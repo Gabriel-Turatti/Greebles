@@ -1,0 +1,89 @@
+
+
+Current Record:
+- Floor: 8
+
+Guide to adding T/Racs:
+- Raac image
+- Raac value
+- Raac stats
+- Raac Actual effect
+
+
+# Universal
+# ( ) Menu for Greebles
+# ( ) Greebles Quality 3
+# ( ) Health bar for enemies
+# ( ) It's hard to read name of Raacs
+# ( ) Secret Rooms
+# ( ) Warning of colors close by?
+# ( ) Raacs: manipulate based on quantity of Greebles
+# ( ) Traac: breaks Leeds into Q0 Greebles into the room
+
+# Actual Rooms Update 0.3
+# ( ) Map warning of Greebles and Broots
+# ( ) Fix item in shop position
+# ( ) Fix position of everything in rooms, deal with collision
+# ( ) Normalize Broots according to Raac and Traac rules
+
+# ( ) Raac: RockCrest: If you have 2+X rocks, you receive X defense. On damage, Rocks break into Shots
+# ( ) Raac: SlimeFest: Each Floor you turn X of each quality 0 Greebles into slime, and add a new gray room to the floor.
+# ( ) Raac: LeedQuest: Each Floor, lose 3X Leeds, add X red rooms.
+# ( ) Raac: TraacBest: Traac items have X more max charge.
+# ( ) Raac: AltarRest: Destroy an unused altar to gain 5X Heeds.
+# ( ) Raac: BlackTest: Killing a Boss gives +X charges to your Traacs
+
+# ( ) New Traacs
+
+
+
+
+
+
+# Cha-ching Update 0.2
+# (X) Shop mechanic
+# (X) TAB information for Greebles
+# (x) Plate Rooms
+# (x) Shop sell
+# (X) Green Rooms
+# (X) Raacs that affect Shop and Pots
+# (X) Weight for altars
+# (X) Make Broot die
+# (X) Quality tiers for Raacs and Traacs
+# ( ) Allow substituion of Traac
+# (X) Nerf SaveThrow for once per floor
+# (X) Raac Class
+# (X) Bug: buying Raacs from shop doesn't work
+# (X) Bug: If amount of colored rooms blows up, game breaks
+# (X) Broot: One who digests Greebles into Slop
+# (X) Broot: One who digs Greebles
+# (X) Broot: One who deconstructs Altars
+# (X) Raac: Better Shops
+# (X) Raac: Splash Damage
+# (X) Raac: converts Shot into Pot
+# (X) Raac: warns color of Rooms
+# (X) Raac: Higher room connectivity
+# (X) Raac: Luck Charm, chance for every Q0 to turn into a Q1
+
+
+
+
+# Actual Playing Update 0.1
+# (X) Balancing enemies
+# (X) Raacs
+# (X) Broots
+# (X) Make Broot spawn correctly, bugged
+# (X) Use for each Quality 0, 1 and 2
+# (X) Make Generating Random Greebles centralized
+# (X) Place Name of Raac when mouse over
+
+
+
+# Long Future
+# ( ) Connectivity algorithm to ensure that Black Rooms are reachable from White Rooms
+# ( ) One-way connectivity in the graph
+# ( ) Walk algorithm generating greebles that it cannot store, where should it go?
+
+
+
+# (X) The "Make it run" Update 0.0
