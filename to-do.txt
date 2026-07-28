@@ -10,6 +10,14 @@ Guide to adding T/Racs:
 - Raac Actual effect
 
 
+
+# Long Future
+# ( ) Connectivity algorithm to ensure that Black Rooms are reachable from White Rooms
+# ( ) One-way connectivity in the graph
+# ( ) Walk algorithm generating greebles that it cannot store, where should it go?
+# ( ) Inventory separated from Greebles
+# ( ) Unacquire greebles player
+
 # Universal
 # ( ) Menu for Greebles
 # ( ) Greebles Quality 3
@@ -20,11 +28,16 @@ Guide to adding T/Racs:
 # ( ) Raacs: manipulate based on quantity of Greebles
 # ( ) Traac: breaks Leeds into Q0 Greebles into the room
 
+
+
+
+
 # Actual Rooms Update 0.3
 # ( ) Map warning of Greebles and Broots
 # ( ) Fix item in shop position
 # ( ) Fix position of everything in rooms, deal with collision
 # ( ) Normalize Broots according to Raac and Traac rules
+# ( ) Show that SaveThrow has been used by gray background
 
 # ( ) Raac: RockCrest: If you have 2+X rocks, you receive X defense. On damage, Rocks break into Shots
 # ( ) Raac: SlimeFest: Each Floor you turn X of each quality 0 Greebles into slime, and add a new gray room to the floor.
@@ -50,7 +63,7 @@ Guide to adding T/Racs:
 # (X) Weight for altars
 # (X) Make Broot die
 # (X) Quality tiers for Raacs and Traacs
-# ( ) Allow substituion of Traac
+# (X) Allow substituion of Traac
 # (X) Nerf SaveThrow for once per floor
 # (X) Raac Class
 # (X) Bug: buying Raacs from shop doesn't work
@@ -79,10 +92,6 @@ Guide to adding T/Racs:
 
 
 
-# Long Future
-# ( ) Connectivity algorithm to ensure that Black Rooms are reachable from White Rooms
-# ( ) One-way connectivity in the graph
-# ( ) Walk algorithm generating greebles that it cannot store, where should it go?
 
 
 

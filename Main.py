@@ -440,6 +440,10 @@ class Player():
                 return True
         else:
             self.Traacs.append(traac)
+        if len(self.Traacs) > self.Greebles["Bankors"]:
+            return self.Traacs.pop(0)
+        else:
+            return None
 class Enemy():
     def __init__(self, id, level):
         self.id = id
@@ -1798,7 +1802,7 @@ class Game():
                 elif item[0] == "Raac":
                     room.Raacs.append(Raac(item[2]))
                     action == "raac"
-                    parameter = len(room.Raac)-1
+                    parameter = len(room.Raacs)-1
                 elif item[0] == "Traac":
                     action = "traac"
                     room.Traacs.append(Traac(item[2]))
@@ -1808,8 +1812,10 @@ class Game():
         if not room.enemy:
             if action == "traac":
                 traac = room.Traacs[parameter]
-                self.player.acquireTraac(traac)
+                traac = self.player.acquireTraac(traac)
                 room.Traacs.pop(parameter)
+                if traac:
+                    room.Traacs.append(traac)
             elif action == "greeb":
                 greeb = room.Greebles[parameter]
                 qtd = self.player.acquire(greeb)
