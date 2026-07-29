@@ -1,7 +1,7 @@
 
 
 Current Record:
-- Floor: 8
+- Floor: 13
 
 Guide to adding T/Racs:
 - Raac image
@@ -17,6 +17,7 @@ Guide to adding T/Racs:
 # ( ) Walk algorithm generating greebles that it cannot store, where should it go?
 # ( ) Inventory separated from Greebles
 # ( ) Unacquire greebles player
+# ( ) Analyze heat death of Greebles
 
 # Universal
 # ( ) Menu for Greebles
@@ -27,17 +28,39 @@ Guide to adding T/Racs:
 # ( ) Warning of colors close by?
 # ( ) Raacs: manipulate based on quantity of Greebles
 # ( ) Traac: breaks Leeds into Q0 Greebles into the room
+# ( ) T/Raac to break defense
+# ( ) Greebles HUD personalization
+    # (X) Greeble Highlight
+    # ( ) Greeble Limit show
+    # ( ) Greeble HUD location choice
+# ( ) HUD: Enemy health bar, damage, def and speed stats
+
+# Updates: Special Bosses every 5 floors
+# Updates: It's all in the Stars (consumable Signs)
+# Updates: HUD personalization
+
+
 
 
 
 
 
 # Actual Rooms Update 0.3
-# ( ) Map warning of Greebles and Broots
+# (X) Map warning of Greebles and Broots
+# ( ) New Room Color
+# ( ) New Room Variant
+# ( ) Plate-Black: Special Boss
 # ( ) Fix item in shop position
 # ( ) Fix position of everything in rooms, deal with collision
 # ( ) Normalize Broots according to Raac and Traac rules
-# ( ) Show that SaveThrow has been used by gray background
+# (X) Show that SaveThrow has been used by gray background
+# (X) Show sprite of enemy dead before clearing room
+# (X) Space: Shortcut to gather all greebles
+# (X) HUD plated rooms
+# (X) Bug: Broots cost wrong order
+# ( ) Bug: ? Plated red rooms not appearing?
+# ( ) Raacs for Broots
+# (?) Boss gets outscaled by armored
 
 # ( ) Raac: RockCrest: If you have 2+X rocks, you receive X defense. On damage, Rocks break into Shots
 # ( ) Raac: SlimeFest: Each Floor you turn X of each quality 0 Greebles into slime, and add a new gray room to the floor.
@@ -46,7 +69,13 @@ Guide to adding T/Racs:
 # ( ) Raac: AltarRest: Destroy an unused altar to gain 5X Heeds.
 # ( ) Raac: BlackTest: Killing a Boss gives +X charges to your Traacs
 
+# ( ) Raac: Vampire: Everytime you discover a purple room, consume 3 Bloods to recover a Heed
+
 # ( ) New Traacs
+
+
+
+
 
 
 
