@@ -6,14 +6,14 @@ from Functions import *
 
 if True: # Pre-processing
     bricksimg = {
-        "gray": image.load('Images/brick_gray.png'),
-        "yellow": image.load('Images/brick_yellow.png'),
-        "red": image.load('Images/brick_red.png'),
-        "purple": image.load('Images/brick_purple.png'),
-        "white": image.load('Images/brick_white.png'),
-        "black": image.load('Images/brick_black.png'),
-        "orange": image.load('Images/brick_orange.png'),
-        "green": image.load('Images/brick_green.png'),
+        "normal_gray": image.load('Images/brick_gray.png'),
+        "normal_yellow": image.load('Images/brick_yellow.png'),
+        "normal_red": image.load('Images/brick_red.png'),
+        "normal_purple": image.load('Images/brick_purple.png'),
+        "normal_white": image.load('Images/brick_white.png'),
+        "normal_black": image.load('Images/brick_black.png'),
+        "normal_orange": image.load('Images/brick_orange.png'),
+        "normal_green": image.load('Images/brick_green.png'),
 
         "plate_gray": image.load('Images/plate_gray.png'),
         "plate_yellow": image.load('Images/plate_yellow.png'),
@@ -144,15 +144,6 @@ if True: # Pre-processing
         "gray": (100, 100, 100),
         "orange": (200, 150, 0),
         "green": (0, 255, 0),
-
-        "plate_red": (255, 0, 0),
-        "plate_black": (0, 0, 0),
-        "plate_yellow": (255, 255, 0),
-        "plate_white": (255, 255, 255),
-        "plate_purple": (255, 0, 255),
-        "plate_gray": (100, 100, 100),
-        "plate_orange": (200, 150, 0),
-        "plate_green": (0, 255, 0),
     }
     for key in bricksimg:
         bricksimg[key] = transform.scale(bricksimg[key], (64, 64))
@@ -168,7 +159,14 @@ if True: # Pre-processing
         traacimg[key] = transform.scale(traacimg[key], (64, 64))
     for key in brootimg:
             brootimg[key] = transform.scale(brootimg[key], (64, 64))
-            
+
+
+    
+# Energy Thermodynamics
+# Common Altar charge: 4
+# Rare Altar charge: 10
+# Unique Altar charge: 25
+
 
 class Player():
     def __init__(self):
@@ -182,37 +180,43 @@ class Player():
     def initGreebles(self):
         self.Greebles = {}
 
+
+
+        # Quality 0b Greebles - Ultra trash
+        self.Greebles["Slops"] = 0 # V=1. Slop
         # Quality 0 Greebles - Trash greebles, sometimes used as ammo, usually used in crafting higher grade greebles
-        self.Greebles["Shots"] = 0 # Used for crafting fuel
-        self.Greebles["Bloods"] = 0 # Used for crafting health
-        self.Greebles["Pots"] = 0 # Money, also used for some crafts
-        self.Greebles["Clots"] = 0 # Advanced Shots
-        self.Greebles["Rocks"] = 0 # Advanced Pots
-        self.Greebles["Slops"] = 0 # Slop
+        self.Greebles["Shots"] = 0 # V=2. Used for crafting fuel
+        self.Greebles["Bloods"] = 0 # V=3. Used for crafting health
+        self.Greebles["Clots"] = 0 # V=4. Advanced Shots
+        self.Greebles["Pots"] = 0 # V=5. Money, also used for some crafts
+        self.Greebles["Rocks"] = 0 # V=6. Advanced Pots
 
         # Quality 1 Greebles - Resources, are expandable and are in constant use
-        self.Greebles["Heeds"] = 0 # Health
-        self.Greebles["Feeds"] = 0 # Fuel
-        self.Greebles["Beets"] = 0 # Crystalized health
-        self.Greebles["Leeds"] = 0 # Crafting material
-        self.Greebles["Sheets"] = 0 # Speed and crafting
+        self.Greebles["Heeds"] = 0 # V=13 Health
+        self.Greebles["Feeds"] = 0 # V=10 Fuel
+        self.Greebles["Beets"] = 0 # V=14 Crystalized health
+        self.Greebles["Leeds"] = 0 # V=19 Crafting material
+        self.Greebles["Sheets"] = 0 # V=23 Speed and crafting
 
         # Quality 2 Greebles - Usually limits the greebles below them, works as storage, or stats
-        self.Greebles["Verdans"] = 0 # Max Health
-        self.Greebles["Postans"] = 0 # Max Fuel
-        self.Greebles["Sackans"] = 0 # Max Q0 inventory*5
-        self.Greebles["Callans"] = 0 # Damage
-        self.Greebles["Daffans"] = 0 # Defense
-        self.Greebles["Radeans"] = 0 # Max Beets, Max Leeds, Max Sheets*4
-        self.Greebles["Xendans"] = 0 # Corrupted Health
+        self.Greebles["Verdans"] = 0 # V=66 Max Health
+        self.Greebles["Postans"] = 0 # V=64 Max Fuel
+        self.Greebles["Sackans"] = 0 # V=58 Max Q0 inventory*5
+        self.Greebles["Callans"] = 0 # V=126 Damage
+        self.Greebles["Daffans"] = 0 # V=109 Defense
+        self.Greebles["Radeans"] = 0 # V=72 Max Beets, Max Leeds, Max Sheets*4
+        self.Greebles["Xendans"] = 0 # V=56 Corrupted Health
 
         # Quality 3 Greebles - Used as power batteries for Raacs, and as catalysts for operations
-        self.Greebles["Bankors"] = 0 # Max Traacs
-        self.Greebles["Rangors"] = 0 # Max Broots
-        self.Greebles["Fencors"] = 0
-        self.Greebles["Kollors"] = 0 # Catalist On
-        self.Greebles["Kollors_off"] = 0 # Catalist Off
-        self.Greebles["Tannors"] = 0
+        self.Greebles["Bankors"] = 0 # V=393 Max Traacs
+        self.Greebles["Rangors"] = 0 # V=300 Max Broots
+        self.Greebles["Fencors"] = 0 # V=321 
+        self.Greebles["Kollors"] = 0 # V=662 Catalist On
+        self.Greebles["Kollors_off"] = 0 # V=460 Catalist Off
+        self.Greebles["Tannors"] = 0 # V=??? 
+
+
+
 
         # Quality 4 Greebles - Used in crafting new Broots and Raacs
         # self.Greebles["???"] = 0
@@ -244,20 +248,20 @@ class Player():
         self.Highlights["Slops"] = False # Slop
 
         # Quality 1 Greebles - Resources, are expandable and are in constant use
-        self.Highlights["Heeds"] = True # Health
-        self.Highlights["Feeds"] = False # Fuel
-        self.Highlights["Beets"] = False # Crystalized health
-        self.Highlights["Leeds"] = False # Crafting material
-        self.Highlights["Sheets"] = False # Speed and crafting
+        self.Highlights["Heeds"] = True # V= Health
+        self.Highlights["Feeds"] = False # V= Fuel
+        self.Highlights["Beets"] = False # V= Crystalized health
+        self.Highlights["Leeds"] = False # V= Crafting material
+        self.Highlights["Sheets"] = False # V= Speed and crafting
 
         # Quality 2 Greebles - Usually limits the greebles below them, works as storage, or stats
-        self.Highlights["Verdans"] = False # Max Health
-        self.Highlights["Postans"] = False # Max Fuel
-        self.Highlights["Sackans"] = False # Max Q0 inventory*5
-        self.Highlights["Callans"] = False # Damage
-        self.Highlights["Daffans"] = False # Defense
-        self.Highlights["Radeans"] = False # Max Beets, Max Leeds, Max Sheets*4
-        self.Highlights["Xendans"] = False # Corrupted Health
+        self.Highlights["Verdans"] = False # V= Max Health
+        self.Highlights["Postans"] = False # V= Max Fuel
+        self.Highlights["Sackans"] = False # V= Max Q0 inventory*5
+        self.Highlights["Callans"] = False # V= Damage
+        self.Highlights["Daffans"] = False # V= Defense
+        self.Highlights["Radeans"] = False # V= Max Beets, Max Leeds, Max Sheets*4
+        self.Highlights["Xendans"] = False # V= Corrupted Health
 
         # Quality 3 Greebles - Used as power batteries for Raacs, and as catalysts for operations
         self.Highlights["Bankors"] = False # Max Traacs
@@ -472,18 +476,10 @@ class Player():
         return qtd
     def walk(self):
         RNG = random.randrange(0, 100)
-
-        for raac in self.Raacs:
-            if raac.name == "BeetHeal":
-                if RNG <= 20*raac.level and self.Greebles["Heeds"] < self.Greebles["Verdans"] and self.Greebles["Beets"] > 0:
-                    self.Greebles["Beets"] -= 1
-                    self.Greebles["Heeds"] += 1
-                    self.Greebles["Pots"] += 1
-                break
     def acquireRaac(self, raac):
         for raac2 in self.Raacs:
             if raac2.id == raac.id:
-                raac2.level += 1
+                raac2.upgrade()
                 return True
         else:
             self.Raacs.append(raac)
@@ -599,16 +595,16 @@ class Altar():
             self.products = [
                 ["Sheets", 1]
             ]
-            self.maxuses = 2
+            self.maxuses = 5
         elif self.id == 5: # Armor Altar
             self.recipe = [
                 ["Sheets", 2],
-                ["Leeds", 1],
+                ["Leeds", 3],
             ]
             self.products = [
                 ["Daffans", 1]
             ]
-            self.maxuses = 1
+            self.maxuses = 2
         elif self.id == 6: # Sacking Altar
             self.recipe = [
                 ["Leeds", 1],
@@ -632,12 +628,12 @@ class Altar():
         elif self.id == 8: # Killing Altar
             self.recipe = [
                 ["Sheets", 4],
-                ["Beets", 1],
+                ["Beets", 2],
             ]
             self.products = [
                 ["Callans", 1]
             ]
-            self.maxuses = 1
+            self.maxuses = 2
         elif self.id == 9: # Structure Altar
             self.recipe = [
                 ["Beets", 2],
@@ -742,7 +738,7 @@ class Altar():
             ]
             self.products = [
                 ["Kollors_off", 1],
-                ["Feeds", 5],
+                ["Feeds", 8],
             ]
             self.maxuses = 4
         elif self.id == 20: # Leed deconstruction Altar
@@ -774,8 +770,24 @@ class Altar():
                 ["Fencors", 1],
             ]
             self.maxuses = 1
-
-
+        elif self.id == 23: # Crafting Altar
+            self.recipe = [
+                ["Shots", 2],
+                ["Rocks", 2],
+            ]
+            self.products = [
+                ["Leeds", 1],
+            ]
+            self.maxuses = 4
+        elif self.id == 24: # Stomach Altar
+            self.recipe = [
+                ["Leeds", 2],
+                ["Feeds", 2],
+            ]
+            self.products = [
+                ["Postans", 1],
+            ]
+            self.maxuses = 3
 
     def chooseRandomAltar():
         AltarPool = [
@@ -802,6 +814,7 @@ class Altar():
             [4, 20],
             [3, 21],
             [2, 22],
+            [4, 23],
         ]
 
         total = 0
@@ -819,9 +832,8 @@ class Altar():
 
 
 
-
 class Room():
-    def __init__(self, N, color, type, level, params, Width, Height):
+    def __init__(self, N, color, type, level, params, Width=13, Height=9):
         self.color = color
         self.type = type
         self.connections = []
@@ -831,14 +843,16 @@ class Room():
         self.Traacs = []
         self.Broots = []
         self.Deploys = []
-        self.Shop = []
+        self.Shops = []
+        self.Enemies = []
+        self.Altars = []
 
         self.width = Width
         self.height = Height
         self.objects = []
         for w in range(Width):
             self.objects.append([])
-            for h in (Height):
+            for h in range(Height):
                 self.objects[w].append([w, h, "", None])
 
         self.id = N
@@ -847,65 +861,101 @@ class Room():
         self.colored = False
         self.discovered = False
 
-        self.enemy = None
-        self.altar = None
 
         self.populate(params)
-    def findFreePosition(self, object):
-        w = random.randrange(self.width)
-        h = random.randrange(self.height)
+    def findFreePosition(self, object, type, w=-1, h=-1):
+        if w == -1:
+            w = random.randrange(self.width)
+        if h == -1:
+            h = random.randrange(self.height)
         possible = 2
-        while self.objects[w][h][3] and possible:
+        while (self.objects[w][h][3] or (type == "altar" and h >= self.height-3) or (type == "altar" and w >= self.width-5) ) and possible:
             w += 1
-            if w >= self.width:
+            if w >= self.width or (type == "altar" and w >= self.width-5):
                 w = 0
                 h += 1
-                if h >= self.height:
+                if h >= self.height or (type == "altar" and h >= self.height-3):
                     h = 0
                     possible -= 1
         if possible:
-            self.objects[w][h] 
+            self.objects[w][h][3] = object
+            self.objects[w][h][2] = type
+
+            if type == "greeble":
+                self.Greebles.append(object)
+            elif type == "broot":
+                self.Broots.append(object)
+            elif type == "deploy":
+                self.Deploys.append(object)
+            elif type == "raac":
+                self.Raacs.append(object)
+            elif type == "traac":
+                self.Traacs.append(object)
+            elif type == "shop":
+                self.Shops.append(object)
+            elif type == "enemy":
+                self.Enemies.append(object)
+            elif type == "altar":
+                self.Altars.append(object)
         else:
             return
+    def freeePosition(self, w, h):
+        ob = self.objects[w][h][3]
+        type = self.objects[w][h][2]
+        if type == "greeble":
+            self.Greebles.remove(ob)
+        elif type == "broot":
+            self.Broots.remove(ob)
+        elif type == "deploy":
+            self.Deploys.remove(ob)
+        elif type == "raac":
+            self.Raacs.remove(ob)
+        elif type == "traac":
+            self.Traacs.remove(ob)
+        elif type == "shop":
+            self.Shops.remove(ob)
+        elif type == "enemy":
+            self.Enemies.remove(ob)
+        elif type == "altar":
+            self.Altars.remove(ob)
+        self.objects[w][h][3] = None
+        self.objects[w][h][2] = ""
     def populate(self, params):
-        if self.color == "red" and self.type == "":
+        if self.color == "red" and self.type == "normal":
             typee = random.randrange(1, 4)
-            self.enemy = Enemy(typee, self.level)
-            # enemy = Enemy(typee, self.level)
-            # w, h = self.findFreePosition(enemy)
+            self.findFreePosition(Enemy(typee, self.level), "enemy")
         elif self.color == "red" and self.type == "plate":
             typee = random.randrange(1, 4)
-            self.enemy = Enemy(typee, self.level+2)
+            self.findFreePosition(Enemy(typee, self.level+2), "enemy")
             self.randomGreeble(1, self.level)
             self.randomGreeble(2, min(round(log2(self.level))-3, 0))
-        elif self.color == "yellow" and self.type == "":
+        elif self.color == "yellow" and self.type == "normal":
             temp1 = self.level
             self.randomGreeble(1, temp1+2)
         elif self.color == "yellow" and self.type == "plate":
             temp2 = self.level//5
             self.randomGreeble(2, temp2)
             self.randomGreeble(1, temp2*3)
-        elif self.color == "black" and self.type == "":
-            self.enemy = Enemy(4, self.level)
+        elif self.color == "black" and self.type == "normal":
+            self.findFreePosition(Enemy(4, self.level), "enemy")
             RNG = random.randrange(10)
             if RNG <= 2:
                 RNG = random.randrange(3)
-                self.Traacs.append(Traac(RNG))
+                self.findFreePosition(Traac(RNG), "traac")
             else:
-                self.Raacs.append(Raac(Raac.chooseRandomRaac()))
-
-            self.acquire(["Feeds", 10+self.level*2])
-        elif self.color == "purple" and self.type == "":
+                self.findFreePosition(Raac(Raac.chooseRandomRaac()), "raac")
+            self.acquire(["Feeds", 10+round(self.level*1.5)])
+        elif self.color == "purple" and self.type == "normal":
             typee = Altar.chooseRandomAltar()
-            self.altar = Altar(typee)
+            self.findFreePosition(Altar(typee), "altar")
         elif self.color == "purple" and self.type == "plate":
-            self.altar = Altar(0)
-        elif self.color == "white" and self.type == "":
+            self.findFreePosition(Altar(0), "altar")
+        elif self.color == "white" and self.type == "normal":
             return
-        elif self.color == "gray" and self.type == "":
+        elif self.color == "gray" and self.type == "normal":
             temp = ceil(log2(self.level+1)) + 1
             self.randomGreeble(0, temp)
-        elif self.color == "green" and self.type == "":
+        elif self.color == "green" and self.type == "normal":
             temp = self.level*2 +4*params[0]
             while temp > 0:
                 RNG = random.randrange(100)
@@ -928,16 +978,20 @@ class Room():
                 self.randomShop("Greeble", False)
                 temp -= 3
     def depopulate(self):
-        self.Greebles.clear()
+        for w in range(self.width):
+            for h in range(self.height):
+                self.freeePosition(w, h)
     def acquire(self, greeb):
         if greeb[1] == 0:
             return
-        for greeb2 in self.Greebles:
-            if greeb2[0] == greeb[0]:
-                greeb2[1] += greeb[1]
-                break
-        else:
-            self.Greebles.append(greeb)
+        for w in range(self.width):
+            for h in range(self.height):
+                tile = self.objects[w][h]
+                if tile[2] == "greeble" and tile[3][0] == greeb[0]:
+                    tile[3][1] += greeb[1]
+                    greeb[1] = 0
+                    return
+        self.findFreePosition(greeb, "greeble")
     def randomGreeble(self, quality, qtd):
         species = len(G[quality])
         Q = [0]*species
@@ -949,29 +1003,50 @@ class Room():
             self.acquire([key, Q[id]])
             id += 1
     def checkEnemyLife(self, player):
-        if self.enemy.hp <= 0:
-            if self.color == "red" or self.color == "plate_red":
-                self.color = "gray"
 
-            for raac in player.Raacs:
-                if raac.name == "EnemyLoot":
-                    EnemyLoot = 2*raac.level
-                    break
-            else:
+        Red = False
+        for enemy in self.Enemies:
+            if enemy.hp > 0:
+                Red = True
+            elif enemy.id != 0:
+                enemy.id = 0
+                enemyEnergy = enemy.mhp*enemy.df + enemy.speed*enemy.dmg
+                enemy.dmg = 0
+
+                for traac in player.Traacs:
+                    if enemyEnergy > 20 and self.color != "black" or enemyEnergy > 40:
+                        traac.charge += 1
+                        enemyEnergy -= 20
+                        if self.color == "black":
+                            traac.charge += 2
+                            enemyEnergy -= 40
+                        if traac.charge > traac.maxCharge:
+                            enemyEnergy += 20*(traac.charge-traac.maxCharge)
+                            traac.charge = traac.maxCharge
+
                 EnemyLoot = 0
-            loot = floor(log(self.enemy.mhp+1, 4)) + EnemyLoot
-            if loot > 0:
-                self.randomGreeble(0, loot)
-            for traac in player.Traacs:
-                traac.charge += 1
-                if self.color == "black":
-                    traac.charge += 2
-                if traac.charge > traac.maxCharge:
-                    traac.charge = traac.maxCharge
+                for raac in player.Raacs:
+                    if raac.source == "EnemyKill" and enemyEnergy > 0:
+                        raac.charge += raac.rate
+                        enemyEnergy -= raac.rate
+                        if raac.charge > raac.maxCharge:
+                            enemyEnergy += (raac.charge-raac.maxCharge)
+                            raac.charge = raac.maxCharge
+                        if enemyEnergy < 0:
+                            raac.charge += enemyEnergy
+                            enemyEnergy = 0
 
 
-            self.enemy.id = 0
-            self.enemy.dmg = 0
+                    if raac.name == "EnemyLoot":
+                        EnemyLoot += 2*raac.level
+                else:
+                    EnemyLoot = 0
+                loot = floor(log(enemy.mhp+1, 4)) + EnemyLoot
+                if loot > 0:
+                    self.randomGreeble(0, loot)
+
+        if self.color == "red" and not Red:
+            self.color = "gray"
     def randomShop(self, itemtype, buy):
         # item = ["Raac", "Treasure", 10, "Pots"]
 
@@ -1033,7 +1108,7 @@ class Room():
             amount = value*qtd
             cost = qtd
         item = [itemtype, amount, name, cost, coin]
-        self.Shop.append(item)
+        self.findFreePosition(item, "shop")
 
 
 class Broot():
@@ -1104,6 +1179,14 @@ class Raac():
     def __init__(self, id):
         self.id = id
         self.level = 1
+
+        self.charge = 0
+        self.source = ""
+        self.maxCharge = 0
+        self.cost = 0
+        self.rate = 0
+        self.upgrades = [0, 0, 0]
+
         self.generate()
     def generate(self):
         if self.id == 0:
@@ -1111,65 +1194,138 @@ class Raac():
             self.trigger = "Floor"
             self.description = "Every time you enter a floor divisible by 2, X Yellow Rooms will permanently be added to the pool."
             self.quality = 4
+
+            self.source = "Floor"
+            self.maxCharge = 1500
+            self.cost = 80
+            self.rate = 50
+            self.upgrades = [500, 80, 50]
         elif self.id == 1:
             self.name = "BeetHeal"
-            self.trigger = "Walk"
-            self.description = "Every time you walk, X*20% chance for a Beet to be converted to a Heed if not at max."
+            self.trigger = "Discover"
+            self.description = "Every time you discover a room, X*20% chance for a Beet to be converted to a Heed+Pot if not at max."
             self.quality = 5
+
+            self.source = "Discover"
+            self.maxCharge = 500
+            self.cost = 8
+            self.rate = 12
+            self.upgrades = [250, 0, 2]
         elif self.id == 2:
             self.name = "FencorRegen"
             self.trigger = "Floor"
-            self.description = "Every time you enter a floor. You get 2*X*Fencor Heeds."
+            self.description = "Every time you enter a floor. You get 3*X*Fencor Heeds."
             self.quality = 2
+
+            self.source = "Floor"
+            self.maxCharge = 500
+            self.cost = 45
+            self.rate = 50
+            self.upgrades = [500, 45, 40]
         elif self.id == 3:
             self.name = "SaveThrow"
             self.trigger = "Damage"
             self.description = "If you take death damage, convert a Verdan into a Xerdan and add 3 Heeds to the blow. Only activates X times per floor."
             self.quality = 3
             self.used = 0
+
+            self.source = "Floor"
+            self.maxCharge = 2000
+            self.cost = 35
+            self.rate = 50
+            self.upgrades = [500, 0, 10]
         elif self.id == 4:
             self.name = "EnemyLoot"
             self.trigger = "EnemyKill"
             self.description = "When an enemy dies, add 2*X Greebles Quality 0 to the room."
             self.quality = 7
+
+            self.source = "EnemyKill"
+            self.maxCharge = 3000
+            self.cost = 15
+            self.rate = 60
+            self.upgrades = [750, 15, 10]
         elif self.id == 5:
             self.name = "Altar"
             self.trigger = "Floor"
-            self.description = "Every time you enter a floor divisible by 2, X Purple Rooms will permanently be added to the pool."
+            self.description = "Every time you enter a floor divisible by 5, X Purple Rooms will permanently be added to the pool."
             self.quality = 4
+
+            self.source = "Floor"
+            self.maxCharge = 2000
+            self.cost = 120
+            self.rate = 60
+            self.upgrades = [300, 120, 80]
         elif self.id == 6:
             self.name = "RoomConnectivity"
             self.trigger = "Floor"
             self.description = "Rooms are more connected"
             self.quality = 8
+
+            self.source = "Floor"
+            self.maxCharge = 3500
+            self.cost = 125
+            self.rate = 100
+            self.upgrades = [1500, 50, 100]
         elif self.id == 7:
             self.name = "ColoredRoom"
             self.trigger = "Floor"
             self.description = "Random rooms can have their colors revealed"
             self.quality = 6
+
+            self.source = "Floor"
+            self.maxCharge = 250
+            self.cost = 5
+            self.rate = 20
+            self.upgrades = [150, 0, 10]
         elif self.id == 8:
             self.name = "LuckyCharm"
             self.trigger = "Discover"
             self.description = "Quality 0 Greebles have chance to become Quality 1"
             self.quality = 5
+
+            self.source = "Discover"
+            self.maxCharge = 600
+            self.cost = 20
+            self.rate = 50
+            self.upgrades = [200, 0, 20]
         elif self.id == 9:
             self.name = "Pottery"
             self.trigger = "Discover"
             self.description = "When discovering rooms, chance to transform Shots into Pots."
             self.quality = 3
+
+            self.source = "Discover"
+            self.maxCharge = 500
+            self.cost = 5
+            self.rate = 50
+            self.upgrades = [150, 0, 20]
         elif self.id == 10:
             self.name = "ExtraStock"
             self.trigger = "Floor"
             self.description = "Shops have more quality."
             self.quality = 3
+
+            self.source = "Floor"
+            self.maxCharge = 1000
+            self.cost = 20
+            self.rate = 50
+            self.upgrades = [400, 20, 25]
         elif self.id == 11:
             self.name = "SplashDamage"
             self.trigger = "Attack"
             self.description = "When attacking enemies, if there are enemies in adjacent rooms, deal 35% damage to X of them."
             self.quality = 5
+
+            self.source = "EnemyKill"
+            self.maxCharge = 2000
+            self.cost = 15
+            self.rate = 20
+            self.upgrades = [700, 0, 20]
         else:
             self.name = "ERROR"
             print("ERROR!")
+        self.energy = self.maxCharge//2
     def chooseRandomRaac():
         RaacPool = [
             [20, 0],
@@ -1214,6 +1370,15 @@ class Raac():
         elif name == "Pottery": return 9
         elif name == "ExtraStock": return 10
         elif name == "SplashDamage": return 11
+    def charged(self, times): # This function will use up energy. Make it the last verification ALWAYS
+        value = self.charge >= self.cost*times
+        self.charge -= self.cost*value*times
+        return value
+    def upgrade(self):
+        self.level += 1
+        self.maxCharge += self.upgrades[0]
+        self.cost += self.upgrades[1]
+        self.rate += self.upgrades[2]
 class Traac():
     def __init__(self, id):
         self.id = id
@@ -1287,19 +1452,19 @@ class Floor():
         for key in temp:
             rooms[key] = temp[key]
 
-        self.Rooms.append(Room(0, "white", "", self.level, [0]))
+        self.Rooms.append(Room(0, "white", "normal", self.level, [0]))
         self.size -= 1
-        rooms["white"] -= 1
+        rooms["normal_white"] -= 1
 
         N = 1
         while self.size > 1:
             self.size -= 1
-            newroom = Room(N, "gray", "", self.level, [0])
+            newroom = Room(N, "gray", "normal", self.level, [0])
             N += 1
             self.Rooms.append(newroom)
-        self.Rooms.append(Room(N, "black", "", self.level, [0]))
+        self.Rooms.append(Room(N, "black", "normal", self.level, [0]))
         self.size -= 1
-        rooms["black"] -= 1
+        rooms["normal_black"] -= 1
         N += 1
 
 
@@ -1320,11 +1485,7 @@ class Floor():
                 if loop == 2:
                     break
                 rooms[key] -= 1
-                if "_" in key:
-                    color, type = key.split("_")
-                else:
-                    color = key
-                    type = ""
+                type, color = key.split("_")
                 self.Rooms[RNG].color = color
                 self.Rooms[RNG].type = type
                 self.Rooms[RNG].depopulate()
@@ -1332,7 +1493,7 @@ class Floor():
                 if color == "yellow":
                     for key2 in broots:
                         if broots[key2] > 0:
-                            self.Rooms[RNG].Broots.append(Broot(key2))
+                            self.Rooms[RNG].findFreePosition(Broot(key2), "broot")
                             broots[key2] -= 1
                             break
 
@@ -1367,52 +1528,36 @@ class Game():
         TextRect.center = ((pos[0], pos[1]))
         self.screen.blit(TextSurf, TextRect)
     def run(self):
-        rooms = {}
-        rooms["white"] = 1
+        self.rooms = {}
 
-        rooms["yellow"] = 2
-        rooms["purple"] = 2
-        rooms["red"] = 0
-        rooms["green"] = 0
+        self.rooms["normal_white"] = 1
+        self.rooms["normal_yellow"] = 2
+        self.rooms["normal_purple"] = 1
+        self.rooms["normal_red"] = -1
+        self.rooms["normal_green"] = 0
+        self.rooms["normal_black"] = 1
 
-        rooms["plate_yellow"] = 0
-        rooms["plate_green"] = 0
-        rooms["plate_red"] = 0
-        rooms["plate_purple"] = 0
-        rooms["plate_gray"] = 0
-        rooms["plate_black"] = 0
+        self.rooms["plate_white"] = 0
+        self.rooms["plate_yellow"] = 0
+        self.rooms["plate_green"] = 0
+        self.rooms["plate_red"] = 0
+        self.rooms["plate_purple"] = 0
+        self.rooms["plate_gray"] = 0
+        self.rooms["plate_black"] = 0
 
 
-        rooms["black"] = 1
 
-        broots = {}
+        self.broots = {}
         for broot in brootimg:
-            broots[broot] = 0
-        broots["armed"] = 2
-        broots["defends"] = 1
+            self.broots[broot] = 0
+        self.broots["armed"] = 2
+        self.broots["defends"] = 1
 
+        self.currentFloor = Floor(0, self.rooms, copy.deepcopy(self.broots), [0, 0])
 
         self.level = 0
-        connectivity = 3
-        extraStock = 0
-        coloredLevel = 0
-        for raac in self.player.Raacs:
-            if raac.name == "RoomConnectivity":
-                connectivity += raac.level
-            elif raac.name == "ColoredRoom":
-                coloredLevel += raac.level
-                coloredLevel += self.player.Greebles["Tannors"]
-            elif raac.name == "ExtraStock":
-                extraStock += raac.level
-        self.currentFloor = Floor(self.level, rooms, broots, [connectivity, extraStock])
-        for rm in self.currentFloor.Rooms:
-            RNG = random.randrange(100)
-            if RNG < coloredLevel*10:
-                rm.colored = True
+        self.newFloor()
 
-
-        self.currentFloor.Rooms[0].discovered = True
-        self.currentFloor.Rooms[0].colored = True
         plate_yellowCost = 5
 
         while self.player.Greebles["Heeds"] >= 0:
@@ -1420,100 +1565,126 @@ class Game():
             if value == -1:
                 return
             elif value == 1:
+                self.newFloor()
+    def newFloor(self):
+        self.level += 1
 
-                self.level += 1
 
 
-                alivecount = 0
-                altarcount = 0
-                anvilcount = 0
-                for rm in self.currentFloor.Rooms:
-                    if rm.color == "green" and not rm.discovered:
-                        RNG = random.randrange(100)
-                        if RNG <= 25:
-                            rooms["green"] -= 1
-                            rooms["plate_green"] += 1
-                    if rm.color == "plate_green" and not rm.discovered:
-                        RNG = random.randrange(100)
-                        if RNG <= 25:
-                            rooms["green"] += 1
-                            rooms["plate_green"] -= 1
-                    if rm.color == "red" or rm.color == "plate_red":
-                        alivecount += 1
-                    if rm.color == "purple":
-                        if rm.altar.uses == rm.altar.maxuses:
-                            if rm.altar.id == 0:
-                                anvilcount += 1
-                            else:
-                                altarcount += 1
+
+        alivecount = 0
+        altarcount = 0
+        anvilcount = 0
+        for rm in self.currentFloor.Rooms:
+            if rm.color == "green" and not rm.discovered:
                 RNG = random.randrange(100)
-                if RNG < altarcount*5:
-                    rooms["purple"] -= 1
-                    rooms["plate_purple"] += 1
-                if anvilcount > 0:
-                    rooms["purple"] += 1
-                    rooms["plate_purple"] -= 1
-                if alivecount == 0 and self.level > 2:
-                    rooms["plate_red"] += 1
-                    rooms["red"] -= 1
-                rooms["yellow"] += 1
-                rooms["red"] += 1
-                if self.level % 2 == 0:
-                    for raac in self.player.Raacs:
-                        if raac.name == "Treasure":
-                            rooms["yellow"] += raac.level
-                            break
-                if self.level % 3 == 0:
-                    rooms["purple"] += 1
-                    rooms["red"] += 1
-                if self.level % 4 == 0:
-                    rooms["green"] += 1
-                if self.level % 5 == 0:
-                    if rooms["yellow"] > plate_yellowCost:
-                        rooms["yellow"] -= 5
-                        rooms["plate_yellow"] += 1
-                        plate_yellowCost += self.level//3
-                    
-                    for raac in self.player.Raacs:
-                        if raac.name == "Altar":
-                            rooms["purple"] += raac.level
-                    rooms["red"] += 1
+                if RNG <= 25:
+                    self.rooms["normal_green"] -= 1
+                    self.rooms["plate_green"] += 1
+            if rm.color == "plate_green" and not rm.discovered:
+                RNG = random.randrange(100)
+                if RNG <= 25:
+                    self.rooms["normal_green"] += 1
+                    self.rooms["plate_green"] -= 1
+            if rm.color == "red":
+                alivecount += 1
+            if rm.color == "purple":
+                for altar in rm.Altars:
+                    if altar.uses == altar.maxuses:
+                        if altar.id == 0:
+                            anvilcount += 1
+                        else:
+                            altarcount += 1
+        RNG = random.randrange(100)
+        if RNG < altarcount*5:
+            self.rooms["normal_purple"] -= 1
+            self.rooms["plate_purple"] += 1
+        if anvilcount > 0:
+            self.rooms["normal_purple"] += 1
+            self.rooms["plate_purple"] -= 1
+        if alivecount == 0 and self.level > 2:
+            self.rooms["plate_red"] += 1
+            self.rooms["normal_red"] -= 1
+        self.rooms["normal_yellow"] += 1
+        self.rooms["normal_red"] += 1
+        if self.level % 2 == 0:
+            for raac in self.player.Raacs:
+                if raac.name == "Treasure" and raac.charged():
+                    self.rooms["normal_yellow"] += raac.level
+                    break
+        if self.level % 3 == 0:
+            self.rooms["normal_purple"] += 1
+            self.rooms["normal_red"] += 1
+        if self.level % 4 == 0 and self.level != 0:
+            self.rooms["normal_green"] += 1
+        if self.level % 5 == 0:
+            if self.rooms["normal_yellow"] > plate_yellowCost:
+                self.rooms["normal_yellow"] -= 5
+                self.rooms["plate_yellow"] += 1
+                plate_yellowCost += self.level//3
+            
+            for raac in self.player.Raacs:
+                if raac.name == "Altar":
+                    self.rooms["normal_purple"] += raac.level
+            self.rooms["normal_red"] += 1
+
+        if self.level != 0:
+            typee = Broot.chooseRandomBroot()
+            self.broots[typee] += 1
+
+        self.player.Greebles["Kollors"] += self.player.Greebles["Kollors_off"]
+        self.player.Greebles["Kollors_off"] = 0
+
+        for raac in self.player.Raacs:
+            if raac.name == "SaveThrow":
+                raac.used = 0
+            elif raac.name == "FencorRegen":
+                amount = raac.level*3
+                temp = self.player.Greebles["Fencors"]
+                while temp > 0 and self.player.Greebles["Heeds"] < self.player.Greebles["Verdans"] and raac.charged():
+                    temp -= 1
+                    self.player.acquire(["Heeds", amount])
 
 
-                typee = Broot.chooseRandomBroot()
-                broots[typee] += 1
 
-                self.player.Greebles["Kollors"] += self.player.Greebles["Kollors_off"]
-                self.player.Greebles["Kollors_off"] = 0
 
-                for raac in self.player.Raacs:
-                    if raac.name == "SaveThrow":
-                        raac.used = 0
-                    elif raac.name == "FencorRegen":
-                        self.player.acquire(["Heeds", raac.level*3*self.player.Greebles["Fencors"]])
+        floorEnergy = 100*self.level
 
-                print(rooms["plate_red"])
-                connectivity = 3
-                coloredLevel = 0
-                extraStock = 0
-                for raac in self.player.Raacs:
-                    if raac.name == "RoomConnectivity":
-                        connectivity += raac.level
-                    elif raac.name == "ColoredRoom":
-                        coloredLevel += raac.level
-                        coloredLevel += self.player.Greebles["Tannors"]
-                    elif raac.name == "ExtraStock":
-                        extraStock += raac.level
-                self.currentFloor = Floor(self.level, rooms, copy.deepcopy(broots), [connectivity, extraStock])
+        connectivity = 3
+        extraStock = 0
+        coloredLevel = 0
+        for raac in self.player.Raacs:
+            if raac.source == "Floor" and floorEnergy > 0:
+                raac.charge += raac.rate
+                floorEnergy -= raac.rate
+                if raac.charge > raac.maxCharge:
+                    floorEnergy += (raac.charge-raac.maxCharge)
+                    raac.charge = raac.maxCharge
+                if floorEnergy < 0:
+                    raac.charge += floorEnergy
+                    floorEnergy = 0
+                
 
-                for rm in self.currentFloor.Rooms:
-                    RNG = random.randrange(100)
-                    if RNG < coloredLevel*10:
-                        rm.colored = True
+            coloredRack = None
+            if raac.name == "RoomConnectivity" and raac.charged():
+                raac.cost += 15
+                connectivity += raac.level
+            elif raac.name == "ColoredRoom" and raac.charged():
+                coloredLevel += raac.level
+                coloredLevel += self.player.Greebles["Tannors"]
+                coloredRack = raac
+            elif raac.name == "ExtraStock" and raac.charged():
+                extraStock += raac.level
+        self.currentFloor = Floor(self.level, self.rooms, copy.deepcopy(self.broots), [connectivity, extraStock])
+        for rm in self.currentFloor.Rooms:
+            RNG = random.randrange(100)
+            if RNG < coloredLevel*10 and coloredRack.charged():
+                rm.colored = True
 
-                self.player.room = 0
-                self.currentFloor.Rooms[0].discovered = True
-                self.currentFloor.Rooms[0].colored = True
+
+        self.player.room = 0
+        self.currentFloor.Rooms[0].discovered = True
+        self.currentFloor.Rooms[0].colored = True
     def update(self):
         display.flip()
         mouseXY = mouse.get_pos()
@@ -1523,158 +1694,124 @@ class Game():
         room = self.currentFloor.Rooms[self.player.room]
 
         self.escreverCanto(f"Floor: {self.currentFloor.level}", 25, (20, 20))
-        self.escreverCanto(f"Room: {self.player.room}", 25, (20, 45))
+        self.escreverCanto(f"Room: {room.id}", 25, (20, 45))
 
         draw.rect(game.screen, (0, 0, 0), (35, 175, self.size*13+10, self.size*9+10), 5)
-        brickimg = bricksimg[room.color]
+        brickimg = bricksimg[room.type+"_"+room.color]
         for x in range(13):
             for y in range(9):
                 self.screen.blit(brickimg, (40+self.size*x, 180+self.size*y))
 
-        x = 6
-        y = 4
-        if room.enemy:
-            self.screen.blit(enemiesimg[room.enemy.id], (40+self.size*x, 180+self.size*y))
-            draw.rect(self.screen, (255, 255, 255), [40+self.size*x-1, 180+self.size*(y+1)-1, self.size-1, self.size-1])
-            self.escreverCanto(f"{room.enemy.hp}/{room.enemy.mhp}", 15, (45+self.size*x, 185+self.size*(y+1)))
-            self.escreverCanto(f"[{room.enemy.dmg}]", 15, (45+self.size*x+self.size//2, 185+self.size*(y+1)))
-            rect = Rect(40+self.size*x, 180+self.size*y, self.size, self.size)
-            if room.enemy.id == 0:
-                options.append([rect, 0, "clean"])
-            else:
-                options.append([rect, 0, "attack"])
-        elif room.altar:
-            if room.altar.id == 0:
-                self.screen.blit(altar2img, (40+self.size*x, 180+self.size*y))
-                self.escreverCanto(f"{room.altar.uses}/{room.altar.maxuses}", 15, (45+self.size*x, 185+self.size*(y+1)))
-
-
-
-                x = 16
-                y = 1
-                id = 0
-                for raac in self.player.Raacs:
-                    draw.rect(game.screen, (0, 0, 0), (40+self.size*x, self.size*y, self.size, self.size), 1)
-                    draw.rect(game.screen, (255, 255, 90), (40+self.size*x+1, self.size*y+1, self.size-2, self.size-2))
-                    self.screen.blit(raacimg[raac.name], (40+self.size*x, self.size*y))
-                    self.escrever(f"{raac.level}", 25, (40+self.size*x+self.size//2, self.size*y-10))
-
-                    rect = Rect(40+self.size*x, self.size*y, self.size, self.size)
-                    options.append([rect, id, "break"])
-                    id += 1
-
-
-                    x += 1
-                    if x >= 24:
-                        x = 21
-                        y += 1
-
-
-
-            else:
-                self.screen.blit(altarimg, (40+self.size*x, 180+self.size*y))
-                self.escreverCanto(f"{room.altar.uses}/{room.altar.maxuses}", 15, (45+self.size*x, 185+self.size*(y+1)))
-                rect = Rect(40+self.size*x, 180+self.size*y, self.size, self.size)
-                options.append([rect, 0, "altar"])
-
-
-                for rec in room.altar.recipe:
-                    self.screen.blit(greebleimg[rec[0]], (40+self.size*(x+1), 180+self.size*y))
-                    self.escreverCanto(f"x{rec[1]}", 15, (40+self.size*(x+1), 180+self.size*y))
-                    x += 1
-                    if x >= 12:
-                        x = 6
-                        y += 1
-                x = 6
-                y += 1
-                for prod in room.altar.products:
-                    self.screen.blit(greebleimg[prod[0]], (40+self.size*(x+1), 180+self.size*y))
-                    self.escreverCanto(f"x{prod[1]}", 15, (40+self.size*(x+1), 180+self.size*y))
-                    x += 1
-                    if x >= 12:
-                        x = 6
-                        y += 1
 
 
 
 
         # Room information
-        x = 0
-        y = 0
-        id = 0
-        for greeb in room.Greebles:
-            self.screen.blit(greebleimg[greeb[0]], (40+self.size*x, 180+self.size*y))
-            rect = Rect(40+self.size*x, 180+self.size*y, self.size, self.size)
-            options.append([rect, id, "greeb"])
-            id += 1
-            x += 1
-            self.escreverCanto(f"x{greeb[1]}", 15, (20+self.size*x, 180+self.size*y))
-            if x >= 13:
-                x = 0
-                y += 1
-        id = 0
-        for raac in room.Raacs:
-            self.screen.blit(raacimg[raac.name], (40+self.size*x, 180+self.size*y))
-            rect = Rect(40+self.size*x, 180+self.size*y, self.size, self.size)
-            self.escrever(f"{raac.id}", 15, (40+self.size*x, 180+self.size*(y+1)))
-            options.append([rect, id, "raac"])
-            id += 1
-            x += 1
-            if x >= 13:
-                x = 0
-                y += 1
-        id = 0
-        for traac in room.Traacs:
-            self.screen.blit(traacimg[traac.name], (40+self.size*x, 180+self.size*y))
-            rect = Rect(40+self.size*x, 180+self.size*y, self.size, self.size)
-            self.escrever(traac.name, 15, (40+self.size*x, 180+self.size*(y+1)))
-            options.append([rect, id, "traac"])
-            id += 1
-            x += 1
-            if x >= 13:
-                x = 0
-                y += 1
-        id = 0
-        for broot in room.Broots:
-            self.screen.blit(brootimg[broot.name], (40+self.size*x, 180+self.size*y))
-            rect = Rect(40+self.size*x, 180+self.size*y, self.size, self.size)
-            self.escrever(broot.name, 15, (40+self.size*x+self.size//2, 190+self.size*(y+1)))
-            options.append([rect, id, "broot"])
-            id += 1
-            x += 1
-            if x >= 13:
-                x = 0
-                y += 1
-        for deploy in room.Deploys:
-            if deploy.alive:
-                self.screen.blit(brootimg[deploy.name], (40+self.size*deploy.x, 180+self.size*deploy.y))
-            else:
-                self.screen.blit(brootimg["DEAD"], (40+self.size*deploy.x, 180+self.size*deploy.y))
-        id = 0
-        x = 0
-        y = 2
-        for item in room.Shop:
-            if item[0] == "Broot":
-                self.screen.blit(brootimg[item[2]], (40+self.size*x, 180+self.size*y))
-            elif item[0] == "Raac":
-                self.screen.blit(raacimg[item[2]], (40+self.size*x, 180+self.size*y))
-            elif item[0] == "Traac":
-                self.screen.blit(traacimg[item[2]], (40+self.size*x, 180+self.size*y))
-            elif item[0] == "Greeble":
-                self.screen.blit(greebleimg[item[2]], (40+self.size*x, 180+self.size*y))
-                self.escrever(f"x{item[3]}", 15, (25+self.size*x+self.size, 175+self.size*(y+1)))
+        for w in range(room.width):
+            for h in range(room.height):
+                object = room.objects[w][h]
+                x = 40+self.size*w
+                y = 180+self.size*h
 
-            rect = Rect(40+self.size*x, 180+self.size*y, self.size, self.size)
 
-            self.screen.blit(greebleimg[item[4]], (40+self.size*x, 180+self.size*(y+1)))
-            self.escrever(f"x{item[3]}", 15, (25+self.size*x+self.size, 190+self.size*(y+2)))
+                if object[2] == "enemy":
+                    self.screen.blit(enemiesimg[object[3].id], (x, y))
+                    draw.rect(self.screen, (255, 255, 255), [x-1, y+self.size-1, self.size-1, self.size-1])
+                    self.escreverCanto(f"{object[3].hp}/{object[3].mhp}", 15, (x+5, y+self.size+5))
+                    self.escreverCanto(f"[{object[3].dmg}]", 15, (x+5+self.size//2, y+5+self.size))
+                    rect = Rect(x, y, self.size, self.size)
+                    if object[3].id == 0:
+                        options.append([rect, (w, h), "clean"])
+                    else:
+                        options.append([rect, (w, h), "attack"])
+                elif object[2] == "altar":
+                    if object[3].id == 0:
+                        self.screen.blit(altar2img, (x, y))
+                        self.escreverCanto(f"{object[3].uses}/{object[3].maxuses}", 15, (x+5, y+self.size+5))
 
-            options.append([rect, id, "buy"])
-            id += 1
-            x += 1
-            if x >= 13:
-                x = 0
-                y += 2
+                        xtemp = 16
+                        ytemp = 1
+                        id = 0
+                        for raac in self.player.Raacs:
+                            rect = Rect(self.size*xtemp, self.size*ytemp, self.size, self.size)
+                            options.append([rect, (w, h, id), "break"])
+                            id += 1
+                            xtemp += 1
+                            if xtemp >= 24:
+                                xtemp = 16
+                                ytemp += 1
+                    else:
+                        self.screen.blit(altarimg, (x, y))
+                        self.escreverCanto(f"{object[3].uses}/{object[3].maxuses}", 15, (x+5, y+5+self.size))
+                        rect = Rect(x, y, self.size, self.size)
+                        options.append([rect, (w, h), "altar"])
+
+
+                        count = 0
+                        for rec in object[3].recipe:
+                            self.screen.blit(greebleimg[rec[0]], (x+self.size, y))
+                            self.escreverCanto(f"x{rec[1]}", 15, (x+self.size, y))
+                            x += self.size
+                            count += 1
+                            if count >= 5:
+                                x -= self.size*5
+                                y += self.size
+                                count = 0
+                        x -= count*self.size
+                        count = 0
+                        y += self.size
+                        for prod in object[3].products:
+                            self.screen.blit(greebleimg[prod[0]], (x+self.size, y))
+                            self.escreverCanto(f"x{prod[1]}", 15, (x+self.size, y))
+                            x += self.size
+                            count += 1
+                            if count >= 5:
+                                x -= self.size*5
+                                y += 1
+                                count = 0
+                elif object[2] == "greeble":
+                    self.screen.blit(greebleimg[object[3][0]], (x, y))
+                    rect = Rect(x, y, self.size, self.size)
+                    if len(room.Enemies) == 0:
+                        options.append([rect, (w, h), "greeble"])
+                    self.escreverCanto(f"x{object[3][1]}", 15, (x+self.size-20, y))
+                elif object[2] == "broot":
+                    self.screen.blit(brootimg[object[3].name], (x, y))
+                    rect = Rect(x, y, self.size, self.size)
+                    self.escrever(object[3].name, 15, (x+self.size//2, y+self.size+10))
+                    options.append([rect, (w, h), "broot"])
+                elif object[2] == "deploy":
+                    if object[3].alive:
+                        self.screen.blit(brootimg[object[3].name], (x, y))
+                    else:
+                        self.screen.blit(brootimg["DEAD"], (x, y))
+                elif object[2] == "shop":
+                    if object[3][0] == "Broot":
+                        self.screen.blit(brootimg[object[3][2]], (x, y))
+                    elif object[3][0] == "Raac":
+                        self.screen.blit(raacimg[object[3][2]], (x, y))
+                    elif object[3][0] == "Traac":
+                        self.screen.blit(traacimg[object[3][2]], (x, y))
+                    elif object[3][0] == "Greeble":
+                        self.screen.blit(greebleimg[object[3][2]], (x, y))
+                        self.escrever(f"x{object[3][1]}", 15, (x-15+self.size, y-5+self.size))
+        
+                    rect = Rect(x, y, self.size, self.size)
+        
+                    self.screen.blit(greebleimg[object[3][4]], (x, y+self.size))
+                    self.escrever(f"x{object[3][3]}", 15, (x-15+self.size, y+10+2*self.size))
+        
+                    options.append([rect, (w, h), "buy"])
+                elif object[2] == "raac":
+                    self.screen.blit(raacimg[object[3].name], (x, y))
+                    rect = Rect(x, y, self.size, self.size)
+                    self.escrever(f"{object[3].id}", 15, (x, y+self.size))
+                    options.append([rect, (w, h), "raac"])
+                elif object[2] == "traac":
+                    self.screen.blit(traacimg[object[3].name], (x, y))
+                    rect = Rect(x, y, self.size, self.size)
+                    self.escrever(object[3].name, 15, (x, y+self.size))
+                    options.append([rect, (w, h), "traac"])
 
 
 
@@ -1701,11 +1838,20 @@ class Game():
                 if rm.type == "plate":
                     draw.rect(game.screen, (0, 0, 0), (40+self.size*x+5, 160+self.size*y+5, self.size-10, self.size-10), 2)
                 self.escrever(str(rm.id), 25, (40+self.size*x+self.size//2, 160+self.size*y+self.size//2))
-                if len(rm.Greebles) > 0:
-                    draw.circle(self.screen, (0, 0, 0), (40+self.size*x+5, 160+self.size*y+5), 5)
-                for greeb in rm.Greebles:
-                    if self.player.Highlights[greeb[0]]:
-                        draw.circle(self.screen, (100, 240, 150), (40+self.size*x+5, 160+self.size*y+5), 5)
+
+
+
+                leave = False
+                for w in range(rm.width):
+                    for h in range(rm.height):
+                        object = rm.objects[w][h]
+                        if object[2] == "greeble":
+                            draw.circle(self.screen, (0, 0, 0), (40+self.size*x+5, 160+self.size*y+5), 5)
+                            if self.player.Highlights[object[3][0]]:
+                                draw.circle(self.screen, (100, 240, 150), (40+self.size*x+5, 160+self.size*y+5), 5)
+                                leave = True
+                                break
+                    if leave:
                         break
 
             else:
@@ -1714,7 +1860,7 @@ class Game():
             options.append([rect, rm.id, "walk"])
             x += 1
 
-            if room.color == "black" and not room.enemy:
+            if room.color == "black" and len(room.Enemies) == 0:
                 draw.rect(game.screen, (0, 0, 0), (40+self.size*x, 160+self.size*y, self.size, self.size), 1)
                 draw.rect(game.screen, (255, 255, 255), (40+self.size*x+1, 160+self.size*y+1, self.size-2, self.size-2))
                 self.escrever("Gate", 25, (40+self.size*x+self.size//2, 160+self.size*y+self.size//2))
@@ -1743,6 +1889,11 @@ class Game():
             color = (255, 255, 0)
             if raac.id == 3 and raac.used == raac.level:
                 color = (0, 0, 0)
+            elif raac.charge < raac.cost:
+                color = (255, 0, 0)
+            elif raac.charge == raac.maxCharge:
+                color = (0, 0, 255)
+
             draw.rect(game.screen, color, (40+self.size*x+1, self.size*y+1, self.size-2, self.size-2))
             self.screen.blit(raacimg[raac.name], (40+self.size*x, self.size*y))
             self.escrever(f"{raac.level}", 25, (40+self.size*x+self.size//2, self.size*y-10))
@@ -1785,12 +1936,21 @@ class Game():
                 self.escrever(str(rm.id), 12, (40+self.size*x+self.size//2, 160+self.size*y+self.size//2))
                 rect = Rect(40+self.size*x, 160+self.size*y, self.size, self.size)
                 options.append([rect, rm.id, "walk"])
-                if len(rm.Greebles) > 0:
-                    draw.circle(self.screen, (0, 0, 0), (40+self.size*x+5, 160+self.size*y+5), 5)
-                for greeb in rm.Greebles:
-                    if self.player.Highlights[greeb[0]]:
-                        draw.circle(self.screen, (100, 240, 150), (40+self.size*x+5, 160+self.size*y+5), 5)
+
+
+                leave = False
+                for w in range(rm.width):
+                    for h in range(rm.height):
+                        object = rm.objects[w][h]
+                        if object[2] == "greeble":
+                            draw.circle(self.screen, (0, 0, 0), (40+self.size*x+5, 160+self.size*y+5), 5)
+                            if self.player.Highlights[object[3][0]]:
+                                draw.circle(self.screen, (100, 240, 150), (40+self.size*x+5, 160+self.size*y+5), 5)
+                                leave = True
+                                break
+                    if leave:
                         break
+
             else:
                 self.escrever("?", 12, (40+self.size*x+self.size//2, 160+self.size*y+self.size//2))
             x += 1
@@ -1827,18 +1987,24 @@ class Game():
         parameter = 0
         # while not action:
         for option in options:
+            if option[2] == "raac" or option[2] == "traac":
+                if Colide(option[0], mouseRect):
+                    self.escrever(f"{room.objects[option[1][0]][option[1][1]][3].name}", 15, (option[0].x+self.size//2, option[0].y+self.size+10))
             if option[2] == "active":
                 if Colide(option[0], mouseRect):
                     self.escrever(f"{self.player.Traacs[option[1]].charge}/{self.player.Traacs[option[1]].maxCharge} [{self.player.Traacs[option[1]].cost}]", 15, (option[0].x+self.size//2, option[0].y+self.size+10))
                     self.escrever(f"{self.player.Traacs[option[1]].name}", 15, (option[0].x+self.size//2, (option[0].y-self.size)+self.size+10))
             if option[2] == "buy":
                 if Colide(option[0], mouseRect):
-                    self.escrever(f"{room.Shop[option[1]][2]}", 15, (option[0].x+self.size//2, (option[0].y-self.size)+self.size+10))
-        x = 6
-        y = 4
-        if room.enemy and Colide(Rect(40+self.size*x, 160+self.size*y, self.size, self.size), mouseRect):
-            y += 1
-            self.escrever(f"[{room.enemy.speed}] [{room.enemy.df}]", 15, (40+self.size*x+self.size//2, 220+self.size*y))
+                    self.escrever(f"{room.objects[option[1][0]][option[1][1]][3][2]}", 15, (option[0].x+self.size//2, (option[0].y-self.size)+self.size+10))
+
+
+        for w in range(room.width):
+            for h in range(room.height):
+                object = room.objects[w][h]
+                if object[2] == "enemy" and Colide(Rect(40+self.size*w, 180+self.size*h, self.size, self.size), mouseRect):
+                    self.escrever(f"[{object[3].speed}] [{object[3].df}]", 15, (40+self.size*w+self.size//2, 180+self.size*h+self.size+40))
+                    break
 
 
         for ev in event.get():
@@ -1851,30 +2017,30 @@ class Game():
                             action = option[2]
                             parameter = option[1]
                 if ev.button == BUTTON_RIGHT:
-                    x = mouseRect.x
-                    y = mouseRect.y
-                    x -= 40
-                    y -= 160
-                    x = x//self.size
-                    y = y//self.size
-                    if x >= 0 and x <= 13 and y >= 0 and y <= 9:
+                    w = mouseRect.x
+                    h = mouseRect.y
+                    w -= 40
+                    h -= 160
+                    w = w//self.size
+                    h = h//self.size
+                    if w >= 0 and w <= 13 and h >= 0 and h <= 9:
                         action = "deploy"
-                        parameter = (x, y)
+                        parameter = (w, h)
             elif ev.type == KEYDOWN:
                 if ev.key == K_1:
                     self.player.selectedBroot -= 1
                 if ev.key == K_2:
                     self.player.selectedBroot += 1
                 if ev.key == K_SPACE:
-                    i = 0
-                    while i < len(room.Greebles):
-                        greeb = room.Greebles[i]
-                        qtd = self.player.acquire(greeb)
-                        greeb[1] = qtd
-                        if greeb[1] == 0:
-                            room.Greebles.pop(i)
-                            i -= 1
-                        i += 1
+                    if len(room.Enemies) == 0:
+                        for w in range(room.width):
+                            for h in range(room.height):
+                                object = room.objects[w][h]
+                                if object[2] == "greeble":
+                                    qtd = self.player.acquire(object[3])
+                                    object[3][1] = qtd
+                                    if object[3][1] == 0:
+                                        room.freeePosition(w, h)
                 if self.player.selectedBroot >= len(self.player.Broots):
                     self.player.selectedBroot = 0
                 elif self.player.selectedBroot < 0:
@@ -1889,63 +2055,64 @@ class Game():
         elif action == "attack":
             self.activate(room.id)
         elif action == "altar":
-            if room.altar.uses > 0:
-                for rec in room.altar.recipe:
+            altar = room.objects[parameter[0]][parameter[1]][3]
+            if altar.uses > 0:
+                for rec in altar.recipe:
                     if self.player.Greebles[rec[0]] < rec[1]:
                         break
                 else:
-                    room.altar.uses -= 1
-                    for rec in room.altar.recipe:
+                    altar.uses -= 1
+                    for rec in altar.recipe:
                         self.player.Greebles[rec[0]] -= rec[1]
-                    for prod in room.altar.products:
+                    for prod in altar.products:
                         qtd = self.player.acquire(prod)
                         if qtd > 0:
-                            for greeb in room.Greebles:
-                                if greeb[0] == prod[0]:
-                                    greeb[1] += qtd
-                                    break
-                            else:
-                                greeb = [prod[0], qtd]
-                                room.Greebles.append(greeb)
+                            room.acquire(greeb, "greeble")
         elif action == "break":
-            if room.altar.uses > 0:
-                room.altar.uses -= 1
+            altar = room.objects[parameter[0]][parameter[1]][3]
+            if altar.uses > 0:
+                altar.uses -= 1
 
-                raac = self.player.Raacs.pop(parameter)
+                raac = self.player.Raacs.pop(parameter[2])
                 room.randomGreeble(2, raac.level*3)
         elif action == "clean":
-            room.enemy = None
+            room.freeePosition(parameter[0], parameter[1])
         elif action == "next":
             return 1
         elif action == "active":
             if self.player.Traacs[parameter].charge >= self.player.Traacs[parameter].cost:
                 sucess = False
-                if self.player.Traacs[parameter].name == "AltarBoost" and room.altar and room.altar.uses == room.altar.maxuses and room.altar.uses >= 5:
-                    room.altar.uses += 1
-                    room.altar.maxuses += 1
-                    sucess = True
+                if self.player.Traacs[parameter].name == "AltarBoost":
+                    for altar in room.Altars:
+                        if altar and altar.uses == altar.maxuses and altar.uses >= 5:
+                            altar.uses += 1
+                            altar.maxuses += 1
+                            sucess = True
                 elif self.player.Traacs[parameter].name == "Crystalize" and self.player.Greebles["Heeds"] > 0 and self.player.Greebles["Beets"] < self.player.Greebles["Radeans"]:
                     self.player.Greebles["Heeds"] -= 1
                     self.player.acquire(["Beets", 1])
                     sucess = True
                 elif self.player.Traacs[parameter].name == "Bomb":
-                    if room.enemy:
-                        room.enemy.hp -= 10*self.player.Traacs[parameter].level
-                        room.checkEnemyLife(self.player)
-                        sucess = True
+                    for w in range(room.width):
+                        for h in range(room.height):
+                            if room.objects[w][h][2] == "enemy":
+                                enemy = room.objects[w][h][3]
+                                enemy.hp -= 10*self.player.Traacs[parameter].level
+                                sucess = True
+                            room.checkEnemyLife(self.player)
                 if sucess:
                     self.player.Traacs[parameter].charge -= self.player.Traacs[parameter].cost
         elif action == "deploy" and len(self.player.Broots) > 0:
             broot = self.player.Broots.pop(self.player.selectedBroot)
             broot.deploy(parameter[0], parameter[1], room)
-            room.Deploys.append(broot)
+            room.findFreePosition(broot, "deploy", parameter[0], parameter[1])
             self.player.selectedBroot -= 1
             if self.player.selectedBroot < 0:
                 self.player.selectedBroot = 0
         elif action == "buy":
-            item = room.Shop[parameter]
-            room.Shop.pop(parameter)
+            item = room.objects[parameter[0]][parameter[1]][3]
             if self.player.Greebles[item[4]] >= item[3]:
+                room.freeePosition(parameter[0], parameter[1])
                 if item[0] == "Greeble":
                     qtd = self.player.acquire([item[2], item[1]])
                     room.acquire([item[2], qtd])
@@ -1953,41 +2120,44 @@ class Game():
                     if len(self.player.Broots) < self.player.Greebles["Rangors"]:
                         self.player.Broots.append(Broot(item[2]))
                     else:
-                        room.Broots.append(Broot(item[2]))
+                        room.findFreePosition("broot", Broot(item[2]), parameter[0], parameter[1])
                 elif item[0] == "Raac":
-                    room.Raacs.append(Raac(Raac.namesID(item[2])))
-                    action == "raac"
-                    parameter = len(room.Raacs)-1
+                    room.objects[parameter[0]][parameter[1]][3] = Raac(Raac.namesID(item[2]))
+                    room.objects[parameter[0]][parameter[1]][2] = "raac"
                 elif item[0] == "Traac":
-                    action = "traac"
-                    room.Traacs.append(Traac(Traac.namesID(item[2])))
-                    parameter = len(room.Traacs)-1
+                    room.objects[parameter[0]][parameter[1]][3] = Traac(Traac.namesID(item[2]))
+                    room.objects[parameter[0]][parameter[1]][2] = "traac"
 
                 self.player.Greebles[item[4]] -= item[3]
-        if not room.enemy:
+
+        enemyAlive = False
+        for w in range(room.width):
+            for h in range(room.height):
+                if room.objects[w][h][2] == "enemy" and room.objects[w][h][3].hp > 0:
+                    enemyAlive = True
+        if not enemyAlive:
             if action == "traac":
-                traac = room.Traacs[parameter]
+                traac = room.objects[parameter[0]][parameter[1]][3]
                 traac = self.player.acquireTraac(traac)
-                room.Traacs.pop(parameter)
+                room.freeePosition(parameter[0], parameter[1])
                 if traac:
-                    room.Traacs.append(traac)
-            elif action == "greeb":
-                greeb = room.Greebles[parameter]
+                    room.findFreePosition(traac, "traac", parameter[0], parameter[1])
+            elif action == "greeble":
+                greeb = room.objects[parameter[0]][parameter[1]][3]
                 qtd = self.player.acquire(greeb)
                 if qtd == 0:
-                    room.Greebles.pop(parameter)
+                    room.freeePosition(parameter[0], parameter[1])
                 else:
-                    greeb[1] = qtd
+                    room.objects[parameter[0]][parameter[1]][3][1] = qtd
             elif action == "raac":
-                raac = room.Raacs[parameter]
+                raac = room.objects[parameter[0]][parameter[1]][3]
                 got = self.player.acquireRaac(raac)
                 if got:
-                    room.Raacs.pop(parameter)
+                    room.freeePosition(parameter[0], parameter[1])
             elif action == "broot":
                 if len(self.player.Broots) < self.player.Greebles["Rangors"]:
-                    broot = room.Broots[parameter]
-                    self.player.Broots.append(broot)
-                    room.Broots.pop(parameter)
+                    self.player.Broots.append(room.objects[parameter[0]][parameter[1]][3])
+                    room.freeePosition(parameter[0], parameter[1])
             
 
         self.clock.tick(30)
@@ -1998,28 +2168,43 @@ class Game():
             else:
                 self.player.Greebles["Heeds"] -= 1
 
+            roomEnergy = 15*self.level
             lucklevel = 0
+            luckCharmRaac = None
+            RNG = random.randrange(100)
             for raac in self.player.Raacs:
+                if raac.source == "Floor" and roomEnergy > 0:
+                    raac.charge += raac.rate
+                    roomEnergy -= raac.rate
+                    if raac.charge > raac.maxCharge:
+                        roomEnergy += (raac.charge-raac.maxCharge)
+                        raac.charge = raac.maxCharge
+                    if roomEnergy < 0:
+                        raac.charge += roomEnergy
+                        roomEnergy = 0
+
                 if raac.name == "LuckyCharm":
+                    luckCharmRaac = raac
                     lucklevel += raac.level
                     lucklevel += self.player.Greebles["Tannors"]
                 elif raac.name == "Pottery":
                     levelPot = raac.level
-                    RNG = random.randrange(100)
                     while RNG < levelPot*4:
-                        if self.player.Greebles["Shots"] > 0:
+                        if self.player.Greebles["Shots"] > 0 and raac.charged():
                             self.player.Greebles["Shots"] -= 1
                             self.player.acquire(["Pots", 1])
                         levelPot -= 25
                         RNG = random.randrange(100)
-
-
-
+                elif raac.name == "BeetHeal":
+                    if RNG <= 20*raac.level and self.Greebles["Heeds"] < self.Greebles["Verdans"] and self.Greebles["Beets"] > 0 and raac.charged():
+                        self.Greebles["Beets"] -= 1
+                        self.Greebles["Heeds"] += 1
+                        self.Greebles["Pots"] += 1
 
             for greeb in self.currentFloor.Rooms[step].Greebles:
                 if greeb[0] in GQ0:
                     RNG = random.randrange(100)
-                    while RNG < lucklevel*10:
+                    while RNG < lucklevel*10 and luckCharmRaac.charged():
                         RNG = random.randrange(100)
                         name = ""
                         if greeb[0] == "Shots":
@@ -2038,39 +2223,43 @@ class Game():
                         self.currentFloor.Rooms[step].acquire([name, 1])
 
                         if greeb[1] == 0:
-                            self.currentFloor.Rooms[step].Greebles.remove(greeb)
-                            break
+                            for w in range(self.width):
+                                for h in range(self.height):
+                                    if self.currentFloor.Rooms[step][w][h][3] == greeb:
+                                        self.currentFloor.Rooms[step].freeePosition(w, h)
+                                        break
 
 
             for rm in self.currentFloor.Rooms:
-                for broot in rm.Deploys:
-                    if broot.name == "digests":
+                for deploy in rm.Deploys:
+                    if deploy.name == "digests":
                         for greeb in rm.Greebles:
                             if greeb[0] != "Slops":
                                 greeb[1] -= 1
                                 rm.acquire(["Slops", 1])
                                 if greeb[1] == 0:
-                                    rm.Greebles.remove(greeb)
-                    elif broot.name == "digs":
-                        broot.action += 1
-                        if broot.action >= broot.cost:
-                            broot.action -= broot.cost
+                                    rm.freeePosition(greeb[1], greeb[2])
+                    elif deploy.name == "digs":
+                        deploy.action += 1
+                        if deploy.action >= deploy.cost:
+                            deploy.action -= deploy.cost
                             RNG = random.randrange(100)
                             if RNG <= 20:
                                 rm.acquire([random.choice(GQ1), 1])
                             else:
                                 rm.acquire([random.choice(GQ0), 1])
-                    elif broot.name == "deconstructs":
-                        if rm.altar and rm.altar.uses > 0:
-                            rm.altar.uses -= 1
-                            RNG = random.randrange(100)/rm.altar.maxuses
-                            if RNG <= 20:
-                                rm.acquire([random.choice(GQ0), 1])
-                            elif RNG <= 40:
-                                rm.acquire([random.choice(GQ1), 1])
-                            else:
-                                rm.acquire([random.choice(GQ2), 1])
-
+                    elif deploy.name == "deconstructs":
+                        for altar in rm.Altars:
+                            if altar.uses > 0:
+                                altar.uses -= 1
+                                RNG = random.randrange(150)/altar.maxuses
+                                if RNG <= 20:
+                                    rm.acquire([random.choice(GQ0), 1])
+                                elif RNG <= 40:
+                                    rm.acquire([random.choice(GQ1), 1])
+                                else:
+                                    rm.acquire([random.choice(GQ2), 1])
+                                break
 
         self.player.room = step
         self.activate(step)
@@ -2081,36 +2270,46 @@ class Game():
 
 
 
+        # Broots and Raacs
+        SplashDamage = 0
+        for raac in self.player.Raacs:
+            if raac.name == "SplashDamage" and raac.charged(raac.level):
+                SplashDamage += raac.level
+        broot_attack = 0
+        broot_defense = 0
 
-        if room.enemy:
-            # Broots
-            SplashDamage = 0
-            for raac in self.player.Raacs:
-                if raac.name == "SplashDamage":
-                    SplashDamage += raac.level
-            broot_attack = 0
-            broot_defense = 0
-            for rm in room.connections:
-                rm = self.currentFloor.Rooms[rm]
-                if rm.enemy and SplashDamage > 0:
-                    rm.enemy.hp -= floor(0.35*self.player.Greebles["Callans"])
-                    rm.checkEnemyLife(self.player)
+        enemyDMG = 0
+        for enemy in room.Enemies:
+            enemyDMG += enemy.dmg
+
+        for rm in room.connections:
+            rm = self.currentFloor.Rooms[rm]
+            for enemy in rm.Enemies:
+                if enemy.hp > 0 and SplashDamage > 0:
+                    enemy.hp -= floor((0.30+SplashDamage*0.05)*self.player.Greebles["Callans"])
                     SplashDamage -= 1
-                for deploy in rm.Deploys:
-                    if deploy.name == "armed":
-                        broot_attack += deploy.dmg
-                        deploy.damage(room.enemy.dmg)
-                    elif deploy.name == "defends":
-                        broot_defense += deploy.dmg
-                        deploy.damage(deploy.dmg)
+            rm.checkEnemyLife(self.player)
+            for deploy in rm.Deploys:
+                if deploy.name == "armed":
+                    broot_attack += deploy.dmg
+                    deploy.damage(enemyDMG)
+                elif deploy.name == "defends":
+                    broot_defense += deploy.dmg
+                    deploy.damage(enemyDMG)
 
 
+        attack = True
+        for enemy in room.Enemies:
+            if enemy.id == 0:
+                continue
+            if attack:
+                enemy.hp -= self.player.Greebles["Callans"]
+                attack = False
+                room.acquire(["Bloods", 1])
+            enemy.hp -= broot_attack
 
-            room.enemy.hp -= self.player.Greebles["Callans"] + broot_attack
-            room.acquire(["Bloods", 1])
-
-            if self.player.Greebles["Sheets"] < room.enemy.speed or room.enemy.hp > 0:
-                qtd = max(0, room.enemy.dmg - broot_defense)
+            if self.player.Greebles["Sheets"] < enemy.speed or enemy.hp > 0:
+                qtd = max(0, enemy.dmg - broot_defense)
                 self.player.damage(qtd)
 
             room.checkEnemyLife(self.player)
@@ -2247,7 +2446,7 @@ game.run()
 
 
 print("Killed!!")
-print(f"At floor {game.level}")
+print(f"At the dance floor {game.level}")
 
 
 

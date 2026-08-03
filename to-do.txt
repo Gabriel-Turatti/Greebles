@@ -5,9 +5,10 @@ Current Record:
 
 Guide to adding T/Racs:
 - Raac image
-- Raac value
+- Raac Shop value
 - Raac stats
 - Raac Actual effect
+- Raac nametoId
 
 
 
@@ -34,23 +35,45 @@ Guide to adding T/Racs:
     # ( ) Greeble Limit show
     # ( ) Greeble HUD location choice
 # ( ) HUD: Enemy health bar, damage, def and speed stats
+# ( ) Game Mode: Deflation - all sources of raac energy slowly starts to dwindle with floors instead of increasing.
 
+# Updates: Save Game
 # Updates: Special Bosses every 5 floors
+# ( ) Plate-Black: Special Boss
 # Updates: It's all in the Stars (consumable Signs)
+    # ( ) 12 zodiac Sign Families
+    # ( ) Aries -> Combat
+    # ( ) Taurus -> Traacs
+    # ( ) Gemini -> Raacs 
+    # ( ) Cancer -> 
+    # ( ) Leo -> Greebles
+    # ( ) Virgo -> Broots
+    # ( ) Libra -> Room generation
+    # ( ) Scorpio -> Shop
+    # ( ) Sagitarius ->
+    # ( ) Capricorn -> 
+    # ( ) Aquarius -> Altar
+    # ( ) Pisces -> Meta Signs
+
+    # ( ) 12 Aspects
+    # ( ) Creation: Converts a Gray room into the [sign]'s color
+    # ( ) Destruction: Removes the respective room's color, gives rewards accordingly
+    # ( ) 
 # Updates: HUD personalization
 
 
 
 
-
+# Thermodynamics Update 0.4
+# ( ) Raac thermodynamic balance
+# ( ) Draw Luck Greeble quality 3
 
 
 # Actual Rooms Update 0.3
 # (X) Map warning of Greebles and Broots
 # ( ) New Room Color
 # ( ) New Room Variant
-# ( ) Plate-Black: Special Boss
-# ( ) Fix item in shop position
+# (X) Fix item in shop position
 # ( ) Fix position of everything in rooms, deal with collision
 # ( ) Normalize Broots according to Raac and Traac rules
 # (X) Show that SaveThrow has been used by gray background
@@ -58,9 +81,11 @@ Guide to adding T/Racs:
 # (X) Space: Shortcut to gather all greebles
 # (X) HUD plated rooms
 # (X) Bug: Broots cost wrong order
-# ( ) Bug: ? Plated red rooms not appearing?
 # ( ) Raacs for Broots
+# ( ) New Broots
+# ( ) Speed mechanic
 # (?) Boss gets outscaled by armored
+# ( ) Anvil not breaking correct Raac
 
 # ( ) Raac: RockCrest: If you have 2+X rocks, you receive X defense. On damage, Rocks break into Shots
 # ( ) Raac: SlimeFest: Each Floor you turn X of each quality 0 Greebles into slime, and add a new gray room to the floor.
@@ -70,6 +95,7 @@ Guide to adding T/Racs:
 # ( ) Raac: BlackTest: Killing a Boss gives +X charges to your Traacs
 
 # ( ) Raac: Vampire: Everytime you discover a purple room, consume 3 Bloods to recover a Heed
+# ( ) Raac: Ampwire: Floor Racs recharge more if energy is available
 
 # ( ) New Traacs
 
