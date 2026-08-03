@@ -38,6 +38,7 @@ Guide to adding T/Racs:
 # ( ) Game Mode: Deflation - all sources of raac energy slowly starts to dwindle with floors instead of increasing.
 # ( ) Change Raacs from place to prioritize energy
 # ( ) Adding rooms temporarly
+# ( ) New Room Variant
 
 # Updates: Save Game
 # Updates: Special Bosses every 5 floors
@@ -70,24 +71,30 @@ Guide to adding T/Racs:
 
 
 # Actual Rooms Update 0.4
-# ( ) Draw Luck Greeble quality 3
+# ( ) ( ) Add Luck Greeble quality 3
+#     ( ) All the Raacs that are not yet drawn
+#     ( ) Heexs Greeble
 # (X) Map warning of Greebles and Broots
 # ( ) New Room Color
-# ( ) New Room Variant
 # (X) Fix item in shop position
-# ( ) Fix position of everything in rooms, deal with collision
-# ( ) Normalize Broots according to Raac and Traac rules
+# (X) Fix position of everything in rooms, deal with collision
 # (X) Show that SaveThrow has been used by gray background
+# (X) Panel of Information
 # (X) Show sprite of enemy dead before clearing room
 # (X) Space: Shortcut to gather all greebles
 # (X) HUD plated rooms
 # (X) Bug: Broots cost wrong order
-# ( ) Raacs for Broots
-# ( ) New Broots
-# ( ) Speed mechanic
+# (X) Speed mechanic
+    # ( ) Fix when multiple enemies fight
+# (X) Change color of Traac based on charge
+# ( ) Shopping Lock
+# ( ) Indicate how many times enemy hit you
 # (?) Boss gets outscaled by armored
 # ( ) Anvil not breaking correct Raac
 # (X) Heexes
+# ( ) Raacs for Broots
+# ( ) New Broots
+# ( ) Normalize Broots according to Raac and Traac rules
 
 # (X) Raac: RockCrest: If you have 2+X rocks, you receive X defense. On damage, Rocks break into Shots
 # (X) Raac: SlimeFest: Each Floor you turn X of each quality 0 Greebles into slime, and add a new gray room to the floor.
