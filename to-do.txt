@@ -36,6 +36,8 @@ Guide to adding T/Racs:
     # ( ) Greeble HUD location choice
 # ( ) HUD: Enemy health bar, damage, def and speed stats
 # ( ) Game Mode: Deflation - all sources of raac energy slowly starts to dwindle with floors instead of increasing.
+# ( ) Change Raacs from place to prioritize energy
+# ( ) Adding rooms temporarly
 
 # Updates: Save Game
 # Updates: Special Bosses every 5 floors
@@ -64,12 +66,11 @@ Guide to adding T/Racs:
 
 
 
-# Thermodynamics Update 0.4
-# ( ) Raac thermodynamic balance
+# (X) Raac thermodynamic balance
+
+
+# Actual Rooms Update 0.4
 # ( ) Draw Luck Greeble quality 3
-
-
-# Actual Rooms Update 0.3
 # (X) Map warning of Greebles and Broots
 # ( ) New Room Color
 # ( ) New Room Variant
@@ -86,13 +87,14 @@ Guide to adding T/Racs:
 # ( ) Speed mechanic
 # (?) Boss gets outscaled by armored
 # ( ) Anvil not breaking correct Raac
+# (X) Heexes
 
-# ( ) Raac: RockCrest: If you have 2+X rocks, you receive X defense. On damage, Rocks break into Shots
-# ( ) Raac: SlimeFest: Each Floor you turn X of each quality 0 Greebles into slime, and add a new gray room to the floor.
-# ( ) Raac: LeedQuest: Each Floor, lose 3X Leeds, add X red rooms.
-# ( ) Raac: TraacBest: Traac items have X more max charge.
-# ( ) Raac: AltarRest: Destroy an unused altar to gain 5X Heeds.
-# ( ) Raac: BlackTest: Killing a Boss gives +X charges to your Traacs
+# (X) Raac: RockCrest: If you have 2+X rocks, you receive X defense. On damage, Rocks break into Shots
+# (X) Raac: SlimeFest: Each Floor you turn X of each quality 0 Greebles into slime, and add a new gray room to the floor.
+# (X) Raac: LeedQuest: Each Floor, lose 3X Leeds, add X red rooms.
+# (X) Raac: TraacBest: Traac items have X more max charge.
+# (X) Raac: AltarRest: Destroy an unused altar to gain 3X Heexs.
+# (X) Raac: BlackTest: Killing a Boss gives +X charges to your Traacs
 
 # ( ) Raac: Vampire: Everytime you discover a purple room, consume 3 Bloods to recover a Heed
 # ( ) Raac: Ampwire: Floor Racs recharge more if energy is available
@@ -103,6 +105,7 @@ Guide to adding T/Racs:
 
 
 
+# Thermodynamics Update 0.3
 
 
 
