@@ -39,6 +39,19 @@ Guide to adding T/Racs:
 # ( ) Change Raacs from place to prioritize energy
 # ( ) Adding rooms temporarly
 # ( ) New Room Variant
+# ( ) Indicate how many times enemy hit you
+# ( ) Raacs for Broots
+# ( ) New Broots
+# ( ) Normalize Broots according to Raac and Traac rules
+# ( ) ( ) Add Luck Greeble quality 3
+#     ( ) All the Raacs that are not yet drawn
+#     ( ) Heexs Greeble
+# ( ) Raac: Vampire: Everytime you discover a purple room, consume 3 Bloods to recover a Heed
+# ( ) Raac: Ampwire: Floor Racs recharge more if energy is available
+# ( ) Broot Defense refactor
+
+# ( ) New Traacs
+
 
 # Updates: Save Game
 # Updates: Special Bosses every 5 floors
@@ -71,11 +84,8 @@ Guide to adding T/Racs:
 
 
 # Actual Rooms Update 0.4
-# ( ) ( ) Add Luck Greeble quality 3
-#     ( ) All the Raacs that are not yet drawn
-#     ( ) Heexs Greeble
 # (X) Map warning of Greebles and Broots
-# ( ) New Room Color
+# (X) New Room Color
 # (X) Fix item in shop position
 # (X) Fix position of everything in rooms, deal with collision
 # (X) Show that SaveThrow has been used by gray background
@@ -85,16 +95,15 @@ Guide to adding T/Racs:
 # (X) HUD plated rooms
 # (X) Bug: Broots cost wrong order
 # (X) Speed mechanic
-    # ( ) Fix when multiple enemies fight
+    # (X) Fix when multiple enemies fight
 # (X) Change color of Traac based on charge
-# ( ) Shopping Lock
-# ( ) Indicate how many times enemy hit you
-# (?) Boss gets outscaled by armored
-# ( ) Anvil not breaking correct Raac
+# (X) (X) Shopping Lock
+# (X) Differentiate Broot from Deploy
+# (X) Boss gets outscaled by armored enemies
+# (X) Bug: Anvil not breaking correct Raac
+# (X) By Default show most relevant object in infopanel
+# (X) Don't clean info Panel
 # (X) Heexes
-# ( ) Raacs for Broots
-# ( ) New Broots
-# ( ) Normalize Broots according to Raac and Traac rules
 
 # (X) Raac: RockCrest: If you have 2+X rocks, you receive X defense. On damage, Rocks break into Shots
 # (X) Raac: SlimeFest: Each Floor you turn X of each quality 0 Greebles into slime, and add a new gray room to the floor.
@@ -103,10 +112,11 @@ Guide to adding T/Racs:
 # (X) Raac: AltarRest: Destroy an unused altar to gain 3X Heexs.
 # (X) Raac: BlackTest: Killing a Boss gives +X charges to your Traacs
 
-# ( ) Raac: Vampire: Everytime you discover a purple room, consume 3 Bloods to recover a Heed
-# ( ) Raac: Ampwire: Floor Racs recharge more if energy is available
 
-# ( ) New Traacs
+
+
+
+
 
 
 

@@ -14,6 +14,7 @@ if True: # Pre-processing
         "normal_black": image.load('Images/brick_black.png'),
         "normal_orange": image.load('Images/brick_orange.png'),
         "normal_green": image.load('Images/brick_green.png'),
+        "normal_cyan": image.load('Images/brick_cyan.png'),
 
         "plate_gray": image.load('Images/plate_gray.png'),
         "plate_yellow": image.load('Images/plate_yellow.png'),
@@ -23,6 +24,9 @@ if True: # Pre-processing
         "plate_black": image.load('Images/plate_black.png'),
         "plate_orange": image.load('Images/plate_orange.png'),
         "plate_green": image.load('Images/plate_green.png'),
+        "plate_cyan": image.load('Images/plate_cyan.png'),
+
+        "lock": image.load('Images/lock.png'),
     }
     enemiesimg = {
         0: image.load('Images/brick_darkred.png'),
@@ -30,6 +34,7 @@ if True: # Pre-processing
         2: image.load('Images/enemy_fast.png'),
         3: image.load('Images/enemy_armored.png'),
         4: image.load('Images/enemy_boss_generic.png'),
+        5: image.load('Images/enemy_armored.png'),
     }
     altarimg = image.load('Images/altar_generic.png')
     altar2img = image.load('Images/altar_break_generic.png')
@@ -253,55 +258,11 @@ class Player():
 
 
 
-
-
-
         self.Highlights = {}
-        # Quality 0 Greebles - Trash greebles, sometimes used as ammo, usually used in crafting higher grade greebles
-        self.Highlights["Shots"] = False # Used for crafting fuel
-        self.Highlights["Bloods"] = False # Used for crafting health
-        self.Highlights["Pots"] = False # Money, also used for some crafts
-        self.Highlights["Clots"] = False # Advanced Shots
-        self.Highlights["Rocks"] = False # Advanced Pots
-        self.Highlights["Slops"] = False # Slop
+        for key in self.Greebles:
+            self.Highlights[key] = False
+        self.Highlights["Heeds"] = True
 
-        # Quality 1 Greebles - Resources, are expandable and are in constant use
-        self.Highlights["Heeds"] = True # V= Health
-        self.Highlights["Feeds"] = False # V= Fuel
-        self.Highlights["Beets"] = False # V= Crystalized health
-        self.Highlights["Leeds"] = False # V= Crafting material
-        self.Highlights["Sheets"] = False # V= Speed and crafting
-
-        # Quality 2 Greebles - Usually limits the greebles below them, works as storage, or stats
-        self.Highlights["Verdans"] = False # V= Max Health
-        self.Highlights["Postans"] = False # V= Max Fuel
-        self.Highlights["Sackans"] = False # V= Max Q0 inventory*5
-        self.Highlights["Callans"] = False # V= Damage
-        self.Highlights["Daffans"] = False # V= Defense
-        self.Highlights["Radeans"] = False # V= Max Beets, Max Leeds, Max Sheets*4
-        self.Highlights["Xendans"] = False # V= Corrupted Health
-
-        # Quality 3 Greebles - Used as power batteries for Raacs, and as catalysts for operations
-        self.Highlights["Bankors"] = False # Max Traacs
-        self.Highlights["Rangors"] = False # Max Broots
-        self.Highlights["Fencors"] = False
-        self.Highlights["Kollors"] = False # Catalist On
-        self.Highlights["Kollors_off"] = False # Catalist Off
-        self.Highlights["Tannors"] = False
-
-        # Quality 4 Greebles - Used in crafting new Broots and Raacs
-        # self.Highlights["???"] = False
-        # self.Highlights["???"] = False
-        # self.Highlights["???"] = False
-        # self.Highlights["???"] = False
-        # self.Highlights["???"] = False
-
-        # Quality 5 Greebles - Used in super powerful actions
-        self.Highlights["black Star"] = False
-        self.Highlights["purple Note"] = False
-        self.Highlights["white Diamond"] = False
-        self.Highlights["Cyan Heart"] = False
-        self.Highlights["red Flower"] = False
     def initPlayer(self, char):
         if char == 0:
             char = random.randrange(5)
@@ -547,7 +508,7 @@ class Enemy():
         # for i in range(1, self.level):
         #     top += log2(i)
 
-        hp = 4 + self.level + random.randrange(0, self.level*2+1)
+        hp = 3 + self.level + random.randrange(0, self.level*2+1)
         dmg = 0.5 + self.level/3 +random.randrange(0, 10)/10
         df = self.level/5
         speed = 20 + self.level*2
@@ -575,11 +536,17 @@ class Enemy():
             name = "Armored"
             speed = speed*0.7
         elif self.id == 4: # Boss
-            hp = hp*1.3
+            hp = hp*1.5
+            dmg = dmg*1.25
+            df = df
+            speed = speed
+            name = "Boss"
+        elif self.id == 5: # Elite
+            hp = hp*1.25
             dmg = dmg*1.15
             df = df*0.9
             speed = speed*0.9
-            name = "Boss"
+            name = "Elite"
 
 
         self.name = name
@@ -924,6 +891,8 @@ class Room():
                     h = 0
                     possible -= 1
         if possible:
+            if type == "greeble":
+                object.append((w, h))
             self.objects[w][h][3] = object
             self.objects[w][h][2] = type
 
@@ -1023,6 +992,29 @@ class Room():
             while temp > 0:
                 self.randomShop("Greeble", False)
                 temp -= 3
+        elif self.color == "orange" and self.type == "normal":
+            self.findFreePosition(Enemy(5, self.level), "enemy")
+            RNG = random.randrange(10)
+            if RNG <= 2:
+                RNG = random.randrange(3)
+                self.findFreePosition(Traac(RNG), "traac")
+            else:
+                self.findFreePosition(Raac(Raac.chooseRandomRaac()), "raac")
+            temp1 = self.level
+            self.randomGreeble(1, temp1-2)
+        elif self.color == "orange" and self.type == "plate":
+            self.findFreePosition(Enemy(5, self.level+1), "enemy")
+            self.findFreePosition(Enemy(5, self.level+1), "enemy")
+            for i in range(3):
+                RNG = random.randrange(10)
+                if RNG <= 2:
+                    RNG = random.randrange(3)
+                    self.findFreePosition(Traac(RNG), "traac")
+                else:
+                    self.findFreePosition(Raac(Raac.chooseRandomRaac()), "raac")
+            temp1 = self.level
+            self.randomGreeble(1, 2*temp1)
+            self.randomGreeble(2, temp1//5)
     def depopulate(self):
         for w in range(self.width):
             for h in range(self.height):
@@ -1507,12 +1499,20 @@ class Raac():
         elif name == "SaveThrow": return 3
         elif name == "EnemyLoot": return 4
         elif name == "Altar": return 5
+
         elif name == "RoomConnectivity": return 6
         elif name == "ColoredRoom": return 7
         elif name == "LuckyCharm": return 8
         elif name == "Pottery": return 9
         elif name == "ExtraStock": return 10
         elif name == "SplashDamage": return 11
+
+        elif name == "RockCrest": return 12
+        elif name == "SlimeFest": return 13
+        elif name == "LeedQuest": return 14
+        elif name == "TrackBest": return 15
+        elif name == "AltarRest": return 16
+        elif name == "BlackTest": return 17
     def charged(self, times=1): # This function will use up energy. Make it the last verification ALWAYS
         value = self.charge >= self.cost*times
         self.charge -= self.cost*value*times
@@ -1635,7 +1635,7 @@ class Floor():
                 self.Rooms[RNG].type = type
                 self.Rooms[RNG].depopulate()
                 self.Rooms[RNG].populate([shopStock])
-                if color == "yellow":
+                if color == "yellow" or color == "orange":
                     for key2 in broots:
                         if broots[key2] > 0:
                             self.Rooms[RNG].findFreePosition(Broot(key2), "broot")
@@ -1679,7 +1679,7 @@ class Game():
         self.rooms["normal_yellow"] = 2
         self.rooms["normal_purple"] = 1
         self.rooms["normal_red"] = -1
-        self.rooms["normal_green"] = 4
+        self.rooms["normal_green"] = 0
         self.rooms["normal_orange"] = 0
         self.rooms["normal_black"] = 1
 
@@ -1703,16 +1703,22 @@ class Game():
         self.params = [0, 0, 0]
         self.currentFloor = Floor(0, self.rooms, copy.deepcopy(self.broots), self.params)
 
+        self.plate_yellowCost = 5
         self.level = -1
         self.newFloor()
 
-        plate_yellowCost = 5
+        self.infoObject = None
+        self.infoType = ""
+
 
         while self.player.Greebles["Heeds"] >= 0:
             value = self.update()
             if value == -1:
                 return
             elif value == 1:
+                for rm in self.currentFloor.Rooms:
+                    print(rm.color)
+                print('----')
                 self.newFloor()
     def newFloor(self):
         self.level += 1
@@ -1723,6 +1729,7 @@ class Game():
         alivecount = 0
         altarcount = 0
         anvilcount = 0
+        orangeScore = 0
         for rm in self.currentFloor.Rooms:
             if rm.color == "green" and not rm.discovered:
                 RNG = random.randrange(100)
@@ -1743,6 +1750,14 @@ class Game():
                             anvilcount += 1
                         else:
                             altarcount += 1
+            if rm.color == "orange":
+                if len(rm.Raacs) > 0:
+                    orangeScore += 20
+
+
+
+        orangeProb = self.rooms["normal_red"] + self.rooms["plate_red"]*2
+        orangeProb -= alivecount
         RNG = random.randrange(100)
         if RNG < altarcount*5:
             self.rooms["normal_purple"] -= 1
@@ -1753,6 +1768,12 @@ class Game():
         if alivecount == 0 and self.level > 2:
             self.rooms["plate_red"] += 1
             self.rooms["normal_red"] -= 1
+        if RNG < orangeScore:
+            self.rooms["plate_orange"] += 1
+            self.rooms["normal_orange"] -= 1
+            
+
+
         self.rooms["normal_yellow"] += 1
         self.rooms["normal_red"] += 1
         if self.level % 2 == 0:
@@ -1766,11 +1787,18 @@ class Game():
         if self.level % 4 == 0 and self.level != 0:
             self.rooms["normal_green"] += 1
         if self.level % 5 == 0:
-            if self.rooms["normal_yellow"] > plate_yellowCost:
+            if self.rooms["normal_yellow"] > self.plate_yellowCost:
                 self.rooms["normal_yellow"] -= 5
                 self.rooms["plate_yellow"] += 1
-                plate_yellowCost += self.level//3
-            
+                self.plate_yellowCost += self.level//3
+
+
+            RNG = random.randrange(100)
+
+            if RNG <= orangeProb:
+                self.rooms["normal_orange"] += 1
+
+
             for raac in self.player.Raacs:
                 if raac.name == "Altar":
                     self.rooms["normal_purple"] += raac.level
@@ -1856,8 +1884,6 @@ class Game():
         mouseRect = Rect(mouseXY[0], mouseXY[1], 1, 1)
         game.screen.fill((100, 70, 40))
         options = []
-        infoObject = None
-        infoType = ""
         room = self.currentFloor.Rooms[self.player.room]
 
 
@@ -1871,7 +1897,9 @@ class Game():
 
 
 
+
         # Room information
+        priority = 0
         for w in range(room.width):
             for h in range(room.height):
                 object = room.objects[w][h]
@@ -1879,13 +1907,16 @@ class Game():
                 y = 180+self.size*h
 
                 rect = Rect(x, y, self.size, self.size)
+                temp = 0
                 if object[2] == "enemy":
+                    temp = 8
                     self.screen.blit(enemiesimg[object[3].id], (x, y))
                     if object[3].id == 0:
                         options.append([rect, (w, h), "clean"])
                     else:
                         options.append([rect, (w, h), "attack"])
                 elif object[2] == "altar":
+                    temp = 7
                     if object[3].id == 0:
                         self.screen.blit(altar2img, (x, y))
                         self.escreverCanto(f"{object[3].uses}/{object[3].maxuses}", 15, (x+5, y+self.size+5))
@@ -1907,19 +1938,24 @@ class Game():
 
                         options.append([rect, (w, h), "altar"])
                 elif object[2] == "greeble":
+                    temp = 1
                     self.screen.blit(greebleimg[object[3][0]], (x, y))
                     if len(room.Enemies) == 0:
                         options.append([rect, (w, h), "greeble"])
                     self.escreverCanto(f"x{object[3][1]}", 15, (x+self.size-20, y))
                 elif object[2] == "broot":
+                    temp = 3
                     self.screen.blit(brootimg[object[3].name], (x, y))
                     options.append([rect, (w, h), "broot"])
                 elif object[2] == "deploy":
+                    temp = 4
                     if object[3].alive:
+                        self.screen.blit(bricksimg["plate_cyan"], (x, y))
                         self.screen.blit(brootimg[object[3].name], (x, y))
                     else:
                         self.screen.blit(brootimg["DEAD"], (x, y))
                 elif object[2] == "shop":
+                    temp = 2
                     if object[3][0] == "Broot":
                         self.screen.blit(brootimg[object[3][2]], (x, y))
                     elif object[3][0] == "Raac":
@@ -1930,22 +1966,32 @@ class Game():
                         self.screen.blit(greebleimg[object[3][2]], (x, y))
                         self.escrever(f"x{object[3][1]}", 15, (x-15+self.size, y-5+self.size))
                 
+                    self.screen.blit(bricksimg["lock"], (x, y+self.size))
                     # self.screen.blit(greebleimg[object[3][4]], (x, y+self.size))
                     # self.escrever(f"x{object[3][3]}", 15, (x-15+self.size, y+10+2*self.size))
         
                     options.append([rect, (w, h), "buy"])
                 elif object[2] == "raac":
+                    temp = 5
                     self.screen.blit(raacimg[object[3].name], (x, y))
                     self.escrever(f"{object[3].id}", 15, (x, y+self.size))
                     options.append([rect, (w, h), "raac"])
                 elif object[2] == "traac":
+                    temp = 6
                     self.screen.blit(traacimg[object[3].name], (x, y))
                     options.append([rect, (w, h), "traac"])
 
 
-                if Colide(mouseRect, rect):
-                    infoObject = object[3]
-                    infoType = object[2]
+
+                if temp > priority and not self.infoObject:
+                    self.infoObject = object[3]
+                    self.infoType = object[2]
+                    priority = temp
+
+                if Colide(mouseRect, rect) and object[3]:
+                    self.infoObject = object[3]
+                    self.infoType = object[2]
+                    priority = 30
 
 
 
@@ -1973,17 +2019,10 @@ class Game():
 
 
 
-                leave = False
-                for w in range(rm.width):
-                    for h in range(rm.height):
-                        object = rm.objects[w][h]
-                        if object[2] == "greeble":
-                            draw.circle(self.screen, (0, 0, 0), (40+self.size*x+5, 160+self.size*y+5), 5)
-                            if self.player.Highlights[object[3][0]]:
-                                draw.circle(self.screen, (100, 240, 150), (40+self.size*x+5, 160+self.size*y+5), 5)
-                                leave = True
-                                break
-                    if leave:
+                for greeble in rm.Greebles:
+                    draw.circle(self.screen, (0, 0, 0), (40+self.size*x+5, 160+self.size*y+5), 5)
+                    if self.player.Highlights[greeble[0]]:
+                        draw.circle(self.screen, (100, 240, 150), (40+self.size*x+5, 160+self.size*y+5), 5)
                         break
 
             else:
@@ -2014,8 +2053,8 @@ class Game():
             rect = Rect(40+self.size*x, 160+self.size*y, self.size, self.size)
             options.append([rect, x-2, "active"])
             if Colide(mouseRect, rect):
-                infoObject = traac
-                infoType = "traac"
+                self.infoObject = traac
+                self.infoType = "traac"
             x += 1
 
 
@@ -2036,8 +2075,8 @@ class Game():
 
             rect = Rect(40+self.size*x, self.size*y, self.size, self.size)
             if Colide(rect, mouseRect):
-                infoObject = raac
-                infoType = "raac"
+                self.infoObject = raac
+                self.infoType = "raac"
 
 
             x += 1
@@ -2056,8 +2095,8 @@ class Game():
             self.screen.blit(brootimg[broot.name], (40+self.size*x, 160+self.size*y))
             rect = [40+self.size*x, 160+self.size*y, self.size, self.size]
             if Colide(mouseRect, rect):
-                infoObject = broot
-                infoType = "broot"
+                self.infoObject = broot
+                self.infoType = "broot"
         self.escrever(f"{len(self.player.Broots)}/{self.player.Greebles["Rangors"]}", 25, (40+self.size*x+self.size//2, 160+self.size*(y+1)+10))
 
 
@@ -2079,19 +2118,10 @@ class Game():
                 rect = Rect(40+self.size*x, 160+self.size*y, self.size, self.size)
                 options.append([rect, rm.id, "walk"])
 
-
-                leave = False
-                for w in range(rm.width):
-                    for h in range(rm.height):
-                        object = rm.objects[w][h]
-                        if object[2] == "greeble":
-                            draw.circle(self.screen, (0, 0, 0), (40+self.size*x+5, 160+self.size*y+5), 5)
-                            if self.player.Highlights[object[3][0]]:
-                                draw.circle(self.screen, (100, 240, 150), (40+self.size*x+5, 160+self.size*y+5), 5)
-                                leave = True
-                                break
-                    if leave:
-                        break
+                for greeble in rm.Greebles:
+                    draw.circle(self.screen, (0, 0, 0), (40+self.size*x+5, 160+self.size*y+5), 5)
+                    if self.player.Highlights[greeble[0]]:
+                        draw.circle(self.screen, (100, 240, 150), (40+self.size*x+5, 160+self.size*y+5), 5)
 
             else:
                 self.escrever("?", 12, (40+self.size*x+self.size//2, 160+self.size*y+self.size//2))
@@ -2125,113 +2155,114 @@ class Game():
         draw.rect(self.screen, (0, 0, 0), [40+self.size*x, 180+self.size*y, self.size*10, self.size*4])
         draw.rect(self.screen, (200, 200, 200), [40+self.size*x+2, 180+self.size*y+2, self.size*10-4, self.size*4-4])
 
-        if infoObject:
+        if self.infoObject:
             x = 40+self.size*x + 5
             y = 180+self.size*y + 5
-            if infoType == "traac":
+            if self.infoType == "traac":
 
-                self.escreverCanto(f"{infoObject.name} Lvl. {infoObject.level}", 20, (x, y))
+                self.escreverCanto(f"{self.infoObject.name} Lvl. {self.infoObject.level}", 20, (x, y))
                 y += 20
 
-                self.escreverCanto(f"Charge: {infoObject.charge}/{infoObject.maxCharge}", 20, (x, y))
+                self.escreverCanto(f"Charge: {self.infoObject.charge}/{self.infoObject.maxCharge}", 20, (x, y))
                 y += 20
 
-                self.escreverCanto(f"Cost: {infoObject.cost}", 20, (x, y))
+                self.escreverCanto(f"Cost: {self.infoObject.cost}", 20, (x, y))
                 y += 20
 
-                self.escreverCanto(f"{infoObject.description}", 20, (x, y))
+                self.escreverCanto(f"{self.infoObject.description}", 20, (x, y))
                 y += 20
-            elif infoType == "raac":
-                self.escreverCanto(f"{infoObject.name} Lvl. {infoObject.level}", 20, (x, y))
-                y += 20
-
-                self.escreverCanto(f"{infoObject.description}", 20, (x, y))
+            elif self.infoType == "raac":
+                self.escreverCanto(f"{self.infoObject.name} Lvl. {self.infoObject.level}", 20, (x, y))
                 y += 20
 
-                if infoObject.name == "SaveThrow":
-                    self.escreverCanto(f"[{infoObject.level - infoObject.used}] Use(s) left", 20, (x, y))
+                self.escreverCanto(f"{self.infoObject.description}", 20, (x, y))
+                y += 20
+
+                if self.infoObject.name == "SaveThrow":
+                    self.escreverCanto(f"[{self.infoObject.level - self.infoObject.used}] Use(s) left", 20, (x, y))
                     y += 20
-            elif infoType == "greeble":
-                self.escreverCanto(f"{infoObject[0]} x {infoObject[1]}", 20, (x, y))
+            elif self.infoType == "greeble":
+                self.escreverCanto(f"{self.infoObject[0]} x {self.infoObject[1]}", 20, (x, y))
                 y += 20
-            elif infoType == "enemy":
-                self.escreverCanto(f"{infoObject.name}", 20, (x, y))
-                y += 20
-
-                self.escreverCanto(f"HP: {infoObject.hp}/{infoObject.mhp}", 20, (x, y))
+            elif self.infoType == "enemy":
+                self.escreverCanto(f"{self.infoObject.name}", 20, (x, y))
                 y += 20
 
-                self.escreverCanto(f"Dmg: {infoObject.dmg}", 20, (x, y))
+                self.escreverCanto(f"HP: {self.infoObject.hp}/{self.infoObject.mhp}", 20, (x, y))
                 y += 20
 
-                self.escreverCanto(f"Df: {infoObject.df}", 20, (x, y))
+
+                self.escreverCanto(f"Dmg: {max(self.infoObject.dmg-self.player.Greebles["Daffans"]//3, 0)}", 20, (x, y))
                 y += 20
 
-                self.escreverCanto(f"Speed: {infoObject.speed} [{infoObject.turn}/{infoObject.playerTurn}]", 20, (x, y))
+                self.escreverCanto(f"Df: {self.infoObject.df}", 20, (x, y))
                 y += 20
-            elif infoType == "altar":
-                # self.escreverCanto(f"{infoObject.name}", 20, (x, y))
+
+                self.escreverCanto(f"Speed: {self.infoObject.speed} [{self.infoObject.turn}/{self.infoObject.playerTurn}]", 20, (x, y))
+                y += 20
+            elif self.infoType == "altar":
+                # self.escreverCanto(f"{self.infoObject.name}", 20, (x, y))
                 # y += 20
 
-                self.escreverCanto(f"Uses: {infoObject.uses}/{infoObject.maxuses}", 20, (x, y))
+                self.escreverCanto(f"Uses: {self.infoObject.uses}/{self.infoObject.maxuses}", 20, (x, y))
                 y += 20
 
-                # self.escreverCanto(f"Rarity: {infoObject.rarity}", 20, (x, y))
+                # self.escreverCanto(f"Rarity: {self.infoObject.rarity}", 20, (x, y))
                 # y += 20
 
                 self.escreverCanto(f"Requires: ", 20, (x, y))
                 x += self.size*1.5
-                for greeb in infoObject.recipe:
+                for greeb in self.infoObject.recipe:
                     draw.rect(self.screen, (0, 0, 0), [x, y, self.size, self.size], 1)
                     self.screen.blit(greebleimg[greeb[0]], (x, y))
                     self.escrever(f"x{greeb[1]}", 20, (x+self.size//2, y+self.size+10))
                     x += self.size
                 y += self.size+25
-                x -= self.size*(len(infoObject.recipe)+1.5)
+                x -= self.size*(len(self.infoObject.recipe)+1.5)
 
                 
                 self.escreverCanto(f"Produces: ", 20, (x, y))
                 x += self.size*1.5
-                for greeb in infoObject.products:
+                for greeb in self.infoObject.products:
                     draw.rect(self.screen, (0, 0, 0), [x, y, self.size, self.size], 1)
                     self.screen.blit(greebleimg[greeb[0]], (x, y))
                     self.escrever(f"x{greeb[1]}", 20, (x+self.size//2, y+self.size+10))
                     x += self.size
-            elif infoType == "shop":
-                self.escreverCanto(f"{infoObject[0]} - {infoObject[2]} x{infoObject[1]}", 20, (x, y))
+            elif self.infoType == "shop":
+                self.escreverCanto(f"{self.infoObject[0]} - {self.infoObject[2]} x{self.infoObject[1]}", 20, (x, y))
                 y += 20
 
                 self.escreverCanto(f"Costs: ", 20, (x, y))
                 x += self.size
                 draw.rect(self.screen, (0, 0, 0), [x, y, self.size, self.size], 1)
-                self.screen.blit(greebleimg[infoObject[4]], (x, y))
+                self.screen.blit(greebleimg[self.infoObject[4]], (x, y))
                 x += self.size//2
                 y += self.size+10
-                self.escrever(f"x{infoObject[3]}", 20, (x, y))
+                self.escrever(f"x{self.infoObject[3]}", 20, (x, y))
                 y += 20
-            elif infoType == "broot":
-                self.escreverCanto(f"{infoObject.name}", 20, (x, y))
-                y += 20
-
-                self.escreverCanto(f"HP: {infoObject.hp}/{infoObject.mhp}", 20, (x, y))
+            elif self.infoType == "broot":
+                self.escreverCanto(f"{self.infoObject.name}", 20, (x, y))
                 y += 20
 
-                self.escreverCanto(f"Power: {infoObject.dmg}", 20, (x, y))
+                self.escreverCanto(f"HP: {self.infoObject.hp}/{self.infoObject.mhp}", 20, (x, y))
                 y += 20
 
-                self.escreverCanto(f"Speed: {infoObject.speed}", 20, (x, y))
-                y += 20
-            elif infoType == "deploy":
-                self.escreverCanto(f"{infoObject.name}", 20, (x, y))
+                self.escreverCanto(f"Power: {self.infoObject.dmg}", 20, (x, y))
                 y += 20
 
-                self.escreverCanto(f"HP: {infoObject.hp}/{infoObject.mhp}", 20, (x, y))
+                self.escreverCanto(f"Speed: {self.infoObject.speed}", 20, (x, y))
+                y += 20
+            elif self.infoType == "deploy":
+                self.escreverCanto(f"{self.infoObject.name}", 20, (x, y))
                 y += 20
 
-                self.escreverCanto(f"Power: {infoObject.dmg}", 20, (x, y))
+                self.escreverCanto(f"HP: {self.infoObject.hp}/{self.infoObject.mhp}", 20, (x, y))
                 y += 20
 
-                self.escreverCanto(f"Speed: {infoObject.speed}", 20, (x, y))
+                self.escreverCanto(f"Power: {self.infoObject.dmg}", 20, (x, y))
+                y += 20
+
+                self.escreverCanto(f"Speed: {self.infoObject.speed}", 20, (x, y))
                 y += 20
 
         # CONTROL
@@ -2284,6 +2315,8 @@ class Game():
 
 
         if action == "walk":
+            self.infoObject = None
+            self.infoType = ""
             self.walkRoom(parameter)
             self.player.walk()
         elif action == "attack":
@@ -2457,11 +2490,7 @@ class Game():
                         self.currentFloor.Rooms[step].acquire([name, 1])
 
                         if greeb[1] == 0:
-                            for w in range(self.currentFloor.Rooms[step].width):
-                                for h in range(self.currentFloor.Rooms[step].height):
-                                    if self.currentFloor.Rooms[step].objects[w][h][3] == greeb:
-                                        self.currentFloor.Rooms[step].freeePosition(w, h)
-                                        break
+                            self.currentFloor.Rooms[step].freeePosition(greeb[2][0], greeb[2][1])
 
 
             for rm in self.currentFloor.Rooms:
@@ -2533,29 +2562,33 @@ class Game():
 
 
         attack = True
-        for enemy in room.Enemies:
-            if enemy.id == 0:
-                continue
-            enemy.hp -= broot_attack
+        playerSpeed = self.player.Greebles["Sheets"]
+        enemyAlive = True
+        while attack and enemyAlive:
+            enemyAlive = False
+            for enemy in room.Enemies:
+                if enemy.id == 0:
+                    continue
+                enemyAlive = True
+                enemy.hp -= broot_attack
 
-            playerSpeed = self.player.Greebles["Sheets"]
-            limit = max(enemy.speed, playerSpeed)
-            while attack:
+                limit = max(enemy.speed, playerSpeed)
                 enemy.turn += enemy.speed
-                enemy.playerTurn += playerSpeed
+                if attack:
+                    enemy.playerTurn += playerSpeed
 
-                if enemy.playerTurn >= limit:
+                if enemy.playerTurn >= limit and attack:
                     enemy.playerTurn -= limit
                     enemy.hp -= self.player.Greebles["Callans"]
                     room.acquire(["Bloods", 1])
                     attack = False
 
-                if enemy.turn >= limit and enemy.hp > 0:
+                if enemy.turn >= limit:
                     enemy.turn -= limit
                     qtd = max(0, enemy.dmg - broot_defense)
                     self.player.damage(qtd)
 
-            room.checkEnemyLife(self.player)
+        room.checkEnemyLife(self.player)
     def showGreebles(self):
         tabPressed = True
         while tabPressed:
@@ -2576,7 +2609,7 @@ class Game():
             y = 50
             total = 0
             color = (255, 255, 255)
-            for greeb in GQ0 + ["Slops"]:
+            for greeb in GQ0 + GQ0a:
                 if self.player.Highlights[greeb]:
                     color = (255, 255, 0)
                 else:
@@ -2603,7 +2636,7 @@ class Game():
 
             x = 40
             y += self.size
-            for greeb in GQ1:
+            for greeb in GQ1 + GQ1a:
                 if self.player.Highlights[greeb]:
                     color = (255, 255, 0)
                 else:
