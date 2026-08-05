@@ -70,30 +70,34 @@ if True: # Pre-processing
     }
     raacimg = {
         "Treasure": image.load('Images/Raacs/raac_treasure.png'), # Yellow Room spawn
-        "BeetHeal": image.load('Images/Raacs/raac_generic.png'), # Beets decompose into Heeds
+        "BeetHeal": image.load('Images/Raacs/raac_BeetHeal.png'), # Beets decompose into Heeds
         "FencorRegen": image.load('Images/Raacs/raac_FencorRegen.png'), # Fencor regenerate Heeds
         "SaveThrow": image.load('Images/Raacs/raac_SaveThrow.png'), # If you were to die, corrupt Verdans instead to heal X Heeds
         "EnemyLoot": image.load('Images/Raacs/raac_EnemyLoot.png'), # Enemies drop 2 Q0 greebles
         "Altar": image.load('Images/Raacs/raac_Altar.png'), # Adds An Altar for each 5 floors
 
-        "RoomConnectivity": image.load('Images/Raacs/raac_generic.png'), # Increases how many connections rooms have
-        "ColoredRoom": image.load('Images/Raacs/raac_generic.png'), # Reveals by chance room's colors, affected by Tannors
-        "LuckyCharm": image.load('Images/Raacs/raac_generic.png'), # Chance to transform Q0 into Q1
-        "Pottery": image.load('Images/Raacs/raac_generic.png'), # Shots have a chance to turn into Pots
-        "ExtraStock": image.load('Images/Raacs/raac_generic.png'), # Shops have more stock
-        "SplashDamage": image.load('Images/Raacs/raac_generic.png'), # Gives 50% of your damage to X enemy room's
+        "RoomConnectivity": image.load('Images/Raacs/raac_RoomConnectivity.png'), # Increases how many connections rooms have
+        "ColoredRoom": image.load('Images/Raacs/raac_ColoredRoom.png'), # Reveals by chance room's colors, affected by Tannors
+        "LuckyCharm": image.load('Images/Raacs/raac_LuckyCharm.png'), # Chance to transform Q0 into Q1
+        "Pottery": image.load('Images/Raacs/raac_Pottery.png'), # Shots have a chance to turn into Pots
+        "ExtraStock": image.load('Images/Raacs/raac_ExtraStock.png'), # Shops have more stock
+        "SplashDamage": image.load('Images/Raacs/raac_SplashDamage.png'), # Gives 50% of your damage to X enemy room's
 
-        "RockCrest": image.load('Images/Raacs/raac_generic.png'), # If you have 2+X rocks, you receive X defense. On damage, Rocks break into Shots
-        "SlimeFest": image.load('Images/Raacs/raac_generic.png'), # Each Floor you turn X of each quality 0 Greebles into slime, and add a new gray room to the floor.
-        "LeedQuest": image.load('Images/Raacs/raac_generic.png'), # Each Floor, lose 3X Leeds, add X red rooms.
-        "TraacBest": image.load('Images/Raacs/raac_generic.png'), # Traac items have X more max charge.
-        "AltarRest": image.load('Images/Raacs/raac_generic.png'), # Destroy an unused altar to gain 5X Heeds.
-        "BlackTest": image.load('Images/Raacs/raac_generic.png'), # Killing a Boss gives +X charges to your Traacs
+        "RockCrest": image.load('Images/Raacs/raac_RockCrest.png'), # If you have 2+X rocks, you receive X defense. On damage, Rocks break into Shots
+        "SlimeFest": image.load('Images/Raacs/raac_SlimeFest.png'), # Each Floor you turn X of each quality 0 Greebles into slime, and add a new gray room to the floor.
+        "LeedQuest": image.load('Images/Raacs/raac_LeedQuest.png'), # Each Floor, lose 3X Leeds, add X red rooms.
+        "TraacBest": image.load('Images/Raacs/raac_TraacBest.png'), # Traac items have X more max charge.
+        "AltarRest": image.load('Images/Raacs/raac_AltarRest.png'), # Destroy an unused altar to gain 3X Heexs.
+        "BlackTest": image.load('Images/Raacs/raac_BlackTest.png'), # Killing a Boss gives +X charges to your Traacs
     }
     traacimg = {
         "AltarBoost": image.load('Images/Traacs/traac_AltarBoost.png'), # Altars have more charge in exchange for rocks
         "Crystalize": image.load('Images/Traacs/traac_Crystalize.png'), # Convert Heed into Beet
         "Bomb": image.load('Images/Traacs/traac_Bomb.png'), # Deals 10 damage to enemies in room
+
+        "TumbleBox": image.load('Images/Traacs/traac_TumbleBox.png'), # Creates random Q0 Greebles in room
+        "Reinforce": image.load('Images/Traacs/traac_Reinforce.png'), # Gives 4 temporary DF points, loses 1 per explored room
+        "RaacRerox": image.load('Images/Traacs/traac_RaacRerox.png'), # Rerolls T/Raacs in the room
     }
     brootimg = {
         "DEAD": image.load('Images/brick_darkred.png'),
@@ -146,6 +150,10 @@ if True: # Pre-processing
         9,
         7,
         15,
+
+        13,
+        10,
+        20,
     ]
     brootValue = [
         0,
@@ -196,6 +204,13 @@ class Player():
         self.Raacs = []
         self.Traacs = []
         self.room = 0
+
+        self.dmg = 0
+        self.df = 0
+
+        self.tempDmg = 0
+        self.tempDf = 0
+
         self.initGreebles()
         self.initPlayer(0)
     def initGreebles(self):
@@ -262,10 +277,10 @@ class Player():
         for key in self.Greebles:
             self.Highlights[key] = False
         self.Highlights["Heeds"] = True
-
     def initPlayer(self, char):
         if char == 0:
-            char = random.randrange(5)
+            # char = random.randrange(5)
+            char = 1
         if char == -1:
             for RN in range(len(raacNumber)):
                 raac = Raac(RN)
@@ -318,91 +333,36 @@ class Player():
             self.Greebles["Rangors"] = 3  + random.randrange(-2, 3)# Max Broots
             self.Greebles["Fencors"] = 0
         elif char == 1: # Classic
+            self.acquire(["Bankors", 2]) # Max Traacs
+            self.acquire(["Rangors", 4]) # Max Broots
+            self.acquire(["Fencors", 1])
+
+            self.acquire(["Verdans", 8]) # Max Health
+            self.acquire(["Postans", 30]) # Max Food
+            self.acquire(["Sackans", 20]) # Max Q0 inventory*4
+            self.acquire(["Callans", 3]) # Damage
+            self.acquire(["Daffans", 0]) # Defense
+            self.acquire(["Radeans", 6]) # Max Health2, Max Health3, Max Energy/2
+            self.acquire(["Xendans", 0]) # Corrupted Health
+
+            self.acquire(["Heeds", 8]) # Health
+            self.acquire(["Feeds", 30]) # Food
+            self.acquire(["Beets", 6]) # Health2
+            self.acquire(["Leeds", 3]) # Health3
+            self.acquire(["Sheets", 20]) # Energy
+
             self.acquireRaac(Raac(1))
-            self.Greebles["Heeds"] = 8 # Health
-            self.Greebles["Feeds"] = 30 # Food
-            self.Greebles["Beets"] = 6 # Health2
-            self.Greebles["Leeds"] = 3 # Health3
-            self.Greebles["Sheets"] = 20 # Energy
-
-            self.Greebles["Verdans"] = 8 # Max Health
-            self.Greebles["Postans"] = 30 # Max Food
-            self.Greebles["Sackans"] = 20 # Max Q0 inventory*4
-            self.Greebles["Callans"] = 3 # Damage
-            self.Greebles["Daffans"] = 0 # Defense
-            self.Greebles["Radeans"] = 6 # Max Health2, Max Health3, Max Energy/2
-            self.Greebles["Xendans"] = 0 # Corrupted Health
-
-            self.Greebles["Bankors"] = 2 # Max Traacs
-            self.Greebles["Rangors"] = 4 # Max Broots
-            self.Greebles["Fencors"] = 1
-        elif char == 2: # Devoted
-            self.acquireRaac(Raac(5))
-            self.Greebles["Heeds"] = 13 # Health
-            self.Greebles["Feeds"] = 20 # Food
-            self.Greebles["Beets"] = 2 # Health2
-            self.Greebles["Leeds"] = 2 # Health3
-            self.Greebles["Sheets"] = 23 # Energy
-
-            self.Greebles["Verdans"] = 13 # Max Health
-            self.Greebles["Postans"] = 20 # Max Food
-            self.Greebles["Sackans"] = 16 # Max Q0 inventory*4
-            self.Greebles["Callans"] = 3 # Damage
-            self.Greebles["Daffans"] = 1 # Defense
-            self.Greebles["Radeans"] = 5 # Max Health2, Max Health3, Max Energy/2
-            self.Greebles["Xendans"] = 0 # Corrupted Health
-
-            self.Greebles["Bankors"] = 1 # Max Traacs
-            self.Greebles["Rangors"] = 6 # Max Broots
-            self.Greebles["Fencors"] = 0
-        elif char == 3: # Corrupted
-            self.acquireRaac(Raac(3))
-            self.Greebles["Heeds"] = 12 # Health
-            self.Greebles["Feeds"] = 25 # Food
-            self.Greebles["Beets"] = 4 # Health2
-            self.Greebles["Leeds"] = 4 # Health3
-            self.Greebles["Sheets"] = 20 # Energy
-
-            self.Greebles["Verdans"] = 12 # Max Health
-            self.Greebles["Postans"] = 25 # Max Food
-            self.Greebles["Sackans"] = 25 # Max Q0 inventory*4
-            self.Greebles["Callans"] = 4 # Damage
-            self.Greebles["Daffans"] = 0 # Defense
-            self.Greebles["Radeans"] = 5 # Max Health2, Max Health3, Max Energy/2
-            self.Greebles["Xendans"] = 4 # Corrupted Health
-
-            self.Greebles["Bankors"] = 1 # Max Traacs
-            self.Greebles["Rangors"] = 3 # Max Broots
-            self.Greebles["Fencors"] = 0
-        elif char == 4: # Bomberman
-            self.acquireTraac(Traac(2)) # Bomb
-            self.Greebles["Heeds"] = 10 # Health
-            self.Greebles["Feeds"] = 35 # Food
-            self.Greebles["Beets"] = 5 # Health2
-            self.Greebles["Leeds"] = 2 # Health3
-            self.Greebles["Sheets"] = 18 # Energy
-
-            self.Greebles["Verdans"] = 10 # Max Health
-            self.Greebles["Postans"] = 35 # Max Food
-            self.Greebles["Sackans"] = 22 # Max Q0 inventory*4
-            self.Greebles["Callans"] = 3 # Damage
-            self.Greebles["Daffans"] = 2 # Defense
-            self.Greebles["Radeans"] = 5 # Max Health2, Max Health3, Max Energy/2
-            self.Greebles["Xendans"] = 0 # Corrupted Health
-
-            self.Greebles["Bankors"] = 3 # Max Traacs
-            self.Greebles["Rangors"] = 2 # Max Broots
-            self.Greebles["Fencors"] = 1
+            self.acquireTraac(Traac(5))
     def damage(self, qtd):
-        qtd -= self.Greebles["Daffans"]//3
+        qtd -= self.df//3
         for raac in self.Raacs:
             if raac.name == "RockCrest" and qtd > 0 and self.Greebles["Rocks"] >= 2+raac.level and raac.charged():
                 qtd -= raac.level
-                self.Greebles["Rocks"] -= 2+raac.level
+                self.unacquire(["Rocks", 2+raac.level])
                 self.acquire(["Shots", 2+raac.level])
 
         if qtd > 0:
-            self.Greebles["Heeds"] -= qtd
+            self.unacquire(["Heeds", qtd])
             if self.Greebles["Heeds"] < 0:
                 for raac in self.Raacs:
                     if raac.name == "SaveThrow":
@@ -410,7 +370,7 @@ class Player():
                 else:
                     raac = None
                 while raac and raac.used < raac.level and self.Greebles["Verdans"] > 0 and self.Greebles["Heeds"] < 0:
-                    self.Greebles["Verdans"] -= 1
+                    self.unacquire(["Verdans", 1])
                     self.acquire(["Xendans", 1])
                     self.acquire(["Heeds", 3])
                     raac.used += 1
@@ -457,8 +417,18 @@ class Player():
                 self.Greebles[name] -= qtd
             else:
                 qtd = 0
-            
+        elif name == "Callans":
+            self.dmg += greeb[1]
+        elif name == "Daffans":
+            self.df += greeb[1]
         return qtd
+    def unacquire(self, greeb):
+        name = greeb[0]
+        self.Greebles[name] -= greeb[1]
+        if name == "Callans":
+            self.dmg -= greeb[1]
+        if name == "Daffans":
+            self.df -= greeb[1]
     def walk(self):
         RNG = random.randrange(0, 100)
     def acquireRaac(self, raac):
@@ -483,15 +453,13 @@ class Player():
         else:
             for raac in self.Raacs:
                 if raac.name == "TraacBest":
-                    for traac in self.Traacs:
-                        traac.maxCharge += raac.level
+                    traac.maxCharge += raac.level
             self.Traacs.append(traac)
         if len(self.Traacs) > self.Greebles["Bankors"]:
             traac = self.Traacs.pop(0)
             for raac in self.Raacs:
                 if raac.name == "TraacBest":
-                    for traac in self.Traacs:
-                        traac.maxCharge -= raac.level
+                    traac.maxCharge -= raac.level
             return traac
         else:
             return None
@@ -556,7 +524,7 @@ class Enemy():
         self.speed = speed*random.randrange(7, 14)/10
 
         self.hp = floor(self.hp)
-        self.dmg = floor(self.dmg)
+        self.dmg = min(1, floor(self.dmg))
         self.df = floor(self.df)
         self.speed = floor(self.speed)
         self.mhp = self.hp
@@ -1048,7 +1016,7 @@ class Room():
                 Red = True
             elif enemy.id != 0:
                 enemy.id = 0
-                enemyEnergy = enemy.mhp*enemy.df + enemy.speed*enemy.dmg
+                enemyEnergy = 20+enemy.mhp*(enemy.df+1) + enemy.speed*enemy.dmg
                 enemy.dmg = 0
 
 
@@ -1551,6 +1519,33 @@ class Traac():
             self.progression = 4
             self.description = "Deal 10X damage on the room."
             self.quality = 2
+
+        elif self.id == 3:
+            self.name = "TumbleBox"
+            self.maxCharge = 5
+            self.cost = 3
+            self.progression = 2
+            self.description = "Creates 3 random Q0 Greebles in the room."
+            self.quality = 5
+        elif self.id == 4:
+            self.name = "Reinforce"
+            self.maxCharge = 9
+            self.cost = 5
+            self.progression = 3
+            self.description = "Gives 3+X temporary DF points. Loses a point everytime you discover a room."
+            self.quality = 5
+        elif self.id == 5:
+            self.name = "RaacRerox"
+            self.maxCharge = 20
+            self.cost = 15
+            self.progression = 5
+            self.description = "Rerolls all T/Raacs in the Room."
+            self.quality = 10
+
+
+
+
+
         else:
             self.name = "ERROR"
             print("ERROR!")
@@ -1558,9 +1553,13 @@ class Traac():
         self.maxCharge += self.progression
     def chooseRandomTraac():
         TraacPool = [
-            [20, 0],
-            [20, 1],
-            [20, 2],
+            [40, 0],
+            [40, 1],
+            [40, 2],
+
+            [40, 3],
+            [40, 4],
+            [20, 5],
         ]
 
         total = 0
@@ -1575,12 +1574,14 @@ class Traac():
                 id = Traac[1]
                 break
 
-        TraacPool[id][0] += 3
         return id
     def namesID(name):
         if name == "AltarBoost": return 0
         elif name == "Crystalize": return 1
         elif name == "Bomb": return 2
+        elif name == "TumbleBox": return 3
+        elif name == "Reinforce": return 4
+        elif name == "RaacRerox": return 5
 
 
 class Floor():
@@ -1659,7 +1660,7 @@ class Game():
         self.wprites = []
         self.screen = display.set_mode((1600, 800))
         self.clock = time.Clock()
-        display.set_caption('GreeblesMania 0.4 - Actual Rooms Update')
+        display.set_caption('GreeblesMania 0.5 - Enemy Diversity Update')
         self.size = 64
         self.player = Player()
     def escreverCanto(self, texto, tam, pos):
@@ -1716,9 +1717,6 @@ class Game():
             if value == -1:
                 return
             elif value == 1:
-                for rm in self.currentFloor.Rooms:
-                    print(rm.color)
-                print('----')
                 self.newFloor()
     def newFloor(self):
         self.level += 1
@@ -1846,8 +1844,7 @@ class Game():
                 extraStock += raac.level
             elif raac.name == "LeedQuest" and self.player.Greebles["Leeds"] >= 3*raac.level and raac.charged():
                 self.rooms["normal_red"] += raac.level
-                self.player.Greebles["Leeds"] -= 3*raac.level
-
+                self.player.unacquire(["Leeds", 3*raac.level])
             elif raac.name == "AltarRest":
                 if altarcount >= raac.level and raac.charged():
                     self.player.acquire(["Heexs", 3*raac.level])
@@ -1862,7 +1859,7 @@ class Game():
             elif raac.name == "SlimeFest":
                 for greeb in GQ0:
                     if self.player.Greebles[greeb] >= raac.level:
-                        self.player.Greebles[greeb] -= raac.level
+                        self.player.unacquire([greeb, raac.level])
                         self.player.acquire(["Slops", raac.level])
                 self.params[2] += raac.level
 
@@ -1966,7 +1963,7 @@ class Game():
                         self.screen.blit(greebleimg[object[3][2]], (x, y))
                         self.escrever(f"x{object[3][1]}", 15, (x-15+self.size, y-5+self.size))
                 
-                    self.screen.blit(bricksimg["lock"], (x, y+self.size))
+                    self.screen.blit(bricksimg["lock"], (x, y))
                     # self.screen.blit(greebleimg[object[3][4]], (x, y+self.size))
                     # self.escrever(f"x{object[3][3]}", 15, (x-15+self.size, y+10+2*self.size))
         
@@ -2330,7 +2327,7 @@ class Game():
                 else:
                     altar.uses -= 1
                     for rec in altar.recipe:
-                        self.player.Greebles[rec[0]] -= rec[1]
+                        self.player.unacquire([rec[0], rec[1]])
                     for prod in altar.products:
                         qtd = self.player.acquire(prod)
                         if qtd > 0:
@@ -2349,24 +2346,46 @@ class Game():
         elif action == "active":
             if self.player.Traacs[parameter].charge >= self.player.Traacs[parameter].cost:
                 sucess = False
-                if self.player.Traacs[parameter].name == "AltarBoost":
+                name = self.player.Traacs[parameter].name
+                lvl = self.player.Traacs[parameter].level
+                if name == "AltarBoost":
                     for altar in room.Altars:
                         if altar and altar.uses == altar.maxuses and altar.uses >= 5:
                             altar.uses += 1
                             altar.maxuses += 1
                             sucess = True
-                elif self.player.Traacs[parameter].name == "Crystalize" and self.player.Greebles["Heeds"] > 0 and self.player.Greebles["Beets"] < self.player.Greebles["Radeans"]:
-                    self.player.Greebles["Heeds"] -= 1
+                elif name == "Crystalize" and self.player.Greebles["Heeds"] > 0 and self.player.Greebles["Beets"] < self.player.Greebles["Radeans"]:
+                    self.player.unacquire(["Heeds", 1])
                     self.player.acquire(["Beets", 1])
                     sucess = True
-                elif self.player.Traacs[parameter].name == "Bomb":
+                elif name == "Bomb":
                     for w in range(room.width):
                         for h in range(room.height):
                             if room.objects[w][h][2] == "enemy":
                                 enemy = room.objects[w][h][3]
-                                enemy.hp -= 10*self.player.Traacs[parameter].level
+                                enemy.hp -= 10*lvl
                                 sucess = True
                             room.checkEnemyLife(self.player)
+                elif name == "TumbleBox":
+                    room.randomGreeble(0, 3)
+                    sucess = True
+                elif name == "Reinforce":
+                    self.player.df += 3+lvl
+                    self.player.tempDf += 3+lvl
+                    sucess = True
+                elif name == "RaacRerox":
+                    for w in range(room.width):
+                        for h in range(room.height):
+                            if room.objects[w][h][2] == "raac":
+                                room.freeePosition(w, h)
+                                newRaac = Raac(Raac.chooseRandomRaac())
+                                room.findFreePosition(newRaac, "raac", w, h)
+                                sucess = True
+                            elif room.objects[w][h][2] == "traac":
+                                room.freeePosition(w, h)
+                                newTraac = Traac(Traac.chooseRandomRaac())
+                                room.findFreePosition(newTraac, "traac", w, h)
+                                sucess = True
                 if sucess:
                     self.player.Traacs[parameter].charge -= self.player.Traacs[parameter].cost
         elif action == "deploy" and len(self.player.Broots) > 0:
@@ -2387,15 +2406,13 @@ class Game():
                     if len(self.player.Broots) < self.player.Greebles["Rangors"]:
                         self.player.Broots.append(Broot(item[2]))
                     else:
-                        room.findFreePosition("broot", Broot(item[2]), parameter[0], parameter[1])
+                        room.findFreePosition(Broot(item[2]), "broot", parameter[0], parameter[1])
                 elif item[0] == "Raac":
-                    room.objects[parameter[0]][parameter[1]][3] = Raac(Raac.namesID(item[2]))
-                    room.objects[parameter[0]][parameter[1]][2] = "raac"
+                    room.findFreePosition(Raac(Raac.namesID(item[2])), "raac", parameter[0], parameter[1])
                 elif item[0] == "Traac":
-                    room.objects[parameter[0]][parameter[1]][3] = Traac(Traac.namesID(item[2]))
-                    room.objects[parameter[0]][parameter[1]][2] = "traac"
+                    room.findFreePosition(Traac(Traac.namesID(item[2])), "traac", parameter[0], parameter[1])
 
-                self.player.Greebles[item[4]] -= item[3]
+                self.player.unacquire([item[4], item[3]])
 
         enemyAlive = False
         for w in range(room.width):
@@ -2431,10 +2448,16 @@ class Game():
     def walkRoom(self, step):
         if not self.currentFloor.Rooms[step].discovered:
             if self.player.Greebles["Feeds"] > 0:
-                self.player.Greebles["Feeds"] -= 1
+                self.player.unacquire(["Feeds", 1])
             else:
-                self.player.Greebles["Heeds"] -= 1
+                self.player.unacquire(["Heeds", 1])
 
+            if self.player.tempDf > 0:
+                self.player.tempDf -= 1
+                self.player.df -= 1
+            if self.player.tempDmg > 0:
+                self.player.tempDmg -= 1
+                self.player.dmg -= 1
             roomEnergy = 15*self.level
             lucklevel = 0
             luckCharmRaac = None
@@ -2458,13 +2481,13 @@ class Game():
                     levelPot = raac.level
                     while RNG < levelPot*4:
                         if self.player.Greebles["Shots"] > 0 and raac.charged():
-                            self.player.Greebles["Shots"] -= 1
+                            self.player.unacquire(["Shots", 1])
                             self.player.acquire(["Pots", 1])
                         levelPot -= 25
                         RNG = random.randrange(100)
                 elif raac.name == "BeetHeal":
                     if RNG <= 20*raac.level and self.player.Greebles["Heeds"] < self.player.Greebles["Verdans"] and self.player.Greebles["Beets"] > 0 and raac.charged():
-                        self.player.Greebles["Beets"] -= 1
+                        self.player.unacquire(["Beets", 1])
                         self.player.acquire(["Heeds", 1])
                         self.player.acquire(["Pots", 1])
 
@@ -2501,7 +2524,7 @@ class Game():
                                 greeb[1] -= 1
                                 rm.acquire(["Slops", 1])
                                 if greeb[1] == 0:
-                                    rm.freeePosition(greeb[1], greeb[2])
+                                    rm.freeePosition(greeb[2][0], greeb[2][1])
                     elif deploy.name == "digs":
                         deploy.action += 1
                         if deploy.action >= deploy.cost:
@@ -2549,7 +2572,7 @@ class Game():
             rm = self.currentFloor.Rooms[rm]
             for enemy in rm.Enemies:
                 if enemy.hp > 0 and SplashDamage > 0:
-                    enemy.hp -= floor((0.30+SplashDamage*0.05)*self.player.Greebles["Callans"])
+                    enemy.hp -= floor((0.30+SplashDamage*0.05)*self.player.dmg)
                     SplashDamage -= 1
             rm.checkEnemyLife(self.player)
             for deploy in rm.Deploys:
@@ -2579,7 +2602,7 @@ class Game():
 
                 if enemy.playerTurn >= limit and attack:
                     enemy.playerTurn -= limit
-                    enemy.hp -= self.player.Greebles["Callans"]
+                    enemy.hp -= self.player.dmg
                     room.acquire(["Bloods", 1])
                     attack = False
 

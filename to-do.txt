@@ -15,42 +15,11 @@ Guide to adding T/Racs:
 # Long Future
 # ( ) Connectivity algorithm to ensure that Black Rooms are reachable from White Rooms
 # ( ) One-way connectivity in the graph
+# ( ) Rule Raacs
 # ( ) Walk algorithm generating greebles that it cannot store, where should it go?
 # ( ) Inventory separated from Greebles
-# ( ) Unacquire greebles player
 # ( ) Analyze heat death of Greebles
-
-# Universal
-# ( ) Menu for Greebles
-# ( ) Greebles Quality 3
-# ( ) Health bar for enemies
-# ( ) It's hard to read name of Raacs
-# ( ) Secret Rooms
-# ( ) Warning of colors close by?
-# ( ) Raacs: manipulate based on quantity of Greebles
-# ( ) Traac: breaks Leeds into Q0 Greebles into the room
-# ( ) T/Raac to break defense
-# ( ) Greebles HUD personalization
-    # (X) Greeble Highlight
-    # ( ) Greeble Limit show
-    # ( ) Greeble HUD location choice
-# ( ) HUD: Enemy health bar, damage, def and speed stats
-# ( ) Game Mode: Deflation - all sources of raac energy slowly starts to dwindle with floors instead of increasing.
-# ( ) Change Raacs from place to prioritize energy
-# ( ) Adding rooms temporarly
-# ( ) New Room Variant
-# ( ) Indicate how many times enemy hit you
-# ( ) Raacs for Broots
-# ( ) New Broots
-# ( ) Normalize Broots according to Raac and Traac rules
-# ( ) ( ) Add Luck Greeble quality 3
-#     ( ) All the Raacs that are not yet drawn
-#     ( ) Heexs Greeble
-# ( ) Raac: Vampire: Everytime you discover a purple room, consume 3 Bloods to recover a Heed
-# ( ) Raac: Ampwire: Floor Racs recharge more if energy is available
-# ( ) Broot Defense refactor
-
-# ( ) New Traacs
+# ( ) Negative Greebles and rooms
 
 
 # Updates: Save Game
@@ -80,7 +49,86 @@ Guide to adding T/Racs:
 
 
 
-# (X) Raac thermodynamic balance
+
+
+
+
+# Universal
+# ( ) Secret Rooms
+# ( ) Warning of colors close by?
+# ( ) Raacs: manipulate based on quantity of Greebles
+# ( ) Game Mode: Deflation - all sources of raac energy slowly starts to dwindle with floors instead of increasing.
+# ( ) Change Raacs from place to prioritize energy
+# ( ) Adding rooms temporarly
+# ( ) New Room Variant "Wasted"
+    # ( ) Wasted Purple: Sacrificial altar that permanently removes Broot from rotation
+    # ( ) Wasted Red: Double Enemies, no rewards
+    # ( ) Wasted Yellow: Rare Greebles
+    # ( ) Wasted Green: Gambling Machines
+    # ( ) Wasted Black: No Boss, no Raac
+    # ( ) Wasted Orange: A copy of a Raac that you have. One Enemy
+# New Color Ideas:
+    # ( ) Cyan Room: Celestial, has Zodiacs
+    # ( ) Pink Room: Charge your Traacs, in exchange for??
+    # ( ) Blue Room: Secret, can only be opened by ??
+
+
+
+
+
+
+
+# Enemy Diversity Update 0.5
+# ( ) New Enemies: With different abilities each
+    # ( ) ( ) Plating: Enemies in adjacent rooms gain +1 defense. Drop: rocks
+    # ( ) ( ) Slime: When dead, spawns two slimes with a third of HP and half damage/defense on adjacent rooms, if HP < 10 or dmg <= 0 does not spawn. Drop: Slops
+    # ( ) ( ) WaspNest: Very low damage but spawns Wasps on adjacent rooms. Drop: Clots
+    # ( ) ( ) Wasp: Weak enemy. Drops: Pots
+    # ( ) ( ) Skeleton: Patrols, moving from room to room, turning gray room into red, and red into gray.
+# ( ) Enemies have different tags: Normal, Fast, Armored, Boss, Elite. Besides the actual type
+# ( ) Enemies that spawn enemies have some sort of limit in spawn.
+# ( ) Plate-Black with special Bosses
+    # ( ) ( ) Envinerator: Spawns self.level vines around the floor, if you attack it, the boss takes damage, but it also attacks you, so some rooms have 2 enemies (bad)
+    # ( ) ( ) Firebreather: Steals Greebles from random rooms into theirs.
+    # ( ) ( ) Scorpion: Attacks you for half damage if you access an adjacent room.
+
+# ( ) Health bar for enemies
+# ( ) Traac: breaks Leeds into Q0 Greebles into the room
+# ( ) T/Raac to break defense
+# ( ) Greebles HUD personalization
+    # (X) Greeble Highlight
+    # ( ) Greeble Limit show
+    # ( ) Greeble HUD location choice
+# ( ) Indicate how many times enemy hit you
+# ( ) Raacs for Broots
+# ( ) New Broots
+# ( ) Normalize Broots according to Raac and Traac rules
+# ( ) ( ) Add Luck Greeble quality 3
+#     (X) All the Raacs that are not yet drawn
+#     ( ) Heexs Greeble
+# ( ) Raac: Vampire: Everytime you discover a purple room, consume 3 Bloods to recover a Heed
+# ( ) Broot Defense refactor
+# ( ) Attack/Defense icons for player
+# (X) Unacquire greebles player
+# ( ) Collecting T/Raac affects pool. 
+# ( ) New Colored Room if you clear a Floor
+# ( ) Traacs gather different amounts of energy depending on level, charge stays the same.
+
+
+# (X) New Traacs
+# (X) (X) Traac: TumbleBox: Generates 3 random Q0 Greebs
+# (X) (X) Traac: Reinforce: Gets +4*self.level defense, loses 1 defense each room turn
+# (X) (X) Traac: RaacRerox: Rerolls any Raacs in the room.
+
+
+
+
+
+
+
+
+
+
 
 
 # Actual Rooms Update 0.4
@@ -123,6 +171,7 @@ Guide to adding T/Racs:
 
 
 # Thermodynamics Update 0.3
+# (X) Raac thermodynamic balance
 
 
 
