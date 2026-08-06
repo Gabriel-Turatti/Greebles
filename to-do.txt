@@ -54,8 +54,9 @@ Guide to adding T/Racs:
 
 
 # Universal
+# ( ) Oh god, make the floor rooms update more optimized
 # ( ) Secret Rooms
-# ( ) Warning of colors close by?
+# ( ) Warning of colors close by? Minesweeper-coded
 # ( ) Raacs: manipulate based on quantity of Greebles
 # ( ) Game Mode: Deflation - all sources of raac energy slowly starts to dwindle with floors instead of increasing.
 # ( ) Change Raacs from place to prioritize energy
@@ -86,11 +87,11 @@ Guide to adding T/Racs:
     # (X) (X) Goblin: Speed
     # (X) (X) Plating: Enemies in adjacent rooms gain +1 defense. Drop: rocks
     # (X) ( ) Slime: When dead, spawns two slimes with a third of HP and half damage/defense on adjacent rooms, if HP < 10 or dmg <= 0 does not spawn. Drop: Slops
-    # ( ) ( ) WaspNest: Very low damage but spawns Wasps on adjacent rooms. Drop: Clots
-    # ( ) ( ) Wasp: Weak enemy. Drops: Pots
-    # ( ) ( ) Skeleton: Patrols, moving from room to room, turning gray room into red, and red into gray.
+    # (X) ( ) WaspNest: Very low damage but spawns Wasps on adjacent rooms. Drop: Clots
+    # (X) ( ) Wasp: Weak enemy.
+    # (X) ( ) Skeleton: Patrols, moving from room to room, turning gray room into red, and red into gray.
 # (X) Enemies have different tags: Normal, Fast, Armored, Boss, Elite. Besides the actual type
-# ( ) Enemies that spawn enemies have some sort of limit in spawn.
+# (X) Enemies that spawn enemies have some sort of limit in spawn.
 # ( ) Plate-Black with special Bosses
     # ( ) ( ) Envinerator: Spawns self.level vines around the floor, if you attack it, the boss takes damage, but it also attacks you, so some rooms have 2 enemies (bad)
     # ( ) ( ) Firebreather: Steals Greebles from random rooms into theirs.
@@ -102,7 +103,7 @@ Guide to adding T/Racs:
     # (X) Greeble Highlight
     # (X) Greeble Limit show
     # (X) Greeble Track choice
-# ( ) Indicate how many times enemy hit you
+# (X) Indicate how many times enemy hit you
 # (X) Normalize Broots according to Raac and Traac rules
 # ( ) ( ) Add Luck Greeble quality 3
 #     (X) All the Raacs that are not yet drawn

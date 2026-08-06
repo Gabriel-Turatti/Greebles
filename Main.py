@@ -37,9 +37,13 @@ if True: # Pre-processing
         5: image.load('Images/brick_blue.png'),
         6: image.load('Images/brick_blue.png'),
         7: image.load('Images/brick_blue.png'),
+        8: image.load('Images/brick_blue.png'),
+        9: image.load('Images/brick_blue.png'),
+        10: image.load('Images/brick_blue.png'),
     }
     altarimg = image.load('Images/altar_generic.png')
     altar2img = image.load('Images/altar_break_generic.png')
+    swordimg = image.load('Images/brick_darkred.png')
     greebleimg = {
         "Bloods": image.load('Images/Greebles/Bloods.png'),
         "Clots": image.load('Images/Greebles/Clots.png'),
@@ -194,6 +198,7 @@ if True: # Pre-processing
         greebleimg[key] = transform.scale(greebleimg[key], (64, 64))
     altarimg = transform.scale(altarimg, (64, 64))
     altar2img = transform.scale(altar2img, (64, 64))
+    swordimg = transform.scale(swordimg, (64, 64))
     for key in raacimg:
         raacimg[key] = transform.scale(raacimg[key], (64, 64))
     for key in traacimg:
@@ -437,6 +442,7 @@ class Player():
                     self.acquire(["Xendans", 1])
                     self.acquire(["Heeds", 3])
                     raac.used += 1
+        return qtd
     def acquire(self, greeb):
         name = greeb[0]
         self.Greebles[name] += greeb[1]
@@ -605,6 +611,28 @@ class Enemy():
             name = "Slime"
             speed = speed*0.7
             description = "Splits in two on death."
+        elif self.id == 6: # Wasp
+            hp = hp*0.75
+            dmg = dmg*0.8
+            df = df*0.9
+            name = "Wasp"
+            speed = speed*1.1
+            description = "Weak."
+        elif self.id == 7: # Wasp Nest
+            hp = hp*1.5
+            dmg = dmg*0.6
+            df = df*1.25
+            name = "Wasp Nest"
+            speed = speed*0.8
+            description = "Generates Wasps in adjacent rooms."
+            self.genNum = self.level
+        elif self.id == 8: # Skeleton
+            hp = hp*1
+            dmg = dmg*1.1
+            df = df*1.4
+            name = "Skeleton"
+            speed = speed*1.1
+            description = "Patrols through adjacent rooms."
 
 
         if self.type == "Boss": # Boss
@@ -1009,7 +1037,7 @@ class Room():
         self.objects[w][h][3] = None
         self.objects[w][h][2] = ""
     def populate(self, params):
-        typee = random.randrange(1, 6)
+        typee = random.randrange(1, 8)
         if self.color == "red" and self.type == "normal":
             self.findFreePosition(Enemy(typee, "Normal", self.level), "enemy")
         elif self.color == "red" and self.type == "plate":
@@ -1074,7 +1102,7 @@ class Room():
             self.randomGreeble(1, temp1-2)
         elif self.color == "orange" and self.type == "plate":
             self.findFreePosition(Enemy(typee, "Elite", self.level+1), "enemy")
-            typee = random.randrange(1, 6)
+            typee = random.randrange(1, 8)
             self.findFreePosition(Enemy(typee, "Elite", self.level+1), "enemy")
             for i in range(3):
                 RNG = random.randrange(100)
@@ -1198,7 +1226,7 @@ class Room():
                 loot = floor(log(enemy.mhp+1, 4)) + EnemyLoot
                 if loot > 0:
                     if enemy.name == "Slime":
-                        self.randomGreeble(0, loot)
+                        self.acquire(["Slops", loot])
                     elif enemy.name == "Plated":
                         self.acquire(["Rocks", loot//2])
                         self.randomGreeble(0, 1+loot//2)
@@ -1279,29 +1307,29 @@ class Broot():
         self.alive = True
         self.generate()
     def generate(self):
-        if self.id == 0:
+        if self.id == 1:
             self.hp = 10
             self.dmg = 4
             self.speed = 20
             self.name = "armed"
-        elif self.id == 1:
+        elif self.id == 2:
             self.hp = 15
             self.dmg = 1
             self.speed = 30
             self.name = "defends"
-        elif self.id == 2:
+        elif self.id == 3:
             self.hp = 25
             self.dmg = 1
             self.speed = 10
             self.name = "digests"
-        elif self.id == 3:
+        elif self.id == 4:
             self.hp = 10
             self.dmg = 1
             self.speed = 24
             self.action = 0
             self.cost = 3
             self.name = "digs"
-        elif self.id == 4:
+        elif self.id == 5:
             self.hp = 20
             self.dmg = 1
             self.speed = 5
@@ -1332,12 +1360,11 @@ class Broot():
         RNG = random.randrange(1, total+1)
         id = 0
         for broot in BrootPool:
-            id += 1
             RNG -= broot[0]
             if RNG <= 0:
                 break
-
-        BrootPool[id][0] += len(BrootPool)*0.5
+            id += 1
+        BrootPool[id][0] += round(len(BrootPool)*0.5)
         return id
 class Raac():
     def __init__(self, id):
@@ -1815,7 +1842,7 @@ class Game():
         self.rooms["plate_blue"] = 0
 
 
-
+        self.log = []
         self.broots = {}
         for broot in brootimg:
             self.broots[broot] = 0
@@ -1930,8 +1957,8 @@ class Game():
             self.rooms["normal_red"] += 1
 
         if self.level != 0:
-            typee = Broot.chooseRandomBroot()
-            self.broots[typee] += 1
+            typee = Broot.chooseRandomBroot(BrootPool)
+            self.broots[brootNumber[typee]] += 1
 
         self.player.Greebles["Kollors"] += self.player.Greebles["Kollors_off"]
         self.player.Greebles["Kollors_off"] = 0
@@ -2126,8 +2153,13 @@ class Game():
                     self.infoType = object[2]
                     priority = 30
 
-
-
+        y = 180
+        x += self.size
+        for efnum in self.log:
+            if efnum[0] == "attack":
+                self.screen.blit(swordimg, (x, y))
+                y += self.size
+                self.escreverCanto(f"x{efnum[1]}", 15, (x+self.size-20, y-10))
 
 
 
@@ -2524,9 +2556,9 @@ class Game():
                                 room.freeePosition(w, h)
                                 RNG = random.randrange(100)
                                 if RNG <= 20:
-                                    self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac", w, h)
+                                    room.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac", w, h)
                                 else:
-                                    self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac", w, h)
+                                    room.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac", w, h)
                                 sucess = True
                 if sucess:
                     self.player.Traacs[parameter].charge -= self.player.Traacs[parameter].cost
@@ -2564,11 +2596,11 @@ class Game():
         if not enemyAlive:
             if action == "traac":
                 traac = room.objects[parameter[0]][parameter[1]][3]
+                TraacPool[traac.id][0] += round(len(TraacPool)*0.5)
                 traac = self.player.acquireTraac(traac)
                 room.freeePosition(parameter[0], parameter[1])
-                TraacPool[traac.id][0] += len(TraacPool)*0.5
                 if traac:
-                    TraacPool[traac.id][0] -= len(TraacPool)*0.5
+                    TraacPool[traac.id][0] -= round(len(TraacPool)*0.5)
                     room.findFreePosition(traac, "traac", parameter[0], parameter[1])
             elif action == "greeble":
                 greeb = room.objects[parameter[0]][parameter[1]][3]
@@ -2579,8 +2611,8 @@ class Game():
                     room.objects[parameter[0]][parameter[1]][3][1] = qtd
             elif action == "raac":
                 raac = room.objects[parameter[0]][parameter[1]][3]
+                RaacPool[raac.id][0] += round(len(RaacPool)*0.5)
                 got = self.player.acquireRaac(raac)
-                RaacPool[raac.id][0] += len(RaacPool)*0.5
                 if got:
                     room.freeePosition(parameter[0], parameter[1])
             elif action == "broot":
@@ -2691,7 +2723,34 @@ class Game():
                                 else:
                                     rm.acquire([random.choice(GQ2), 1])
                                 break
-
+                for enemy in rm.Enemies:
+                    if enemy.name == "Wasp Nest" and enemy.genNum > 0:
+                        RNG = random.randrange(100)
+                        if RNG <= 35:
+                            enemy.genNum -= 1
+                            newWasp = Enemy(6, "Normal", self.level)
+                            for rmnum in rm.connections:
+                                rm2 = self.currentFloor.Rooms[rmnum]
+                                if rm2.color == "gray":
+                                    rm2.findFreePosition(newWasp, "enemy")
+                                    rm2.color = "red"
+                    elif enemy.name == "Skeleton" and rm.color == "red":
+                        RNG = random.randrange(100)
+                        if RNG <= 50:
+                            for rmnum in rm.connections:
+                                rm2 = self.currentFloor.Rooms[rmnum]
+                                if rm2.color == "gray":
+                                    for w in range(rm.width):
+                                        for h in range(rm.height):
+                                            if rm.objects[w][h][3] == enemy:
+                                                break
+                                        if rm.objects[w][h][3] == enemy:
+                                            break
+                                    rm.freePosition(w, h)
+                                    rm2.findFreePosition(enemy, "enemy")
+                                    rm2.color = "red"
+                                    rm.color = "gray"
+        self.log.clear()
         self.player.room = step
         self.activate(step)
     def activate(self, step):
@@ -2739,6 +2798,7 @@ class Game():
                     continue
                 enemyAlive = True
                 enemy.hp -= broot_attack
+                broot_attack = 0
 
                 limit = max(enemy.speed, playerSpeed)
                 enemy.turn += enemy.speed
@@ -2753,8 +2813,10 @@ class Game():
 
                 if enemy.turn >= limit:
                     enemy.turn -= limit
-                    qtd = max(0, enemy.dmg - broot_defense)
-                    self.player.damage(qtd)
+                    if enemy.hp > 0 or enemy.turn > enemy.playerTurn:
+                        qtd = max(0, enemy.dmg - broot_defense)
+                        qtd = self.player.damage(qtd)
+                        self.log.append(["attack", qtd])
 
         room.checkEnemyLife(self.player, self)
     def showGreebles(self):
