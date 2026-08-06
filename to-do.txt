@@ -105,6 +105,7 @@ Guide to adding T/Racs:
     # (X) Greeble Track choice
 # (X) Indicate how many times enemy hit you
 # (X) Normalize Broots according to Raac and Traac rules
+# ( ) Log: SaveThrow and Final Broot
 # ( ) ( ) Add Luck Greeble quality 3
 #     (X) All the Raacs that are not yet drawn
 #     ( ) Heexs Greeble
@@ -114,10 +115,13 @@ Guide to adding T/Racs:
 # (X) Collecting T/Raac affects pool. 
 # ( ) Traacs gather different amounts of energy depending on level, charge stays the same.
 # (X) Blue Room: Added to pool if you clean a floor. Is Secret
-# ( ) New Broots
-    # ( ) ( ) One who detects secret Passages: Place it in a room to detect if there is a secret room connected to it
-    # ( ) ( ) One who takes the final hit: Follows you into other rooms, if you were to die from a hit, kills it instead.
-    # ( ) ( ) One who Fights onward: Place on a red room, attacks enemy directly.
+# (X) New Broots
+    # (X) ( ) One who detects secret Passages: Place it in a room to detect if there is a secret room connected to it
+    # (X) ( ) One who takes the final hit: Follows you into other rooms, if you were to die from a hit, kills it instead.
+    # (X) ( ) One who Fights onward: Place on a red room, attacks enemy directly.
+        "detector": image.load('Images/plate_green.png'),
+        "final": image.load('Images/plate_green.png'),
+        "fights": image.load('Images/plate_green.png'),
 # (X) BeetHeal and Splash are having no energy
 
 # ( ) Raacs for Broots

@@ -15,6 +15,7 @@ if True: # Pre-processing
         "normal_orange": image.load('Images/brick_orange.png'),
         "normal_green": image.load('Images/brick_green.png'),
         "normal_cyan": image.load('Images/brick_cyan.png'),
+        "normal_blue": image.load('Images/brick_blue.png'),
 
         "plate_gray": image.load('Images/plate_gray.png'),
         "plate_yellow": image.load('Images/plate_yellow.png'),
@@ -25,6 +26,7 @@ if True: # Pre-processing
         "plate_orange": image.load('Images/plate_orange.png'),
         "plate_green": image.load('Images/plate_green.png'),
         "plate_cyan": image.load('Images/plate_cyan.png'),
+        "plate_blue": image.load('Images/plate_blue.png'),
 
         "lock": image.load('Images/lock.png'),
     }
@@ -109,9 +111,14 @@ if True: # Pre-processing
         "DEAD": image.load('Images/brick_darkred.png'),
         "armed": image.load('Images/Broot_armed.png'),
         "defends": image.load('Images/Broot_defends.png'),
+
         "digests": image.load('Images/Broot_digests.png'),
         "digs": image.load('Images/Broot_digs.png'),
         "deconstructs": image.load('Images/Broot_deconstructs.png'),
+
+        "detector": image.load('Images/plate_green.png'),
+        "final": image.load('Images/plate_green.png'),
+        "fights": image.load('Images/plate_green.png'),
     }
     zoodiacimg = {
         "Aries": image.load('Images/Zoodiacs/1-1-Aries.png'),
@@ -170,11 +177,17 @@ if True: # Pre-processing
     ]
     brootValue = [
         0,
+
         4,
         11,
+
         3,
         7,
         10,
+
+        6,
+        13,
+        5,
     ]
     zoodiacValue = [
         0,
@@ -189,6 +202,7 @@ if True: # Pre-processing
         "gray": (100, 100, 100),
         "orange": (200, 150, 0),
         "green": (0, 255, 0),
+        "blue": (0, 0, 255),
     }
     for key in bricksimg:
         bricksimg[key] = transform.scale(bricksimg[key], (64, 64))
@@ -242,11 +256,17 @@ if True: # Pre-processing
     ]
     BrootPool = [
         [0, 0], # [PoolWeight, Id]
+
         [45, "armed"],
         [30, "defends"],
+
         [15, "digests"],
         [12, "digs"],
         [18, "deconstructs"],
+
+        [12, "detector"],
+        [10, "final"],
+        [25, "fights"],
     ]
 
     
@@ -421,7 +441,7 @@ class Player():
 
             self.acquireRaac(Raac(1))
             self.acquireTraac(Traac(5))
-    def damage(self, qtd):
+    def damage(self, qtd, game):
         qtd -= self.df//3
         for raac in self.Raacs:
             if raac.name == "RockCrest" and qtd > 0 and self.Greebles["Rocks"] >= 2+raac.level and raac.charged():
@@ -432,6 +452,13 @@ class Player():
         if qtd > 0:
             self.unacquire(["Heeds", qtd])
             if self.Greebles["Heeds"] < 0:
+                for deploy in game.currentFloor.Rooms[self.room].Deploys:
+                    if deploy.name == "final" and deploy.alive:
+                        self.Greebles["Heeds"] = 0
+                        deploy.dmg -= 1
+                        if deploy.dmg <= 0:
+                            deploy.alive = False
+                        return qtd
                 for raac in self.Raacs:
                     if raac.name == "SaveThrow":
                         break
@@ -560,9 +587,6 @@ class Enemy():
         self.born()
     def born(self):
 
-        # top = 0
-        # for i in range(1, self.level):
-        #     top += log2(i)
 
         hp = 3 + self.level + random.randrange(0, self.level*2+1)
         dmg = 0.5 + self.level/3 +random.randrange(0, 10)/10
@@ -1307,33 +1331,53 @@ class Broot():
         self.alive = True
         self.generate()
     def generate(self):
-        if self.id == 1:
+        if self.id == 1: # Armed
             self.hp = 10
             self.dmg = 4
             self.speed = 20
             self.name = "armed"
-        elif self.id == 2:
+        elif self.id == 2: # Defends
             self.hp = 15
             self.dmg = 1
             self.speed = 30
             self.name = "defends"
-        elif self.id == 3:
+        elif self.id == 3: # Digests
             self.hp = 25
             self.dmg = 1
             self.speed = 10
             self.name = "digests"
-        elif self.id == 4:
+        elif self.id == 4: # Dig
             self.hp = 10
             self.dmg = 1
             self.speed = 24
             self.action = 0
             self.cost = 3
             self.name = "digs"
-        elif self.id == 5:
+        elif self.id == 5: # Deconstructs
             self.hp = 20
             self.dmg = 1
             self.speed = 5
             self.name = "deconstructs"
+        elif self.id == 6: # Detector
+            self.hp = 35
+            self.dmg = 1
+            self.speed = 10
+            self.name = "detector"
+        elif self.id == 7: # Final
+            self.hp = 15
+            self.dmg = 1
+            self.speed = 5
+            self.name = "final"
+        elif self.id == 8: # Fights
+            self.hp = 30
+            self.dmg = 5
+            self.speed = 15
+            self.name = "fights"
+
+
+
+
+
         self.mhp = self.hp
     def namesID(name):
         if name == "DEAD": return 0
@@ -1342,7 +1386,9 @@ class Broot():
         elif name == "digests": return 3
         elif name == "digs": return 4
         elif name == "deconstructs": return 5
-
+        elif name == "detector": return 6
+        elif name == "final": return 7
+        elif name == "fights": return 8
     def deploy(self, x, y, room):
         self.x = x
         self.y = y
@@ -1364,6 +1410,7 @@ class Broot():
             if RNG <= 0:
                 break
             id += 1
+
         BrootPool[id][0] += round(len(BrootPool)*0.5)
         return id
 class Raac():
@@ -1829,7 +1876,7 @@ class Game():
         self.rooms["normal_green"] = 0
         self.rooms["normal_orange"] = 0
         self.rooms["normal_black"] = 1
-        self.rooms["normal_blue"] = 0
+        self.rooms["normal_blue"] = 2
 
         self.rooms["plate_white"] = 0
         self.rooms["plate_yellow"] = 0
@@ -1846,8 +1893,9 @@ class Game():
         self.broots = {}
         for broot in brootimg:
             self.broots[broot] = 0
-        self.broots["armed"] = 2
-        self.broots["defends"] = 1
+        # self.broots["armed"] = 2
+        # self.broots["defends"] = 1
+        self.broots["detector"] = 3
 
         self.params = [0, 0, 0]
         self.currentFloor = Floor(0, self.rooms, copy.deepcopy(self.broots), self.params)
@@ -2569,6 +2617,12 @@ class Game():
             self.player.selectedBroot -= 1
             if self.player.selectedBroot < 0:
                 self.player.selectedBroot = 0
+
+
+            if broot.name == "detector":
+                for rmNum in room.connections:
+                    if self.currentFloor.Rooms[rmNum].color == "blue":
+                        self.currentFloor.Rooms[rmNum].colored = True
         elif action == "buy":
             item = room.objects[parameter[0]][parameter[1]][3]
             if self.player.Greebles[item[4]] >= item[3]:
@@ -2750,7 +2804,29 @@ class Game():
                                     rm2.findFreePosition(enemy, "enemy")
                                     rm2.color = "red"
                                     rm.color = "gray"
+
+        
+        for rm in self.currentFloor.Rooms:
+            for deploy in rm.Deploys:
+                if deploy.name == "fights" and deploy.alive:
+                    for enemy in rm.Enemies:
+                        enemy.hp -= deploy.dmg
+                        deploy.damage(enemy.dmg)
+                        rm.checkEnemyLife()
+
         self.log.clear()
+
+        for deploy in self.currentFloor.Rooms[self.player.room].Deploys:
+            if deploy.name == "final" and deploy.alive:
+                for w in range(self.currentFloor.Rooms[self.player.room].width):
+                    for h in range(self.currentFloor.Rooms[self.player.room].height):
+                        if self.currentFloor.Rooms[self.player.room].objects[w][h][3] == deploy:
+                            break
+                    if self.currentFloor.Rooms[self.player.room].objects[w][h][3] == deploy:
+                        break
+                self.currentFloor.Rooms[self.player.room].freeePosition(w, h)
+                self.currentFloor.Rooms[step].findFreePosition(deploy, "deploy")
+
         self.player.room = step
         self.activate(step)
     def activate(self, step):
@@ -2799,6 +2875,10 @@ class Game():
                 enemyAlive = True
                 enemy.hp -= broot_attack
                 broot_attack = 0
+                for deploy in room.Deploys:
+                    if deploy.name == "fights" and deploy.alive:
+                        enemy.hp -= deploy.dmg
+                        deploy.damage(enemy.dmg)
 
                 limit = max(enemy.speed, playerSpeed)
                 enemy.turn += enemy.speed
@@ -2815,7 +2895,7 @@ class Game():
                     enemy.turn -= limit
                     if enemy.hp > 0 or enemy.turn > enemy.playerTurn:
                         qtd = max(0, enemy.dmg - broot_defense)
-                        qtd = self.player.damage(qtd)
+                        qtd = self.player.damage(qtd, self)
                         self.log.append(["attack", qtd])
 
         room.checkEnemyLife(self.player, self)
