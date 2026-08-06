@@ -25,7 +25,7 @@ Guide to adding T/Racs:
 # Updates: Save Game
 # Updates: Special Bosses every 5 floors
 # ( ) Plate-Black: Special Boss
-# Updates: It's all in the Stars (consumable Signs)
+# Updates: It's all in the Stars (consumable Signs) 0.6
     # ( ) 12 zodiac Sign Families
     # ( ) Aries -> Combat
     # ( ) Taurus -> Traacs
@@ -67,6 +67,7 @@ Guide to adding T/Racs:
     # ( ) Wasted Green: Gambling Machines
     # ( ) Wasted Black: No Boss, no Raac
     # ( ) Wasted Orange: A copy of a Raac that you have. One Enemy
+    # ( ) Wasted Gray: 0 Greebles, will occupy position of other rooms if enough of them are present.
 # New Color Ideas:
     # ( ) Cyan Room: Celestial, has Zodiacs
     # ( ) Pink Room: Charge your Traacs, in exchange for??
@@ -80,40 +81,48 @@ Guide to adding T/Racs:
 
 # Enemy Diversity Update 0.5
 # ( ) New Enemies: With different abilities each
-    # ( ) ( ) Plating: Enemies in adjacent rooms gain +1 defense. Drop: rocks
-    # ( ) ( ) Slime: When dead, spawns two slimes with a third of HP and half damage/defense on adjacent rooms, if HP < 10 or dmg <= 0 does not spawn. Drop: Slops
+    # (X) (X) Goblin: Normal
+    # (X) (X) Goblin: Armored
+    # (X) (X) Goblin: Speed
+    # (X) (X) Plating: Enemies in adjacent rooms gain +1 defense. Drop: rocks
+    # (X) ( ) Slime: When dead, spawns two slimes with a third of HP and half damage/defense on adjacent rooms, if HP < 10 or dmg <= 0 does not spawn. Drop: Slops
     # ( ) ( ) WaspNest: Very low damage but spawns Wasps on adjacent rooms. Drop: Clots
     # ( ) ( ) Wasp: Weak enemy. Drops: Pots
     # ( ) ( ) Skeleton: Patrols, moving from room to room, turning gray room into red, and red into gray.
-# ( ) Enemies have different tags: Normal, Fast, Armored, Boss, Elite. Besides the actual type
+# (X) Enemies have different tags: Normal, Fast, Armored, Boss, Elite. Besides the actual type
 # ( ) Enemies that spawn enemies have some sort of limit in spawn.
 # ( ) Plate-Black with special Bosses
     # ( ) ( ) Envinerator: Spawns self.level vines around the floor, if you attack it, the boss takes damage, but it also attacks you, so some rooms have 2 enemies (bad)
     # ( ) ( ) Firebreather: Steals Greebles from random rooms into theirs.
     # ( ) ( ) Scorpion: Attacks you for half damage if you access an adjacent room.
 
-# ( ) Health bar for enemies
-# ( ) Traac: breaks Leeds into Q0 Greebles into the room
-# ( ) T/Raac to break defense
-# ( ) Greebles HUD personalization
+# (X) Health bar for enemies
+# (X) Refactor Greebles maximum
+# (X) Greebles HUD personalization
     # (X) Greeble Highlight
-    # ( ) Greeble Limit show
-    # ( ) Greeble HUD location choice
+    # (X) Greeble Limit show
+    # (X) Greeble Track choice
 # ( ) Indicate how many times enemy hit you
-# ( ) Raacs for Broots
-# ( ) New Broots
-# ( ) Normalize Broots according to Raac and Traac rules
+# (X) Normalize Broots according to Raac and Traac rules
 # ( ) ( ) Add Luck Greeble quality 3
 #     (X) All the Raacs that are not yet drawn
 #     ( ) Heexs Greeble
-# ( ) Raac: Vampire: Everytime you discover a purple room, consume 3 Bloods to recover a Heed
 # ( ) Broot Defense refactor
 # ( ) Attack/Defense icons for player
 # (X) Unacquire greebles player
-# ( ) Collecting T/Raac affects pool. 
-# ( ) New Colored Room if you clear a Floor
+# (X) Collecting T/Raac affects pool. 
 # ( ) Traacs gather different amounts of energy depending on level, charge stays the same.
+# (X) Blue Room: Added to pool if you clean a floor. Is Secret
+# ( ) New Broots
+    # ( ) ( ) One who detects secret Passages: Place it in a room to detect if there is a secret room connected to it
+    # ( ) ( ) One who takes the final hit: Follows you into other rooms, if you were to die from a hit, kills it instead.
+    # ( ) ( ) One who Fights onward: Place on a red room, attacks enemy directly.
+# (X) BeetHeal and Splash are having no energy
 
+# ( ) Raacs for Broots
+# ( ) Raac: Vampire: Everytime you discover a purple room, consume 3 Bloods to recover a Heed
+# ( ) Traac: breaks Leeds into Q0 Greebles into the room
+# ( ) T/Raac to break defense
 
 # (X) New Traacs
 # (X) (X) Traac: TumbleBox: Generates 3 random Q0 Greebs

@@ -34,7 +34,9 @@ if True: # Pre-processing
         2: image.load('Images/enemy_fast.png'),
         3: image.load('Images/enemy_armored.png'),
         4: image.load('Images/enemy_boss_generic.png'),
-        5: image.load('Images/enemy_armored.png'),
+        5: image.load('Images/brick_blue.png'),
+        6: image.load('Images/brick_blue.png'),
+        7: image.load('Images/brick_blue.png'),
     }
     altarimg = image.load('Images/altar_generic.png')
     altar2img = image.load('Images/altar_break_generic.png')
@@ -107,15 +109,22 @@ if True: # Pre-processing
         "digs": image.load('Images/Broot_digs.png'),
         "deconstructs": image.load('Images/Broot_deconstructs.png'),
     }
+    zoodiacimg = {
+        "Aries": image.load('Images/Zoodiacs/1-1-Aries.png'),
+    }
+
     raacNumber = []
     traacNumber = []
     brootNumber = []
+    zoodiacNumber = []
     for key in raacimg:
         raacNumber.append(key)
     for key in traacimg:
         traacNumber.append(key)
     for key in brootimg:
         brootNumber.append(key)
+    for key in zoodiacimg:
+        zoodiacNumber.append(key)
     GQ0 = ["Shots", "Bloods", "Pots", "Clots", "Rocks"]
     GQ1 = ["Heeds", "Feeds", "Beets", "Leeds", "Sheets"]
     GQ2 = ["Verdans", "Postans", "Sackans", "Callans", "Daffans", "Radeans", "Xendans"]
@@ -163,6 +172,9 @@ if True: # Pre-processing
         7,
         10,
     ]
+    zoodiacValue = [
+        0,
+    ]
 
     colorkey = {
         "red": (255, 0, 0),
@@ -188,7 +200,49 @@ if True: # Pre-processing
         traacimg[key] = transform.scale(traacimg[key], (64, 64))
     for key in brootimg:
             brootimg[key] = transform.scale(brootimg[key], (64, 64))
+    for key in zoodiacimg:
+        zoodiacimg[key] = transform.scale(zoodiacimg[key], (64, 64))
 
+
+    RaacPool = [
+    [20, 0],
+    [30, 1],
+    [20, 2],
+    [20, 3],
+    [20, 4],
+    [20, 5],
+
+    [20, 6],
+    [20, 7],
+    [20, 8],
+    [20, 9],
+    [20, 10],
+    [20, 11],
+
+    [20, 12],
+    [20, 13],
+    [20, 14],
+    [20, 15],
+    [20, 16],
+    [20, 17],
+]
+    TraacPool = [
+        [40, 0],
+        [40, 1],
+        [40, 2],
+
+        [40, 3],
+        [40, 4],
+        [20, 5],
+    ]
+    BrootPool = [
+        [0, 0], # [PoolWeight, Id]
+        [45, "armed"],
+        [30, "defends"],
+        [15, "digests"],
+        [12, "digs"],
+        [18, "deconstructs"],
+    ]
 
     
 # Energy Thermodynamics
@@ -274,9 +328,18 @@ class Player():
 
 
         self.Highlights = {}
+        self.MaxGreebles = {}
         for key in self.Greebles:
             self.Highlights[key] = False
+            self.MaxGreebles[key] = 0
+
+
         self.Highlights["Heeds"] = True
+
+        for greeb in GQ3:
+            self.MaxGreebles[greeb] = 1000
+        for greeb in GQ2:
+            self.MaxGreebles[greeb] = 1000
     def initPlayer(self, char):
         if char == 0:
             # char = random.randrange(5)
@@ -338,8 +401,8 @@ class Player():
             self.acquire(["Fencors", 1])
 
             self.acquire(["Verdans", 8]) # Max Health
-            self.acquire(["Postans", 30]) # Max Food
-            self.acquire(["Sackans", 20]) # Max Q0 inventory*4
+            self.acquire(["Postans", 10]) # Max Food
+            self.acquire(["Sackans", 10]) # Max Q0 inventory*4
             self.acquire(["Callans", 3]) # Damage
             self.acquire(["Daffans", 0]) # Defense
             self.acquire(["Radeans", 6]) # Max Health2, Max Health3, Max Energy/2
@@ -378,57 +441,75 @@ class Player():
         name = greeb[0]
         self.Greebles[name] += greeb[1]
         qtd = 0
-        if name == "Heeds":
-            if self.Greebles["Heeds"] > self.Greebles["Verdans"]:
-                qtd = -self.Greebles["Verdans"] + self.Greebles["Heeds"]
-                self.Greebles["Heeds"] = self.Greebles["Verdans"]
-            else:
-                qtd = 0
-        elif name == "Feeds":
-            if self.Greebles["Feeds"] > self.Greebles["Postans"]:
-                qtd = -self.Greebles["Postans"] + self.Greebles["Feeds"]
-                self.Greebles["Feeds"] = self.Greebles["Postans"]
-            else:
-                qtd = 0
-        elif name == "Beets":
-            if self.Greebles["Beets"] > self.Greebles["Radeans"]:
-                qtd = -self.Greebles["Radeans"] + self.Greebles["Beets"]
-                self.Greebles["Beets"] = self.Greebles["Radeans"]
-            else:
-                qtd = 0
-        elif name == "Leeds":
-            if self.Greebles["Leeds"] > self.Greebles["Radeans"]:
-                qtd = -self.Greebles["Radeans"] + self.Greebles["Leeds"]
-                self.Greebles["Leeds"] = self.Greebles["Radeans"]
-            else:
-                qtd = 0
-        elif name == "Sheets":
-            if self.Greebles["Sheets"] > self.Greebles["Radeans"]*4:
-                qtd = self.Greebles["Sheets"] - self.Greebles["Radeans"]*4
-                self.Greebles["Sheets"] = self.Greebles["Radeans"]*4
-            else:
-                qtd = 0
-        elif name in ["Shots", "Bloods", "Pots", "Clots", "Rocks"]:
-            qtd2 = 0
-            for name2 in ["Shots", "Bloods", "Pots", "Clots", "Rocks"]:
-                qtd2 += self.Greebles[name2]
-            if qtd2 > self.Greebles["Sackans"]*5:
-                qtd = qtd2 - self.Greebles["Sackans"]*5
-                self.Greebles[name] -= qtd
-            else:
-                qtd = 0
+
+        if self.Greebles[name] > self.MaxGreebles[name]:
+            qtd = self.Greebles[name] -self.MaxGreebles[name]
+            self.Greebles[name] = self.MaxGreebles[name]
+        else:
+            qtd = 0
+
+
+        if name in ["Shots", "Bloods", "Pots", "Clots", "Rocks"]:
+            for name2 in GQ0:
+                self.MaxGreebles[name2] -= (greeb[1]-qtd)
+            self.MaxGreebles[name] += (greeb[1]-qtd)
         elif name == "Callans":
             self.dmg += greeb[1]
         elif name == "Daffans":
             self.df += greeb[1]
+        elif name == "Radeans":
+            self.MaxGreebles["Sheets"] += 4*greeb[1]
+            self.MaxGreebles["Leeds"] += greeb[1]
+            self.MaxGreebles["Beets"] += greeb[1]
+        elif name == "Verdans":
+            self.MaxGreebles["Heeds"] += greeb[1]
+            self.MaxGreebles["Slops"] += 10*greeb[1]
+        elif name == "Xendans":
+            self.MaxGreebles["Heexs"] += 3*greeb[1]
+        elif name == "Postans":
+            self.MaxGreebles["Feeds"] += 3*greeb[1]
+        elif name == "Sackans":
+            self.MaxGreebles["Shots"] += 10*greeb[1]
+            self.MaxGreebles["Bloods"] += 10*greeb[1]
+            self.MaxGreebles["Clots"] += 10*greeb[1]
+            self.MaxGreebles["Pots"] += 10*greeb[1]
+            self.MaxGreebles["Rocks"] += 10*greeb[1]
+
+
+
+
+
+
+
         return qtd
     def unacquire(self, greeb):
         name = greeb[0]
         self.Greebles[name] -= greeb[1]
         if name == "Callans":
             self.dmg -= greeb[1]
-        if name == "Daffans":
+        elif name == "Daffans":
             self.df -= greeb[1]
+        elif name in ["Shots", "Bloods", "Pots", "Clots", "Rocks"]:
+            for name2 in GQ0:
+                self.MaxGreebles[name2] += greeb[1]
+            self.MaxGreebles[name] -= greeb[1]
+        elif name == "Radeans":
+            self.MaxGreebles["Sheets"] -= 4*greeb[1]
+            self.MaxGreebles["Leeds"] -= greeb[1]
+            self.MaxGreebles["Beets"] -= greeb[1]
+        elif name == "Verdans":
+            self.MaxGreebles["Heeds"] -= greeb[1]
+            self.MaxGreebles["Slops"] -= 10*greeb[1]
+        elif name == "Xendans":
+            self.MaxGreebles["Heexs"] -= 3*greeb[1]
+        elif name == "Postans":
+            self.MaxGreebles["Feeds"] -= 3*greeb[1]
+        elif name == "Sackans":
+            self.MaxGreebles["Shots"] -= 10*greeb[1]
+            self.MaxGreebles["Bloods"] -= 10*greeb[1]
+            self.MaxGreebles["Clots"] -= 10*greeb[1]
+            self.MaxGreebles["Pots"] -= 10*greeb[1]
+            self.MaxGreebles["Rocks"] -= 10*greeb[1]
     def walk(self):
         RNG = random.randrange(0, 100)
     def acquireRaac(self, raac):
@@ -466,8 +547,9 @@ class Player():
 
 
 class Enemy():
-    def __init__(self, id, level):
+    def __init__(self, id, type, level):
         self.id = id
+        self.type = type
         self.level = level
         self.born()
     def born(self):
@@ -484,37 +566,59 @@ class Enemy():
         if self.level >= 10:
             hp += (self.level-8)*log2(self.level)
             speed += log2(self.level)
+            dmg = dmg * 1.2**(self.level/10)
 
-        if self.id == 1: # Normal
+
+
+        if self.id == 1: # Common
             hp = hp
             dmg = dmg
             df = df
             speed = speed
-            name = "Normal"
+            name = "Common"
+            description = "Boring enemy"
         elif self.id == 2: # Fast
             hp = hp*0.5
             dmg = dmg*0.7
             df = df*0.3
             speed = speed*1.25
             name = "Fast"
+            description = "Higher Speed"
         elif self.id == 3: # Armored
             hp = hp*1.2
             dmg = dmg*1.1
             df = df*1.3
             name = "Armored"
             speed = speed*0.7
-        elif self.id == 4: # Boss
+            description = "Higher Defense"
+        elif self.id == 4: # Plated
+            hp = hp*1.4
+            dmg = dmg*0.8
+            df = df*1.2
+            name = "Plated"
+            speed = speed*0.5
+            description = "Grants +1 Defense for adjacent enemies"
+        elif self.id == 5: # Slime
+            hp = hp*1.45
+            dmg = dmg*1.1
+            df = df*0.6
+            name = "Slime"
+            speed = speed*0.7
+            description = "Splits in two on death."
+
+
+        if self.type == "Boss": # Boss
             hp = hp*1.5
-            dmg = dmg*1.25
+            dmg = dmg*1.15
             df = df
             speed = speed
-            name = "Boss"
-        elif self.id == 5: # Elite
+            name = "Boss " + name
+        if self.type == "Elite": # Elite
             hp = hp*1.25
-            dmg = dmg*1.15
+            dmg = dmg*1.3
             df = df*0.9
             speed = speed*0.9
-            name = "Elite"
+            name = "Elite " + name
 
 
         self.name = name
@@ -524,11 +628,12 @@ class Enemy():
         self.speed = speed*random.randrange(7, 14)/10
 
         self.hp = floor(self.hp)
-        self.dmg = min(1, floor(self.dmg))
+        self.dmg = max(1, floor(self.dmg))
         self.df = floor(self.df)
         self.speed = floor(self.speed)
         self.mhp = self.hp
 
+        self.description = description
         self.turn = 0
         self.playerTurn = 0
 class Altar():
@@ -904,12 +1009,11 @@ class Room():
         self.objects[w][h][3] = None
         self.objects[w][h][2] = ""
     def populate(self, params):
+        typee = random.randrange(1, 6)
         if self.color == "red" and self.type == "normal":
-            typee = random.randrange(1, 4)
-            self.findFreePosition(Enemy(typee, self.level), "enemy")
+            self.findFreePosition(Enemy(typee, "Normal", self.level), "enemy")
         elif self.color == "red" and self.type == "plate":
-            typee = random.randrange(1, 4)
-            self.findFreePosition(Enemy(typee, self.level+2), "enemy")
+            self.findFreePosition(Enemy(typee, "Normal", self.level+2), "enemy")
             self.randomGreeble(1, self.level)
             self.randomGreeble(2, min(round(log2(self.level))-3, 0))
         elif self.color == "yellow" and self.type == "normal":
@@ -920,13 +1024,12 @@ class Room():
             self.randomGreeble(2, temp2)
             self.randomGreeble(1, temp2*3)
         elif self.color == "black" and self.type == "normal":
-            self.findFreePosition(Enemy(4, self.level), "enemy")
-            RNG = random.randrange(10)
-            if RNG <= 2:
-                RNG = random.randrange(3)
-                self.findFreePosition(Traac(RNG), "traac")
+            self.findFreePosition(Enemy(typee, "Boss", self.level), "enemy")
+            RNG = random.randrange(100)
+            if RNG <= 20:
+                self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac")
             else:
-                self.findFreePosition(Raac(Raac.chooseRandomRaac()), "raac")
+                self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
             self.acquire(["Feeds", 10+round(self.level*1.5)])
         elif self.color == "purple" and self.type == "normal":
             typee = Altar.chooseRandomAltar()
@@ -961,28 +1064,36 @@ class Room():
                 self.randomShop("Greeble", False)
                 temp -= 3
         elif self.color == "orange" and self.type == "normal":
-            self.findFreePosition(Enemy(5, self.level), "enemy")
-            RNG = random.randrange(10)
-            if RNG <= 2:
-                RNG = random.randrange(3)
-                self.findFreePosition(Traac(RNG), "traac")
+            self.findFreePosition(Enemy(typee, "Elite", self.level), "enemy")
+            RNG = random.randrange(100)
+            if RNG <= 20:
+                self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac")
             else:
-                self.findFreePosition(Raac(Raac.chooseRandomRaac()), "raac")
+                self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
             temp1 = self.level
             self.randomGreeble(1, temp1-2)
         elif self.color == "orange" and self.type == "plate":
-            self.findFreePosition(Enemy(5, self.level+1), "enemy")
-            self.findFreePosition(Enemy(5, self.level+1), "enemy")
+            self.findFreePosition(Enemy(typee, "Elite", self.level+1), "enemy")
+            typee = random.randrange(1, 6)
+            self.findFreePosition(Enemy(typee, "Elite", self.level+1), "enemy")
             for i in range(3):
-                RNG = random.randrange(10)
-                if RNG <= 2:
-                    RNG = random.randrange(3)
-                    self.findFreePosition(Traac(RNG), "traac")
+                RNG = random.randrange(100)
+                if RNG <= 20:
+                    self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac")
                 else:
-                    self.findFreePosition(Raac(Raac.chooseRandomRaac()), "raac")
+                    self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
             temp1 = self.level
             self.randomGreeble(1, 2*temp1)
             self.randomGreeble(2, temp1//5)
+        elif self.color == "blue" and self.type == "normal":
+            RNG = random.randrange(100)
+            if RNG <= 20:
+                self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac")
+            else:
+                self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
+            temp1 = self.level
+            self.randomGreeble(1, temp1)
+            self.randomGreeble(2, temp1//3)
     def depopulate(self):
         for w in range(self.width):
             for h in range(self.height):
@@ -1008,7 +1119,7 @@ class Room():
         for key in G[quality]:
             self.acquire([key, Q[id]])
             id += 1
-    def checkEnemyLife(self, player):
+    def checkEnemyLife(self, player, game):
 
         Red = False
         for enemy in self.Enemies:
@@ -1017,9 +1128,36 @@ class Room():
             elif enemy.id != 0:
                 enemy.id = 0
                 enemyEnergy = 20+enemy.mhp*(enemy.df+1) + enemy.speed*enemy.dmg
-                enemy.dmg = 0
 
 
+                if enemy.name == "Slime":
+                    hp = enemy.mhp/3
+                    dmg = enemy.dmg/2
+                    df = enemy.df/2
+                    if hp > 5 and dmg > 1:
+                        em1 = Enemy(enemy.id, "Normal", self.level)
+                        em2 = Enemy(enemy.id, "Normal", self.level)
+                        em1.hp = hp
+                        em1.mhp = hp
+                        em1.dmg = dmg
+                        em1.df = df
+
+                        em2.hp = hp
+                        em2.mhp = hp
+                        em2.dmg = dmg
+                        em2.df = df
+                        for rnum in self.connections:
+                            if em1 == None:
+                                break
+                            if game.currentFloor.Rooms[rnum].color == "gray":
+                                game.currentFloor.Rooms[rnum].findFreePosition(em1)
+                                game.currentFloor.Rooms[rnum].color = "red"
+                                em1 = em2
+                                em2 = None
+                elif enemy.name == "Plated":
+                    for rnum in self.connections:
+                        for enemy in game.currentFloor.Rooms[rnum].Enemies:
+                            enemy.df -= 1
 
                 EnemyLoot = 0
                 BlackTest = None
@@ -1059,7 +1197,13 @@ class Room():
 
                 loot = floor(log(enemy.mhp+1, 4)) + EnemyLoot
                 if loot > 0:
-                    self.randomGreeble(0, loot)
+                    if enemy.name == "Slime":
+                        self.randomGreeble(0, loot)
+                    elif enemy.name == "Plated":
+                        self.acquire(["Rocks", loot//2])
+                        self.randomGreeble(0, 1+loot//2)
+                    else:
+                        self.randomGreeble(0, loot)
 
         if self.color == "red" and not Red:
             self.color = "gray"
@@ -1128,36 +1272,49 @@ class Room():
 
 
 class Broot():
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, id):
+        self.id = id
         self.x = 0
         self.y = 0
         self.alive = True
         self.generate()
     def generate(self):
-        if self.name == "armed":
+        if self.id == 0:
             self.hp = 10
             self.dmg = 4
             self.speed = 20
-        elif self.name == "defends":
+            self.name = "armed"
+        elif self.id == 1:
             self.hp = 15
             self.dmg = 1
             self.speed = 30
-        elif self.name == "digests":
+            self.name = "defends"
+        elif self.id == 2:
             self.hp = 25
             self.dmg = 1
             self.speed = 10
-        elif self.name == "digs":
+            self.name = "digests"
+        elif self.id == 3:
             self.hp = 10
             self.dmg = 1
             self.speed = 24
             self.action = 0
             self.cost = 3
-        elif self.name == "deconstructs":
+            self.name = "digs"
+        elif self.id == 4:
             self.hp = 20
             self.dmg = 1
             self.speed = 5
+            self.name = "deconstructs"
         self.mhp = self.hp
+    def namesID(name):
+        if name == "DEAD": return 0
+        elif name == "armed": return 1
+        elif name == "defends": return 2
+        elif name == "digests": return 3
+        elif name == "digs": return 4
+        elif name == "deconstructs": return 5
+
     def deploy(self, x, y, room):
         self.x = x
         self.y = y
@@ -1167,29 +1324,20 @@ class Broot():
         if self.hp <= 0 and self.alive:
             self.dmg = 0
             self.alive = False
-    def chooseRandomBroot():
-        BrootPool = [
-            [0, 0], # [PoolWeight, Id]
-            [45, "armed"],
-            [30, "defends"],
-            [15, "digests"],
-            [12, "digs"],
-            [18, "deconstructs"],
-        ]
-
+    def chooseRandomBroot(BrootPool):
         total = 0
         for broot in BrootPool:
             total += broot[0]
 
         RNG = random.randrange(1, total+1)
-        id = "armed"
+        id = 0
         for broot in BrootPool:
+            id += 1
             RNG -= broot[0]
             if RNG <= 0:
-                id = broot[1]
                 break
 
-        # BrootPool[id][0] += 3
+        BrootPool[id][0] += len(BrootPool)*0.5
         return id
 class Raac():
     def __init__(self, id):
@@ -1335,7 +1483,7 @@ class Raac():
 
             self.source = "EnemyKill"
             self.maxCharge = 2000
-            self.cost = 15
+            self.cost = 5
             self.rate = 20
             self.upgrades = [700, 0, 20]
         elif self.id == 12:
@@ -1422,29 +1570,7 @@ class Raac():
             self.name = "ERROR"
             print("ERROR!")
         self.charge = self.maxCharge//2
-    def chooseRandomRaac():
-        RaacPool = [
-            [20, 0],
-            [30, 1],
-            [20, 2],
-            [20, 3],
-            [20, 4],
-            [20, 5],
-
-            [20, 6],
-            [20, 7],
-            [20, 8],
-            [20, 9],
-            [20, 10],
-            [20, 11],
-
-            [20, 12],
-            [20, 13],
-            [20, 14],
-            [20, 15],
-            [20, 16],
-            [20, 17],
-        ]
+    def chooseRandomRaac(RaacPool):
 
         total = 0
         for raac in RaacPool:
@@ -1458,7 +1584,6 @@ class Raac():
                 id = raac[1]
                 break
         
-        RaacPool[id][0] += round(len(RaacPool)*0.5)
         return id
     def namesID(name):
         if name == "Treasure": return 0
@@ -1551,16 +1676,8 @@ class Traac():
             print("ERROR!")
     def upgrade(self):
         self.maxCharge += self.progression
-    def chooseRandomTraac():
-        TraacPool = [
-            [40, 0],
-            [40, 1],
-            [40, 2],
-
-            [40, 3],
-            [40, 4],
-            [20, 5],
-        ]
+        self.level += 1
+    def chooseRandomTraac(TraacPool):
 
         total = 0
         for Traac in TraacPool:
@@ -1639,7 +1756,7 @@ class Floor():
                 if color == "yellow" or color == "orange":
                     for key2 in broots:
                         if broots[key2] > 0:
-                            self.Rooms[RNG].findFreePosition(Broot(key2), "broot")
+                            self.Rooms[RNG].findFreePosition(Broot(Broot.namesID(key2)), "broot")
                             broots[key2] -= 1
                             break
 
@@ -1658,7 +1775,9 @@ class Floor():
 class Game():
     def __init__(self):
         self.wprites = []
-        self.screen = display.set_mode((1600, 800))
+        self.width = 1600
+        self.height = 800
+        self.screen = display.set_mode((self.width, self.height))
         self.clock = time.Clock()
         display.set_caption('GreeblesMania 0.5 - Enemy Diversity Update')
         self.size = 64
@@ -1683,6 +1802,7 @@ class Game():
         self.rooms["normal_green"] = 0
         self.rooms["normal_orange"] = 0
         self.rooms["normal_black"] = 1
+        self.rooms["normal_blue"] = 0
 
         self.rooms["plate_white"] = 0
         self.rooms["plate_yellow"] = 0
@@ -1692,6 +1812,7 @@ class Game():
         self.rooms["plate_gray"] = 0
         self.rooms["plate_orange"] = 0
         self.rooms["plate_black"] = 0
+        self.rooms["plate_blue"] = 0
 
 
 
@@ -1710,6 +1831,10 @@ class Game():
 
         self.infoObject = None
         self.infoType = ""
+        self.TrackGreebles = []
+        self.TrackGreebles.append("Heeds")
+        self.TrackGreebles.append("Feeds")
+        self.TrackGreebles.append("Beets")
 
 
         while self.player.Greebles["Heeds"] >= 0:
@@ -1728,6 +1853,7 @@ class Game():
         altarcount = 0
         anvilcount = 0
         orangeScore = 0
+        raacScore = 0
         for rm in self.currentFloor.Rooms:
             if rm.color == "green" and not rm.discovered:
                 RNG = random.randrange(100)
@@ -1739,8 +1865,7 @@ class Game():
                 if RNG <= 25:
                     self.rooms["normal_green"] += 1
                     self.rooms["plate_green"] -= 1
-            if rm.color == "red":
-                alivecount += 1
+            alivecount += len(rm.Enemies)
             if rm.color == "purple":
                 for altar in rm.Altars:
                     if altar.uses == altar.maxuses:
@@ -1751,7 +1876,8 @@ class Game():
             if rm.color == "orange":
                 if len(rm.Raacs) > 0:
                     orangeScore += 20
-
+            if rm.color != "blue":
+                raacScore += 20*(len(rm.Raacs)+len(rm.Traacs))
 
 
         orangeProb = self.rooms["normal_red"] + self.rooms["plate_red"]*2
@@ -1769,7 +1895,8 @@ class Game():
         if RNG < orangeScore:
             self.rooms["plate_orange"] += 1
             self.rooms["normal_orange"] -= 1
-            
+        if RNG < raacScore:
+            self.rooms["normal_blue"] += 1
 
 
         self.rooms["normal_yellow"] += 1
@@ -1871,6 +1998,12 @@ class Game():
             if RNG < coloredLevel*10 and coloredRack.charged():
                 rm.colored = True
 
+            if len(rm.Enemies) > 0:
+                for enemy in rm.Enemies:
+                    if enemy.name == "Plated":
+                        for rnum in rm.connections:
+                            for enemy in self.currentFloor.Rooms[rnum].Enemies:
+                                enemy.df += 1
 
         self.player.room = 0
         self.currentFloor.Rooms[0].discovered = True
@@ -1912,6 +2045,9 @@ class Game():
                         options.append([rect, (w, h), "clean"])
                     else:
                         options.append([rect, (w, h), "attack"])
+                        draw.rect(self.screen, (0, 0, 0), [x, y+self.size, self.size, 10])
+                        fact = object[3].hp/object[3].mhp
+                        draw.rect(self.screen, (255, 0, 0), [x, y+self.size, fact*self.size, 10])
                 elif object[2] == "altar":
                     temp = 7
                     if object[3].id == 0:
@@ -2002,6 +2138,8 @@ class Game():
         y = -1
         for rm in room.connections:
             rm = self.currentFloor.Rooms[rm]
+            if rm.color == "blue" and not rm.colored:
+                continue
             draw.rect(game.screen, (0, 0, 0), (40+self.size*x, 160+self.size*y, self.size, self.size), 1)
 
             if rm.colored:
@@ -2055,8 +2193,8 @@ class Game():
             x += 1
 
 
-        x = 15
-        y = 1
+        x = 14
+        y = 0
         for raac in self.player.Raacs:
             draw.rect(game.screen, (0, 0, 0), (40+self.size*x, self.size*y, self.size, self.size), 1)
             color = (255, 255, 0)
@@ -2078,7 +2216,7 @@ class Game():
 
             x += 1
             if x >= 24:
-                x = 13
+                x = 14
                 y += 1
 
 
@@ -2101,6 +2239,8 @@ class Game():
         y = 6
         self.size = 32
         for rm in self.currentFloor.Rooms:
+            if rm.color == "blue" and not rm.colored:
+                continue
             draw.rect(game.screen, (0, 0, 0), (40+self.size*x, 160+self.size*y, self.size, self.size), 1)
 
             if rm.colored:
@@ -2132,18 +2272,22 @@ class Game():
 
 
 
+        x = 40+14*self.size
+        y = 180+0*self.size
+        for name in self.TrackGreebles:
+            self.screen.blit(greebleimg[name], (x, y))
+            self.escreverCanto(f"x{self.player.Greebles[name]}/{self.player.MaxGreebles[name]}", 15, (x, y+self.size))
+            x += self.size
+            if x >= self.width-self.size:
+                x = 40+14*self.size
+                y += self.size+20
 
 
-        self.screen.blit(greebleimg["Beets"], (40+10*self.size, 20))
-        self.escreverCanto(f"x{self.player.Greebles["Beets"]}/{self.player.Greebles["Radeans"]}", 15, (40+10*self.size, 20+self.size))
-        self.screen.blit(greebleimg["Heeds"], (40+11*self.size, 20))
-        self.escreverCanto(f"x{self.player.Greebles["Heeds"]}/{self.player.Greebles["Verdans"]}", 15, (40+11*self.size, 20+self.size))
-        self.screen.blit(greebleimg["Feeds"], (40+12*self.size, 20))
-        self.escreverCanto(f"x{self.player.Greebles["Feeds"]}/{self.player.Greebles["Postans"]}", 15, (40+12*self.size, 20+self.size))
 
-
-        self.escreverCanto(f"Floor: {self.currentFloor.level}", 25, (50+13*self.size, 20))
-        self.escreverCanto(f"Room: {room.id}", 25, (50+13*self.size, 45))
+        draw.rect(self.screen, (0, 0, 0),  [36, 186+self.size*9, 400, 35], 2)
+        draw.rect(self.screen, (150, 150, 150),  [38, 188+self.size*9, 396, 31])
+        self.escreverCanto(f"Floor: {self.currentFloor.level}", 25, (40, 190+self.size*9))
+        self.escreverCanto(f"Room: {room.id}", 25, (40+self.size*3, 190+self.size*9))
 
 
 
@@ -2331,7 +2475,7 @@ class Game():
                     for prod in altar.products:
                         qtd = self.player.acquire(prod)
                         if qtd > 0:
-                            room.acquire(greeb, "greeble")
+                            room.acquire([prod[0], qtd])
         elif action == "break":
             altar = room.objects[parameter[0]][parameter[1]][3]
             if altar.uses > 0:
@@ -2365,7 +2509,7 @@ class Game():
                                 enemy = room.objects[w][h][3]
                                 enemy.hp -= 10*lvl
                                 sucess = True
-                            room.checkEnemyLife(self.player)
+                            room.checkEnemyLife(self.player, self)
                 elif name == "TumbleBox":
                     room.randomGreeble(0, 3)
                     sucess = True
@@ -2376,15 +2520,13 @@ class Game():
                 elif name == "RaacRerox":
                     for w in range(room.width):
                         for h in range(room.height):
-                            if room.objects[w][h][2] == "raac":
+                            if room.objects[w][h][2] == "raac" or room.objects[w][h][2] == "traac":
                                 room.freeePosition(w, h)
-                                newRaac = Raac(Raac.chooseRandomRaac())
-                                room.findFreePosition(newRaac, "raac", w, h)
-                                sucess = True
-                            elif room.objects[w][h][2] == "traac":
-                                room.freeePosition(w, h)
-                                newTraac = Traac(Traac.chooseRandomRaac())
-                                room.findFreePosition(newTraac, "traac", w, h)
+                                RNG = random.randrange(100)
+                                if RNG <= 20:
+                                    self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac", w, h)
+                                else:
+                                    self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac", w, h)
                                 sucess = True
                 if sucess:
                     self.player.Traacs[parameter].charge -= self.player.Traacs[parameter].cost
@@ -2424,7 +2566,9 @@ class Game():
                 traac = room.objects[parameter[0]][parameter[1]][3]
                 traac = self.player.acquireTraac(traac)
                 room.freeePosition(parameter[0], parameter[1])
+                TraacPool[traac.id][0] += len(TraacPool)*0.5
                 if traac:
+                    TraacPool[traac.id][0] -= len(TraacPool)*0.5
                     room.findFreePosition(traac, "traac", parameter[0], parameter[1])
             elif action == "greeble":
                 greeb = room.objects[parameter[0]][parameter[1]][3]
@@ -2436,6 +2580,7 @@ class Game():
             elif action == "raac":
                 raac = room.objects[parameter[0]][parameter[1]][3]
                 got = self.player.acquireRaac(raac)
+                RaacPool[raac.id][0] += len(RaacPool)*0.5
                 if got:
                     room.freeePosition(parameter[0], parameter[1])
             elif action == "broot":
@@ -2574,7 +2719,7 @@ class Game():
                 if enemy.hp > 0 and SplashDamage > 0:
                     enemy.hp -= floor((0.30+SplashDamage*0.05)*self.player.dmg)
                     SplashDamage -= 1
-            rm.checkEnemyLife(self.player)
+            rm.checkEnemyLife(self.player, self)
             for deploy in rm.Deploys:
                 if deploy.name == "armed":
                     broot_attack += deploy.dmg
@@ -2611,7 +2756,7 @@ class Game():
                     qtd = max(0, enemy.dmg - broot_defense)
                     self.player.damage(qtd)
 
-        room.checkEnemyLife(self.player)
+        room.checkEnemyLife(self.player, self)
     def showGreebles(self):
         tabPressed = True
         while tabPressed:
@@ -2630,7 +2775,6 @@ class Game():
 
             x = 40
             y = 50
-            total = 0
             color = (255, 255, 255)
             for greeb in GQ0 + GQ0a:
                 if self.player.Highlights[greeb]:
@@ -2645,17 +2789,23 @@ class Game():
 
                 draw.rect(self.screen, (0, 0, 0), [x-3, y-3+self.size+6, self.size+6, 15+6], 2)
                 draw.rect(self.screen, (150, 150, 150), [x-1, y-1+self.size+6, self.size+2, 15+2])
-                self.escrever(f"x{self.player.Greebles[greeb]}", 15, (x+self.size//2, y+self.size+14))
-                total += self.player.Greebles[greeb]
+                maxx = self.player.MaxGreebles[greeb]
+                if maxx >= 1000:
+                    maxx = ""
+                else:
+                    maxx = "/" + str(maxx)
+                self.escrever(f"x{self.player.Greebles[greeb]}{maxx}", 15, (x+self.size//2, y+self.size+14))
+
+                if greeb in self.TrackGreebles:
+                    draw.circle(self.screen, (0, 0, 255), (x+8, y+8), 10)
 
                 x += self.size+6
-            total -= self.player.Greebles["Slops"]
 
             y += self.size
             x -= round((self.size+6)*3.5)
-            draw.rect(self.screen, (170, 170, 170), [40-3, y+23, (self.size+6)*5, 20])
-            draw.rect(self.screen, (0, 0, 0), [40-3, y+23, (self.size+6)*5, 20], 2)
-            self.escrever(f"x{total}/{self.player.Greebles["Sackans"]*5}", 15, (x, y+33))
+            # draw.rect(self.screen, (170, 170, 170), [40-3, y+23, (self.size+6)*5, 20])
+            # draw.rect(self.screen, (0, 0, 0), [40-3, y+23, (self.size+6)*5, 20], 2)
+            # self.escrever(f"x{total}/{self.player.MaxGreebles[GQ0[0]]}", 15, (x, y+33))
 
             x = 40
             y += self.size
@@ -2672,7 +2822,12 @@ class Game():
 
                 draw.rect(self.screen, (0, 0, 0), [x-3, y-3+self.size+6, self.size+6, 15+6], 2)
                 draw.rect(self.screen, (150, 150, 150), [x-1, y-1+self.size+6, self.size+2, 15+2])
-                self.escrever(f"x{self.player.Greebles[greeb]}", 15, (x+self.size//2, y+self.size+14))
+                self.escrever(f"x{self.player.Greebles[greeb]}/{self.player.MaxGreebles[greeb]}", 15, (x+self.size//2, y+self.size+14))
+
+
+                if greeb in self.TrackGreebles:
+                    draw.circle(self.screen, (0, 0, 255), (x+8, y+8), 10)
+
                 x += self.size
 
             x = 40
@@ -2690,7 +2845,17 @@ class Game():
 
                 draw.rect(self.screen, (0, 0, 0), [x-3, y-3+self.size+6, self.size+6, 15+6], 2)
                 draw.rect(self.screen, (150, 150, 150), [x-1, y-1+self.size+6, self.size+2, 15+2])
-                self.escrever(f"x{self.player.Greebles[greeb]}", 15, (x+self.size//2, y+self.size+14))
+
+                maxx = self.player.MaxGreebles[greeb]
+                if maxx >= 1000:
+                    maxx = ""
+                else:
+                    maxx = "/" + str(maxx)
+                self.escrever(f"x{self.player.Greebles[greeb]}{maxx}", 15, (x+self.size//2, y+self.size+14))
+
+
+                if greeb in self.TrackGreebles:
+                    draw.circle(self.screen, (0, 0, 255), (x+8, y+8), 10)
                 x += self.size
 
             x = 40
@@ -2708,7 +2873,17 @@ class Game():
 
                 draw.rect(self.screen, (0, 0, 0), [x-3, y-3+self.size+6, self.size+6, 15+6], 2)
                 draw.rect(self.screen, (150, 150, 150), [x-1, y-1+self.size+6, self.size+2, 15+2])
-                self.escrever(f"x{self.player.Greebles[greeb]}", 15, (x+self.size//2, y+self.size+14))
+                maxx = self.player.MaxGreebles[greeb]
+                if maxx >= 1000:
+                    maxx = ""
+                else:
+                    maxx = "/" + str(maxx)
+                self.escrever(f"x{self.player.Greebles[greeb]}{maxx}", 15, (x+self.size//2, y+self.size+14))
+
+
+
+                if greeb in self.TrackGreebles:
+                    draw.circle(self.screen, (0, 0, 255), (x+8, y+8), 10)
                 x += self.size
 
 
@@ -2730,7 +2905,12 @@ class Game():
                             if Colide(opt[0], mouseRect):
                                 self.player.Highlights[opt[1]] = not self.player.Highlights[opt[1]]
                     if ev.button == BUTTON_RIGHT:
-                        pass
+                        for opt in options:
+                            if Colide(opt[0], mouseRect):
+                                if opt[1] in self.TrackGreebles:
+                                    self.TrackGreebles.remove(opt[1])
+                                else:
+                                    self.TrackGreebles.append(opt[1])
                 elif ev.type == KEYDOWN:
                     if ev.key == K_TAB:
                         tabPressed = not tabPressed
