@@ -6,6 +6,7 @@ Current Record:
 Guide to adding T/Racs:
 - Raac image
 - Raac Shop value
+- Raac Pool
 - Raac stats
 - Raac Actual effect
 - Raac nametoId
@@ -63,6 +64,10 @@ Traac charge is equal to 20+5*self.level energy.
 # ( ) Change Raacs from place to prioritize energy
 # ( ) Adding rooms temporarly
 # ( ) Flip Greebles quality 3 and 4 functions
+# ( ) Change slop of Digests Broot by tier of quality
+# ( ) Broot Frosty:
+# ( ) Broot Armor Breaker:
+# ( ) Broot Killers walk:
 # ( ) Traac: breaks Leeds into Q0 Greebles into the room
 # ( ) New Room Variant "Wasted"
     # ( ) Wasted Purple: Sacrificial altar that permanently removes Broot from rotation
@@ -129,12 +134,13 @@ Traac charge is equal to 20+5*self.level energy.
 # (X) (X) Traac: Reinforce: Gets +4*self.level defense, loses 1 defense each room turn
 # (X) (X) Traac: RaacRerox: Rerolls any Raacs in the room.
 
-# ( ) Raac: Vampire: Everytime you kill an enemy, consume 2X Bloods to recover X Heed
-# ( ) Raac: Frost Aspect: Your attacks slows enemies down by 2+Tannors speed.
-# ( ) Raac: Squire: Increases Broots abilities
-# ( ) Raac: Hammlet: your attacks break 0.5 armor
-# ( ) Raac: Revishot: Every floor, remove 2 Shot and gain a temporary Def point. 
-# ( ) Raac: Magic Eye: Blue rooms are revealed if connected to a purple room.
+# ( ) Test new raacs
+# (X) ( ) Raac: Vampire: Everytime you kill an enemy, consume 2X Bloods to recover X Heed
+# (X) ( ) Raac: Frost Aspect: Your attacks slows enemies down by 2+Tannors speed.
+# (X) ( ) Raac: Squire: Increases Broots abilities
+# (X) ( ) Raac: Hammlet: your attacks break 0.5 armor
+# (X) ( ) Raac: Revishot: Every floor, remove 2 Shot and gain a temporary Def point. 
+# (X) ( ) Raac: Magic Eye: Blue rooms are revealed if connected to a purple room.
 
 
 

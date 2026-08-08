@@ -98,6 +98,26 @@ if True: # Pre-processing
         "TraacBest": image.load('Images/Raacs/raac_TraacBest.png'), # Traac items have X more max charge.
         "AltarRest": image.load('Images/Raacs/raac_AltarRest.png'), # Destroy an unused altar to gain 3X Heexs.
         "BlackTest": image.load('Images/Raacs/raac_BlackTest.png'), # Killing a Boss gives +X charges to your Traacs
+
+        "Vampire": image.load('Images/Raacs/raac_generic.png'), # Everytime you kill an enemy, consume 2X Bloods to recover X Heed
+        "FrostAspect": image.load('Images/Raacs/raac_generic.png'), # Your attacks slows enemies down by 2+Tannors speed.
+        "Squire": image.load('Images/Raacs/raac_generic.png'), # Increases Broots abilities
+        "Hammlet": image.load('Images/Raacs/raac_generic.png'), # your attacks break 0.5 armor
+        "Revishot": image.load('Images/Raacs/raac_generic.png'), # Every floor, remove 2 Shot and gain a temporary Def point. 
+        "MagicEye": image.load('Images/Raacs/raac_generic.png'), # Blue rooms are revealed if connected to a purple room.
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
     traacimg = {
         "AltarBoost": image.load('Images/Traacs/traac_AltarBoost.png'), # Altars have more charge in exchange for rocks
@@ -168,6 +188,13 @@ if True: # Pre-processing
         25,
         27,
         26,
+
+        18,
+        15,
+        22,
+        14,
+        6,
+        10,
     ]
     traacValue = [
         9,
@@ -247,6 +274,13 @@ if True: # Pre-processing
     [20, 15],
     [20, 16],
     [20, 17],
+
+    [20, 18],
+    [20, 19],
+    [20, 20],
+    [20, 21],
+    [20, 22],
+    [20, 23],
 ]
     TraacPool = [
         [40, 0],
@@ -701,13 +735,17 @@ class Enemy():
 
         self.hp = floor(self.hp)
         self.dmg = max(1, floor(self.dmg))
-        self.df = floor(self.df)
+        self.df = self.df
         self.speed = floor(self.speed)
         self.mhp = self.hp
 
         self.description = description
         self.turn = 0
         self.playerTurn = 0
+    def damage(self, qtd):
+        qtd -= self.df
+        if qtd > 0:
+            self.hp -= qtd
 class Altar():
     def __init__(self, id):
         self.recipe = []
@@ -1255,10 +1293,16 @@ class Room():
                             enemyEnergy = 0
 
 
-                    if raac.name == "EnemyLoot":
+                    if raac.name == "EnemyLoot" and raac.charged():
                         EnemyLoot += 2*raac.level
                     elif raac.name == "BlackTest":
                         BlackTest = raac
+                    elif raac.name == "Vampire":
+                        times = raac.level
+                        while player.Greebles["Bloods"] > 2 and player.Greebles["Heeds"] < player.MaxGreebles["Heeds"] and times > 0 and raac.charged():
+                            times -= 1
+                            player.unacquire(["Bloods", 2])
+                            player.acquire(["Heeds", 1])
                 else:
                     EnemyLoot = 0
 
@@ -1356,57 +1400,57 @@ class Room():
 
 
 class Broot():
-    def __init__(self, id):
+    def __init__(self, id, squireLevel):
         self.id = id
         self.x = 0
         self.y = 0
         self.alive = True
-        self.generate()
-    def generate(self):
+        self.generate(squireLevel)
+    def generate(self, squireLevel):
         if self.id == 1: # Armed
-            self.hp = 10
-            self.dmg = 4
-            self.speed = 20
+            self.hp = 10*squireLevel
+            self.dmg = 4*squireLevel
+            self.speed = 20+5*squireLevel
             self.name = "armed"
         elif self.id == 2: # Defends
-            self.hp = 15
-            self.dmg = 1
-            self.speed = 30
+            self.hp = 15*squireLevel
+            self.dmg = 1*squireLevel
+            self.speed = 30+5*squireLevel
             self.name = "defends"
         elif self.id == 3: # Digests
-            self.hp = 25
-            self.dmg = 1
-            self.speed = 10
+            self.hp = 25*squireLevel
+            self.dmg = 1*squireLevel
+            self.speed = 10+5*squireLevel
             self.name = "digests"
         elif self.id == 4: # Dig
-            self.hp = 10
-            self.dmg = 1
-            self.speed = 24
+            self.hp = 10*squireLevel
+            self.dmg = 1*squireLevel
+            self.speed = 24+4*squireLevel
             self.action = 0
             self.cost = 3
             self.name = "digs"
         elif self.id == 5: # Deconstructs
-            self.hp = 20
-            self.dmg = 1
-            self.speed = 5
+            self.hp = 20*squireLevel
+            self.dmg = 1*squireLevel
+            self.speed = 5*squireLevel
             self.name = "deconstructs"
         elif self.id == 6: # Detector
-            self.hp = 35
-            self.dmg = 1
-            self.speed = 10
+            self.hp = 35*squireLevel
+            self.dmg = 1*squireLevel
+            self.speed = 10*squireLevel
             self.name = "detector"
         elif self.id == 7: # Final
-            self.hp = 15
-            self.dmg = 1
-            self.speed = 5
+            self.hp = 15*squireLevel
+            self.dmg = 1*squireLevel
+            self.speed = 5*squireLevel
             self.name = "final"
         elif self.id == 8: # Fights
-            self.hp = 30
-            self.dmg = 5
-            self.speed = 15
+            self.hp = 30*squireLevel
+            self.dmg = 5*squireLevel
+            self.speed = 15+10*squireLevel
             self.name = "fights"
 
-
+        self.level = squireLevel
 
 
 
@@ -1658,6 +1702,73 @@ class Raac():
             self.cost = 20
             self.rate = 45
             self.upgrades = [500, 20, 15]
+        elif self.id == 18:
+            self.name = "Vampire"
+            self.trigger = "EnemyKill"
+            self.description = "Everytime you kill an enemy, consume 2X Bloods to recover X Heeds"
+            self.quality = 4
+
+            self.source = "EnemyKill"
+            self.maxCharge = 500
+            self.cost = 10
+            self.rate = 30
+            self.upgrades = [250, 10, 10]
+        elif self.id == 19:
+            self.name = "FrostAspect"
+            self.trigger = "Attack"
+            self.description = "Your attacks slows enemies down by X(2+Tannor) speed."
+            self.quality = 5
+
+            self.source = "Floor"
+            self.maxCharge = 1500
+            self.cost = 15
+            self.rate = 50
+            self.upgrades = [500, 15, 25]
+        elif self.id == 20:
+            self.name = "Squire"
+            self.trigger = "Always"
+            self.description = "Increases General Broots abilities."
+            self.quality = 8
+
+            self.source = "Floor"
+            self.maxCharge = 2000
+            self.cost = 30
+            self.rate = 100
+            self.upgrades = [1000, 30, 50]
+        elif self.id == 21:
+            self.name = "Hammlet"
+            self.trigger = "Attack"
+            self.description = "Your attacks break 0.5X armor"
+            self.quality = 4
+
+            self.source = "Floor"
+            self.maxCharge = 3000
+            self.cost = 5
+            self.rate = 50
+            self.upgrades = [300, 5, 0]
+        elif self.id == 22:
+            self.name = "Revishot"
+            self.trigger = "Floor"
+            self.description = "Every Floor, remove 2X Shots and gain X Def points."
+            self.quality = 2
+
+            self.source = "EnemyKill"
+            self.maxCharge = 1000
+            self.cost = 10
+            self.rate = 15
+            self.upgrades = [500, 10, 5]
+        elif self.id == 23:
+            self.name = "MagicEye"
+            self.trigger = "Discover"
+            self.description = "Blue Rooms are revealed when connected to purple rooms. Up to X times"
+            self.quality = 4
+            self.used = 0
+
+            self.source = "Discover"
+            self.maxCharge = 1500
+            self.cost = 10
+            self.rate = 20
+            self.upgrades = [250, 10, 5]
 
 
 
@@ -1712,6 +1823,13 @@ class Raac():
         elif name == "TrackBest": return 15
         elif name == "AltarRest": return 16
         elif name == "BlackTest": return 17
+
+        elif name == "Vampire": return 18
+        elif name == "FrostAspect": return 19
+        elif name == "Squire": return 20
+        elif name == "Hammlet": return 21
+        elif name == "Revishot": return 22
+        elif name == "MagicEye": return 23
     def charged(self, times=1): # This function will use up energy. Make it the last verification ALWAYS
         value = self.charge >= self.cost*times
         self.charge -= self.cost*value*times
@@ -1862,7 +1980,7 @@ class Floor():
                 if color == "yellow" or color == "orange":
                     for key2 in broots:
                         if broots[key2] > 0:
-                            self.Rooms[RNG].findFreePosition(Broot(Broot.namesID(key2)), "broot")
+                            self.Rooms[RNG].findFreePosition(Broot(Broot.namesID(key2), 1+params[3]), "broot")
                             broots[key2] -= 1
                             break
 
@@ -1929,7 +2047,7 @@ class Game():
         self.broots["defends"] = 1
         # self.broots["detector"] = 3
 
-        self.params = [0, 0, 0]
+        self.params = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.currentFloor = Floor(0, self.rooms, copy.deepcopy(self.broots), self.params)
 
         self.plate_yellowCost = 5
@@ -2057,6 +2175,7 @@ class Game():
         connectivity = 3
         extraStock = 0
         coloredLevel = 0
+        Squire = 0
         for raac in self.player.Raacs:
             if raac.source == "Floor" and floorEnergy > 0:
                 raac.charge += raac.rate
@@ -2084,7 +2203,7 @@ class Game():
             elif raac.name == "AltarRest":
                 if altarcount >= raac.level and raac.charged():
                     self.player.acquire(["Heexs", 3*raac.level])
-            elif raac.name == "SaveThrow":
+            elif raac.name in ["SaveThrow", "MagicEye"]:
                 raac.used = 0
             elif raac.name == "FencorRegen":
                 amount = raac.level*3
@@ -2092,15 +2211,22 @@ class Game():
                 while temp > 0 and self.player.Greebles["Heeds"] < self.player.Greebles["Verdans"] and raac.charged():
                     temp -= 1
                     self.player.acquire(["Heeds", amount])
-            elif raac.name == "SlimeFest":
+            elif raac.name == "SlimeFest" and raac.charged():
                 for greeb in GQ0:
                     if self.player.Greebles[greeb] >= raac.level:
                         self.player.unacquire([greeb, raac.level])
                         self.player.acquire(["Slops", raac.level])
                 self.params[2] += raac.level
-
+            elif raac.name == "Squire":
+                Squire += raac.level
+            elif raac.name == "Revishot":
+                while self.player.Greebles["Shots"] > 2 and raac.charged():
+                    self.player.df += 1
+                    self.player.tempDf += 1
         self.params[0] = connectivity
         self.params[1] = extraStock
+        # gray rooms
+        self.params[3] = Squire
         self.currentFloor = Floor(self.level, self.rooms, copy.deepcopy(self.broots), self.params)
         for rm in self.currentFloor.Rooms:
             RNG = random.randrange(100)
@@ -2162,18 +2288,6 @@ class Game():
                     if object[3].id == 0:
                         self.screen.blit(altar2img, (x, y))
                         self.escreverCanto(f"{object[3].uses}/{object[3].maxuses}", 15, (x+5, y+self.size+5))
-
-                        xtemp = 16
-                        ytemp = 1
-                        id = 0
-                        for raac in self.player.Raacs:
-                            rect = Rect(self.size*xtemp, self.size*ytemp, self.size, self.size)
-                            options.append([rect, (w, h, id), "break"])
-                            id += 1
-                            xtemp += 1
-                            if xtemp >= 24:
-                                xtemp = 16
-                                ytemp += 1
                     else:
                         self.screen.blit(altarimg, (x, y))
                         # self.escreverCanto(f"{object[3].uses}/{object[3].maxuses}", 15, (x+5, y+5+self.size))
@@ -2317,6 +2431,7 @@ class Game():
 
         x = 14
         y = 0
+        id = 0
         for raac in self.player.Raacs:
             draw.rect(game.screen, (0, 0, 0), (40+self.size*x, self.size*y, self.size, self.size), 1)
             color = (255, 255, 0)
@@ -2335,6 +2450,14 @@ class Game():
                 self.infoObject = raac
                 self.infoType = "raac"
 
+
+            breakAltar = None
+            for altar in room.Altars:
+                if altar.id == 0 and altar.uses > 0:
+                    breakAltar = altar
+            if breakAltar:
+                options.append([rect, (breakAltar, id), "break"])
+                id += 1
 
             x += 1
             if x >= 24:
@@ -2416,7 +2539,7 @@ class Game():
             rm = self.currentFloor.Rooms[rm]
             for deploy in rm.Deploys:
                 if deploy.name == "defends":
-                    broot_defense += 3
+                    broot_defense += 3*deploy.level
         defText = ""
         if broot_defense > 0:
             defText = "+"+str(broot_defense)
@@ -2464,14 +2587,14 @@ class Game():
                 self.escreverCanto(f"{self.infoObject.name}", 20, (x, y))
                 y += 20
 
-                self.escreverCanto(f"HP: {self.infoObject.hp}/{self.infoObject.mhp}", 20, (x, y))
+                self.escreverCanto(f"HP: {self.infoObject.hp:.0f}/{self.infoObject.mhp}", 20, (x, y))
                 y += 20
 
 
                 self.escreverCanto(f"Dmg: {max(self.infoObject.dmg-self.player.Greebles["Daffans"]//3, 0)}", 20, (x, y))
                 y += 20
 
-                self.escreverCanto(f"Df: {self.infoObject.df}", 20, (x, y))
+                self.escreverCanto(f"Df: {self.infoObject.df:.1f}", 20, (x, y))
                 y += 20
 
                 self.escreverCanto(f"Speed: {self.infoObject.speed} [{self.infoObject.turn}/{self.infoObject.playerTurn}]", 20, (x, y))
@@ -2612,11 +2735,11 @@ class Game():
                         if qtd > 0:
                             room.acquire([prod[0], qtd])
         elif action == "break":
-            altar = room.objects[parameter[0]][parameter[1]][3]
+            altar = parameter[1][0]
             if altar.uses > 0:
                 altar.uses -= 1
 
-                raac = self.player.Raacs.pop(parameter[2])
+                raac = self.player.Raacs.pop(parameter[1][1])
                 room.randomGreeble(2, raac.level*3)
         elif action == "clean":
             room.freeePosition(parameter[0], parameter[1])
@@ -2752,7 +2875,7 @@ class Game():
             luckCharmRaac = None
             RNG = random.randrange(100)
             for raac in self.player.Raacs:
-                if raac.source == "Floor" and roomEnergy > 0:
+                if raac.source == "Discover" and roomEnergy > 0:
                     raac.charge += raac.rate
                     roomEnergy -= raac.rate
                     if raac.charge > raac.maxCharge:
@@ -2779,6 +2902,12 @@ class Game():
                         self.player.unacquire(["Beets", 1])
                         self.player.acquire(["Heeds", 1])
                         self.player.acquire(["Pots", 1])
+                elif raac.name == "MagicEye":
+                    if self.currentFloor.Rooms[step].color == "purple":
+                        for rm in self.currentFloor.Rooms[step].connections:
+                            if self.currentFloor.Rooms[rm].color == "blue" and raac.used < raac.level and raac.charged():
+                                self.currentFloor.Rooms[step].colored = True
+                                raac.used += 1
 
             for greeb in self.currentFloor.Rooms[step].Greebles:
                 if greeb[0] in GQ0:
@@ -2811,12 +2940,12 @@ class Game():
                         for greeb in rm.Greebles:
                             if greeb[0] != "Slops":
                                 greeb[1] -= 1
-                                rm.acquire(["Slops", 1])
+                                rm.acquire(["Slops", 2])
                                 if greeb[1] == 0:
                                     rm.freeePosition(greeb[2][0], greeb[2][1])
                     elif deploy.name == "digs":
-                        deploy.action += 1
-                        if deploy.action >= deploy.cost:
+                        deploy.action += deploy.level
+                        while deploy.action >= deploy.cost:
                             deploy.action -= deploy.cost
                             RNG = random.randrange(100)
                             if RNG <= 20:
@@ -2827,7 +2956,7 @@ class Game():
                         for altar in rm.Altars:
                             if altar.uses > 0:
                                 altar.uses -= 1
-                                RNG = random.randrange(150)/altar.maxuses
+                                RNG = random.randrange(100+50*deploy.level)/altar.maxuses
                                 if RNG <= 20:
                                     rm.acquire([random.choice(GQ0), 1])
                                 elif RNG <= 40:
@@ -2896,9 +3025,15 @@ class Game():
 
         # Broots and Raacs
         SplashDamage = 0
+        FrostAspect = 0
+        Hammlet = 0
         for raac in self.player.Raacs:
             if raac.name == "SplashDamage" and raac.charged(raac.level):
                 SplashDamage += raac.level
+            if raac.name == "FrostAspect" and raac.charged():
+                FrostAspect += (2+self.player.Greebles["Tannors"])*raac.level
+            if raac.name == "Hammlet" and raac.charged():
+                Hammlet += raac.level/2
         broot_attack = 0
         broot_defense = 0
 
@@ -2945,7 +3080,11 @@ class Game():
 
                 if enemy.playerTurn >= limit and attack:
                     enemy.playerTurn -= limit
-                    enemy.hp -= self.player.dmg
+                    enemy.damage(self.player.dmg)
+                    enemy.speed -= FrostAspect
+                    enemy.df -= Hammlet
+                    if enemy.df < 0:
+                        enemy.df = 0
                     room.acquire(["Bloods", 1])
                     attack = False
 
