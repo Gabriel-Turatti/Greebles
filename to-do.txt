@@ -10,6 +10,7 @@ Guide to adding T/Racs:
 - Raac Actual effect
 - Raac nametoId
 
+Traac charge is equal to 20+5*self.level energy.
 
 
 # Long Future
@@ -61,6 +62,8 @@ Guide to adding T/Racs:
 # ( ) Game Mode: Deflation - all sources of raac energy slowly starts to dwindle with floors instead of increasing.
 # ( ) Change Raacs from place to prioritize energy
 # ( ) Adding rooms temporarly
+# ( ) Flip Greebles quality 3 and 4 functions
+# ( ) Traac: breaks Leeds into Q0 Greebles into the room
 # ( ) New Room Variant "Wasted"
     # ( ) Wasted Purple: Sacrificial altar that permanently removes Broot from rotation
     # ( ) Wasted Red: Double Enemies, no rewards
@@ -81,7 +84,7 @@ Guide to adding T/Racs:
 
 
 # Enemy Diversity Update 0.5
-# ( ) New Enemies: With different abilities each
+# (X) New Enemies: With different abilities each
     # (X) (X) Goblin: Normal
     # (X) (X) Goblin: Armored
     # (X) (X) Goblin: Speed
@@ -105,37 +108,33 @@ Guide to adding T/Racs:
     # (X) Greeble Track choice
 # (X) Indicate how many times enemy hit you
 # (X) Normalize Broots according to Raac and Traac rules
-# ( ) Log: SaveThrow and Final Broot
-# ( ) ( ) Add Luck Greeble quality 3
+# (X) Log: SaveThrow and Final Broot
+# (X) ( ) Add Luck Greeble quality 3
 #     (X) All the Raacs that are not yet drawn
 #     ( ) Heexs Greeble
-# ( ) Broot Defense refactor
-# ( ) Attack/Defense icons for player
+# (-) Broot Defense refactor
+# (X) ( ) Attack/Defense/Speed icons for player
 # (X) Unacquire greebles player
-# (X) Collecting T/Raac affects pool. 
-# ( ) Traacs gather different amounts of energy depending on level, charge stays the same.
+# (X) Collecting T/Raac affects pool.
+# (X) Traacs gather different amounts of energy depending on level, charge stays the same.
 # (X) Blue Room: Added to pool if you clean a floor. Is Secret
 # (X) New Broots
     # (X) ( ) One who detects secret Passages: Place it in a room to detect if there is a secret room connected to it
     # (X) ( ) One who takes the final hit: Follows you into other rooms, if you were to die from a hit, kills it instead.
     # (X) ( ) One who Fights onward: Place on a red room, attacks enemy directly.
-        "detector": image.load('Images/plate_green.png'),
-        "final": image.load('Images/plate_green.png'),
-        "fights": image.load('Images/plate_green.png'),
 # (X) BeetHeal and Splash are having no energy
-
-# ( ) Raacs for Broots
-# ( ) Raac: Vampire: Everytime you discover a purple room, consume 3 Bloods to recover a Heed
-# ( ) Traac: breaks Leeds into Q0 Greebles into the room
-# ( ) T/Raac to break defense
 
 # (X) New Traacs
 # (X) (X) Traac: TumbleBox: Generates 3 random Q0 Greebs
 # (X) (X) Traac: Reinforce: Gets +4*self.level defense, loses 1 defense each room turn
 # (X) (X) Traac: RaacRerox: Rerolls any Raacs in the room.
 
-
-
+# ( ) Raac: Vampire: Everytime you kill an enemy, consume 2X Bloods to recover X Heed
+# ( ) Raac: Frost Aspect: Your attacks slows enemies down by 2+Tannors speed.
+# ( ) Raac: Squire: Increases Broots abilities
+# ( ) Raac: Hammlet: your attacks break 0.5 armor
+# ( ) Raac: Revishot: Every floor, remove 2 Shot and gain a temporary Def point. 
+# ( ) Raac: Magic Eye: Blue rooms are revealed if connected to a purple room.
 
 
 
