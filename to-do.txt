@@ -15,18 +15,48 @@ Traac charge is equal to 20+5*self.level energy.
 
 
 # Long Future
-# ( ) Connectivity algorithm to ensure that Black Rooms are reachable from White Rooms
 # ( ) One-way connectivity in the graph
-# ( ) Rule Raacs
-# ( ) Walk algorithm generating greebles that it cannot store, where should it go?
 # ( ) Inventory separated from Greebles
-# ( ) Analyze heat death of Greebles
-# ( ) Negative Greebles and rooms
+# (X) Analyze heat death of Greebles
 
 
-# Updates: Save Game
-# Updates: Special Bosses every 5 floors
-# ( ) Plate-Black: Special Boss
+# Update: Negative Greebles and rooms
+# Update: Rule Raacs
+# Update: Save Game
+# Update: Alternative Floors
+
+
+
+
+# Universal Future
+# ( ) Connectivity algorithm to ensure that Black Rooms are reachable from White Rooms
+# ( ) Walk algorithm generating greebles that it cannot store, where should it go?
+# ( ) Oh god, make the floor rooms update more optimized
+# ( ) Warning of colors close by? Minesweeper-coded
+# ( ) Game Mode: Deflation - all sources of raac energy slowly starts to dwindle with floors instead of increasing.
+# ( ) Change Raacs from place to prioritize energy
+# ( ) Do something about enemy bodies.
+# ( ) New Room Variant "Wasted"
+    # ( ) Wasted Purple: Sacrificial altar that permanently removes Broot from rotation
+    # ( ) Wasted Red: Double Enemies, no rewards
+    # ( ) Wasted Yellow: Rare Greebles
+    # ( ) Wasted Green: Gambling Machines
+    # ( ) Wasted Black: No Boss, no Raac
+    # ( ) Wasted Orange: A copy of a Raac that you have. One Enemy
+    # ( ) Wasted Gray: 0 Greebles, will occupy position of other rooms if enough of them are present.
+# New Color Ideas:
+    # ( ) Cyan Room: Celestial, has Zodiacs
+    # ( ) Pink Room: Charge your Traacs, in exchange for??
+
+
+
+
+
+
+
+
+
+
 # Updates: It's all in the Stars (consumable Signs) 0.6
     # ( ) 12 zodiac Sign Families
     # ( ) Aries -> Combat
@@ -46,22 +76,6 @@ Traac charge is equal to 20+5*self.level energy.
     # ( ) Creation: Converts a Gray room into the [sign]'s color
     # ( ) Destruction: Removes the respective room's color, gives rewards accordingly
     # ( ) 
-# Updates: HUD personalization
-
-
-
-
-
-
-
-
-# Universal
-# ( ) Oh god, make the floor rooms update more optimized
-# ( ) Secret Rooms
-# ( ) Warning of colors close by? Minesweeper-coded
-# ( ) Raacs: manipulate based on quantity of Greebles
-# ( ) Game Mode: Deflation - all sources of raac energy slowly starts to dwindle with floors instead of increasing.
-# ( ) Change Raacs from place to prioritize energy
 # ( ) Adding rooms temporarly
 # ( ) Flip Greebles quality 3 and 4 functions
 # ( ) Change slop of Digests Broot by tier of quality
@@ -69,18 +83,37 @@ Traac charge is equal to 20+5*self.level energy.
 # ( ) Broot Armor Breaker:
 # ( ) Broot Killers walk:
 # ( ) Traac: breaks Leeds into Q0 Greebles into the room
-# ( ) New Room Variant "Wasted"
-    # ( ) Wasted Purple: Sacrificial altar that permanently removes Broot from rotation
-    # ( ) Wasted Red: Double Enemies, no rewards
-    # ( ) Wasted Yellow: Rare Greebles
-    # ( ) Wasted Green: Gambling Machines
-    # ( ) Wasted Black: No Boss, no Raac
-    # ( ) Wasted Orange: A copy of a Raac that you have. One Enemy
-    # ( ) Wasted Gray: 0 Greebles, will occupy position of other rooms if enough of them are present.
-# New Color Ideas:
-    # ( ) Cyan Room: Celestial, has Zodiacs
-    # ( ) Pink Room: Charge your Traacs, in exchange for??
-    # ( ) Blue Room: Secret, can only be opened by ??
+
+
+# Draw that shit
+    # (X) ( ) Slime: When dead, spawns two slimes with a third of HP and half damage/defense on adjacent rooms, if HP < 10 or dmg <= 0 does not spawn. Drop: Slops
+    # (X) ( ) WaspNest: Very low damage but spawns Wasps on adjacent rooms. Drop: Clots
+    # (X) ( ) Wasp: Weak enemy.
+    # (X) ( ) Skeleton: Patrols, moving from room to room, turning gray room into red, and red into gray.
+    # (X) ( ) Envinerator: Spawns self.level vines around the floor, if you attack it, the boss takes damage, but it also attacks you, so some rooms have 2 enemies (bad)
+    # (X) ( ) Firebreather: Steals Greebles from random rooms into theirs.
+    # (X) ( ) Scorpion: Attacks you for half damage if you access an adjacent room.
+#     ( ) Dead enemy bodies
+# (X) ( ) Add Luck Greeble quality 3
+#     ( ) Heexs Greeble
+# (X) ( ) Attack/Defense/Speed icons for player
+    # (X) ( ) One who detects secret Passages: Place it in a room to detect if there is a secret room connected to it
+    # (X) ( ) One who takes the final hit: Follows you into other rooms, if you were to die from a hit, kills it instead.
+    # (X) ( ) One who Fights onward: Place on a red room, attacks enemy directly.
+# (X) ( ) Raac: Vampire: Everytime you kill an enemy, consume 2X Bloods to recover X Heed
+# (X) ( ) Raac: Frost Aspect: Your attacks slows enemies down by 2+Tannors speed.
+# (X) ( ) Raac: Squire: Increases Broots abilities
+# (X) ( ) Raac: Hammlet: your attacks break 0.5 armor
+# (X) ( ) Raac: Revishot: Every floor, remove 2 Shot and gain a temporary Def point. 
+# (X) ( ) Raac: Magic Eye: Blue rooms are revealed if connected to a purple room.
+
+
+
+
+
+
+
+
 
 
 
@@ -100,11 +133,12 @@ Traac charge is equal to 20+5*self.level energy.
     # (X) ( ) Skeleton: Patrols, moving from room to room, turning gray room into red, and red into gray.
 # (X) Enemies have different tags: Normal, Fast, Armored, Boss, Elite. Besides the actual type
 # (X) Enemies that spawn enemies have some sort of limit in spawn.
-# ( ) Plate-Black with special Bosses
-    # ( ) ( ) Envinerator: Spawns self.level vines around the floor, if you attack it, the boss takes damage, but it also attacks you, so some rooms have 2 enemies (bad)
-    # ( ) ( ) Firebreather: Steals Greebles from random rooms into theirs.
-    # ( ) ( ) Scorpion: Attacks you for half damage if you access an adjacent room.
-
+# (X) Plate-Black with special Bosses
+    # (X) ( ) Envinerator: Spawns self.level vines around the floor, if you attack it, the boss takes damage, but it also attacks you, so some rooms have 2 enemies (bad)
+    # (X) ( ) Firebreather: Steals Greebles from random rooms into theirs.
+    # (X) ( ) Scorpion: Attacks you for half damage if you access an adjacent room.
+# (X) Secret Rooms
+    # (X) Blue Room: Secret, can only be opened by ??
 # (X) Health bar for enemies
 # (X) Refactor Greebles maximum
 # (X) Greebles HUD personalization
@@ -114,6 +148,7 @@ Traac charge is equal to 20+5*self.level energy.
 # (X) Indicate how many times enemy hit you
 # (X) Normalize Broots according to Raac and Traac rules
 # (X) Log: SaveThrow and Final Broot
+#     ( ) Dead enemy bodies
 # (X) ( ) Add Luck Greeble quality 3
 #     (X) All the Raacs that are not yet drawn
 #     ( ) Heexs Greeble
@@ -124,17 +159,17 @@ Traac charge is equal to 20+5*self.level energy.
 # (X) Traacs gather different amounts of energy depending on level, charge stays the same.
 # (X) Blue Room: Added to pool if you clean a floor. Is Secret
 # (X) New Broots
+# (X) BeetHeal and Splash are having no energy
     # (X) ( ) One who detects secret Passages: Place it in a room to detect if there is a secret room connected to it
     # (X) ( ) One who takes the final hit: Follows you into other rooms, if you were to die from a hit, kills it instead.
     # (X) ( ) One who Fights onward: Place on a red room, attacks enemy directly.
-# (X) BeetHeal and Splash are having no energy
 
 # (X) New Traacs
 # (X) (X) Traac: TumbleBox: Generates 3 random Q0 Greebs
 # (X) (X) Traac: Reinforce: Gets +4*self.level defense, loses 1 defense each room turn
 # (X) (X) Traac: RaacRerox: Rerolls any Raacs in the room.
 
-# ( ) Test new raacs
+# (X) Test new raacs
 # (X) ( ) Raac: Vampire: Everytime you kill an enemy, consume 2X Bloods to recover X Heed
 # (X) ( ) Raac: Frost Aspect: Your attacks slows enemies down by 2+Tannors speed.
 # (X) ( ) Raac: Squire: Increases Broots abilities

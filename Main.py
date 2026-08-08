@@ -329,6 +329,8 @@ class Player():
         self.tempDf = 0
         self.tempSpeed = 0
 
+        self.vined = False
+
         self.initGreebles()
         self.initPlayer(0)
     def initGreebles(self):
@@ -708,6 +710,42 @@ class Enemy():
             name = "Skeleton"
             speed = speed*1.1
             description = "Patrols through adjacent rooms."
+
+
+
+        elif self.id == 50: # Vine
+            hp = hp*0.5
+            dmg = dmg*0.7
+            df = df*0.3
+            name = "Vine"
+            speed = speed*1.2
+            description = "Can't leave the Room until killed"
+
+
+
+
+        elif self.id == 97: # Scorpion
+            hp = hp*0.8
+            dmg = dmg*1.75
+            df = df*2
+            name = "Scorpion"
+            speed = speed*0.9
+            description = "Attacks you if you get close to the room"
+        elif self.id == 98: # Firebreather
+            hp = hp*1.8
+            dmg = dmg*0.9
+            df = df*1.8
+            name = "Firebreather"
+            speed = speed*0.7
+            description = "Steals Greebles from Floor"
+        elif self.id == 99: # Envinerator
+            hp = hp*1.5
+            dmg = dmg*1.3
+            df = df*1.6
+            name = "Envinerator"
+            speed = speed*0.9
+            description = "Spawns Vines in the entire Floor"
+            self.genNum = self.level
         else:
             name = "ERROR"
             print("ERROR")
@@ -1145,13 +1183,16 @@ class Room():
             self.randomGreeble(2, temp2)
             self.randomGreeble(1, temp2*3)
         elif self.color == "black" and self.type == "normal":
-            self.findFreePosition(Enemy(typee, "Boss", self.level), "enemy")
-            RNG = random.randrange(100)
-            if RNG <= 20:
-                self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac")
+            if self.level % 5 == 0 and self.level != 0:
+                self.type = "plate"
             else:
-                self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
-            self.acquire(["Feeds", 5+round(self.level*1.5)])
+                self.findFreePosition(Enemy(typee, "Boss", self.level), "enemy")
+                RNG = random.randrange(100)
+                if RNG <= 20:
+                    self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac")
+                else:
+                    self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
+                self.acquire(["Feeds", 5+round(self.level*1.5)])
         elif self.color == "purple" and self.type == "normal":
             typee = Altar.chooseRandomAltar()
             self.findFreePosition(Altar(typee), "altar")
@@ -1215,6 +1256,17 @@ class Room():
             temp1 = self.level
             self.randomGreeble(1, temp1)
             self.randomGreeble(2, temp1//3)
+        if self.color == "black" and self.type == "plate":
+            for i in range(2):
+                RNG = random.randrange(100)
+                if RNG <= 20:
+                    self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac")
+                else:
+                    self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
+            self.acquire(["Feeds", 10+round(self.level*2)])
+            typee = random.randrange(97, 100)
+            self.findFreePosition(Enemy(typee, "Boss", self.level), "enemy")
+
     def depopulate(self):
         for w in range(self.width):
             for h in range(self.height):
@@ -2250,6 +2302,9 @@ class Game():
         game.screen.fill((100, 70, 40))
         options = []
         room = self.currentFloor.Rooms[self.player.room]
+        self.player.vined = False
+
+
 
 
         draw.rect(game.screen, (0, 0, 0), (35, 175, self.size*13+10, self.size*9+10), 5)
@@ -2276,6 +2331,8 @@ class Game():
                 if object[2] == "enemy":
                     temp = 8
                     self.screen.blit(enemiesimg[object[3].id], (x, y))
+                    if object[3].name == "vine":
+                        self.player.vined = True
                     if object[3].id == 0:
                         options.append([rect, (w, h), "clean"])
                     else:
@@ -2713,7 +2770,7 @@ class Game():
                     self.showGreebles()
 
 
-        if action == "walk":
+        if action == "walk" and not self.player.vined:
             self.infoObject = None
             self.infoType = ""
             self.walkRoom(parameter)
@@ -2975,6 +3032,17 @@ class Game():
                                 if rm2.color == "gray":
                                     rm2.findFreePosition(newWasp, "enemy")
                                     rm2.color = "red"
+                    elif enemy.name == "Envinerator" and enemy.genNum > 0:
+                        RNG = random.randrange(100)
+                        if RNG <= 50:
+                            enemy.genNum -= 1
+                            newWasp = Enemy(50, "Normal", self.level)
+                            for rmnum in rm.connections:
+                                rm2 = self.currentFloor.Rooms[rmnum]
+                                if rm2.color == "gray" or rm2.color == "red":
+                                    rm2.findFreePosition(newWasp, "enemy")
+                                    rm2.color = "red"
+
                     elif enemy.name == "Skeleton" and rm.color == "red":
                         RNG = random.randrange(100)
                         if RNG <= 50:
@@ -2992,7 +3060,13 @@ class Game():
                                     rm2.color = "red"
                                     rm.color = "gray"
 
-        
+
+        stealer = 0
+        if self.level % 5 == 0 and self.level > 0:
+            blackroom = self.currentFloor.Rooms[-1]
+            for enemy in blackroom.Enemies:
+                if enemy.name == "Firebreather":
+                    stealer = random.randrange(len(self.currentFloor.Rooms))
         for rm in self.currentFloor.Rooms:
             for deploy in rm.Deploys:
                 if deploy.name == "fights" and deploy.alive:
@@ -3000,6 +3074,11 @@ class Game():
                         enemy.hp -= deploy.dmg
                         deploy.damage(enemy.dmg)
                         rm.checkEnemyLife(self.player, self)
+            if stealer != 0 and len(rm.Greebles) > 0:
+                greeb = rm.Greebles[0]
+                rm.freeePosition(greeb[2][0], greeb[2][1])
+                blackroom.acquire([greeb[0], greeb[1]])
+
 
         self.log.clear()
 
@@ -3044,6 +3123,8 @@ class Game():
         for rm in room.connections:
             rm = self.currentFloor.Rooms[rm]
             for enemy in rm.Enemies:
+                if enemy.name == "Scorpion":
+                    self.player.damage(max(enemy.dmg//2, 1))
                 if enemy.hp > 0 and SplashDamage > 0:
                     enemy.hp -= floor((0.30+SplashDamage*0.05)*self.player.dmg)
                     SplashDamage -= 1
