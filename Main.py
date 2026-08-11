@@ -1213,9 +1213,11 @@ class Room():
         self.Altars = []
         self.Zoodiacs = []
 
+        self.objects = []
+
+
         self.width = Width
         self.height = Height
-        self.objects = []
         for w in range(Width):
             self.objects.append([])
             for h in range(Height):
@@ -1336,29 +1338,10 @@ class Room():
             self.randomGreeble(0, temp)
         elif self.color == "green" and self.type == "normal":
             temp = self.level*2 +4*params[0]
-            while temp > 0:
-                RNG = random.randrange(100)
-                if RNG <= 4 and temp >= 6:
-                    itemtype = "Traac"
-                    temp -= 6
-                elif RNG <= 16 and temp >= 5:
-                    itemtype = "Raac"
-                    temp -= 5
-                elif RNG <= 25 and temp >= 8:
-                    itemtype = "Zoodiac"
-                    temp -= 8
-                elif RNG <= 40 and temp >= 3:
-                    itemtype = "Broot"
-                    temp -= 3
-                else:
-                    itemtype = "Greeble"
-                    temp -= 1
-                self.randomShop(itemtype, True)
+            self.randomShop(temp, True)
         elif self.color == "green" and self.type == "plate":
             temp = self.level*2 +2*params[0]
-            while temp > 0:
-                self.randomShop("Greeble", False)
-                temp -= 3
+            self.randomShop(temp, False)
         elif self.color == "orange" and self.type == "normal":
             self.findFreePosition(Enemy(typee, "Elite", self.level), "enemy")
             RNG = random.randrange(100)
@@ -1552,71 +1535,93 @@ class Room():
 
         if self.color == "red" and not Red:
             self.color = "gray"
-    def randomShop(self, itemtype, buy):
+    def randomShop(self, temp, buy):
         # item = ["Raac", "Treasure", 10, "Pots"]
 
-        if buy:
-            if itemtype == "Greeble":
-                RNG = random.randrange(0, 100)
-                if RNG <= 1:
-                    name = random.choice(GQ4)
-                    value = 22
-                elif RNG <= 35:
-                    name = random.choice(GQ2)
-                    value = 8
+        while temp > 0:
+            if buy:
+                RNG = random.randrange(100)
+                if RNG <= 4 and temp >= 6:
+                    itemtype = "Traac"
+                    temp -= 6
+                elif RNG <= 16 and temp >= 5:
+                    itemtype = "Raac"
+                    temp -= 5
+                elif RNG <= 25 and temp >= 8:
+                    itemtype = "Zoodiac"
+                    temp -= 8
+                elif RNG <= 40 and temp >= 3:
+                    itemtype = "Broot"
+                    temp -= 3
                 else:
-                    name = random.choice(GQ1)
-                    value = 2
-            elif itemtype == "Raac":
-                RNG = random.randrange(len(raacimg))
-                temp = Raac(RNG)
-                name = temp.name
-                value = raacValue[RNG]
-            elif itemtype == "Traac":
-                RNG = random.randrange(len(traacimg))
-                temp = Traac(RNG)
-                name = temp.name
-                value = traacValue[RNG]
-            elif itemtype == "Broot":
-                RNG = random.randrange(1, len(brootNumber)-1)
-                name = brootNumber[RNG]
-                value = brootValue[RNG]
-            elif itemtype == "Zoodiac":
-                idd = Zoodiac.chooseRandomZoodiac()
-                name = str(idd[0]+1) + "-" + str(idd[1]+1) + "-" + str(idd[2]+1)
-                value = 15
-            RNG = random.randrange(100)
-            if RNG <= 0:
-                coin = random.choice(GQ1)
-                cost = ceil(value*1/3)
-            elif RNG <= 10:
-                coin = random.choice(GQ0)
-                cost = value
+                    itemtype = "Greeble"
+                    temp -= 1
             else:
-                coin = "Pots"
-                cost = value
-            amount = 1
-        else:
-            if itemtype == "Greeble":
-                RNG = random.randrange(0, 100)
-                if RNG <= 1:
-                    name = random.choice(GQ4)
-                    qtd = 1
-                    value = 22
-                elif RNG <= 35:
-                    name = random.choice(GQ2)
-                    qtd = random.randrange(3) + 1
-                    value = 8
+                itemtype = "Greeblbe"
+                temp -= 3
+
+            if buy:
+                if itemtype == "Greeble":
+                    RNG = random.randrange(0, 100)
+                    if RNG <= 1:
+                        name = random.choice(GQ4)
+                        value = 22
+                    elif RNG <= 35:
+                        name = random.choice(GQ2)
+                        value = 8
+                    else:
+                        name = random.choice(GQ1)
+                        value = 2
+                elif itemtype == "Raac":
+                    RNG = random.randrange(len(raacimg))
+                    temp = Raac(RNG)
+                    name = temp.name
+                    value = raacValue[RNG]
+                elif itemtype == "Traac":
+                    RNG = random.randrange(len(traacimg))
+                    temp = Traac(RNG)
+                    name = temp.name
+                    value = traacValue[RNG]
+                elif itemtype == "Broot":
+                    RNG = random.randrange(1, len(brootNumber)-1)
+                    name = brootNumber[RNG]
+                    value = brootValue[RNG]
+                elif itemtype == "Zoodiac":
+                    idd = Zoodiac.chooseRandomZoodiac()
+                    name = str(idd[0]+1) + "-" + str(idd[1]+1) + "-" + str(idd[2]+1)
+                    value = 15
+                RNG = random.randrange(100)
+                if RNG <= 0:
+                    coin = random.choice(GQ1)
+                    cost = ceil(value*1/3)
+                elif RNG <= 10:
+                    coin = random.choice(GQ0)
+                    cost = value
                 else:
-                    name = random.choice(GQ1)
-                    qtd = random.randrange(6) + 1
-                    value = 2
-            coin = name
-            name = "Pots"
-            amount = value*qtd
-            cost = qtd
-        item = [itemtype, amount, name, cost, coin]
-        self.findFreePosition(item, "shop")
+                    coin = "Pots"
+                    cost = value
+                amount = 1
+            else:
+                if itemtype == "Greeble":
+                    RNG = random.randrange(0, 100)
+                    if RNG <= 1:
+                        name = random.choice(GQ4)
+                        qtd = 1
+                        value = 22
+                    elif RNG <= 35:
+                        name = random.choice(GQ2)
+                        qtd = random.randrange(3) + 1
+                        value = 8
+                    else:
+                        name = random.choice(GQ1)
+                        qtd = random.randrange(6) + 1
+                        value = 2
+                coin = name
+                name = "Pots"
+                amount = value*qtd
+                cost = qtd
+            item = [itemtype, amount, name, cost, coin]
+            self.findFreePosition(item, "shop")
     def prize(self):
         if self.color == "red":
             typee = Enemy.chooseRandomEnemy()
@@ -1633,7 +1638,7 @@ class Room():
                 self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac")
             else:
                 self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
-        elif self.color == "Orange":
+        elif self.color == "orange":
             self.randomGreeble(2, self.level//3)
             temp1 = self.level
             while temp1 > 0:
@@ -1642,51 +1647,26 @@ class Room():
                 if self.type == "plate":
                     self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac")
                     temp1 -= 2
-        elif self.color == "Yellow":
+        elif self.color == "yellow":
             self.randomGreeble(1, self.level)
             self.randomGreeble(2, self.level//3)
             self.randomGreeble(3, self.level//7)
             if self.type == "plate":
                 self.randomGreeble(3, self.level//5)
-        elif self.color == "White":
+        elif self.color == "white":
             self.randomGreeble(2, self.level//5)
             self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
             self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac")
             self.findFreePosition(Enemy(Enemy.chooseRandomEnemy(), "Normal", self.level), "enemy")
             self.findFreePosition(Zoodiac(Zoodiac.chooseRandomZoodiac()), "zoodiac")
-            self.findFreePosition(Broot(Broot.chooseRandomBroot(BrootPool)), "broot")
-            for i in range(3):
-                RNG = random.randrange(100)
-                if RNG <= 4:
-                    itemtype = "Traac"
-                elif RNG <= 16:
-                    itemtype = "Raac"
-                elif RNG <= 25:
-                    itemtype = "Zoodiac"
-                elif RNG <= 40:
-                    itemtype = "Broot"
-                else:
-                    itemtype = "Greeble"
-                self.randomShop(itemtype, True)
+            self.findFreePosition(Broot(Broot.chooseRandomBroot(BrootPool), 1), "broot")
+            self.randomShop(15, True)
             self.findFreePosition(Altar(Altar.chooseRandomAltar()), "altar")
-        elif self.color == "Green":
-            for i in range(self.level*2):
-                RNG = random.randrange(50)
-                if RNG <= 4:
-                    itemtype = "Traac"
-                elif RNG <= 16:
-                    itemtype = "Raac"
-                elif RNG <= 25:
-                    itemtype = "Zoodiac"
-                elif RNG <= 40:
-                    itemtype = "Broot"
-                else:
-                    itemtype = "Greeble"
-                self.randomShop(itemtype, True)
+        elif self.color == "green":
+            self.randomShop(5*self.level, True)
             if self.type == "plate":
-                for i in range(self.level):
-                    self.randomShop("Greeble", False)
-        elif self.color == "Cyan":
+                self.randomShop(5*self.level, False)
+        elif self.color == "cyan":
             temp1 = self.level
             while temp1 > 0:
                 temp1 -= 2
@@ -1696,20 +1676,20 @@ class Room():
                     level += 2
                 broot = Broot(RNG, level)
                 self.findFreePosition(broot)
-        elif self.color == "Gray":
+        elif self.color == "gray":
             self.randomGreeble(0, self.level*2)
             if self.type == "plate":
                 self.randomGreeble(1, self.level)
         elif self.color == "teal":
             pass
-        elif self.color == "Blue":
+        elif self.color == "blue":
             temp1 = self.level
             while temp1 > 0:
                 temp1 -= 3
                 self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
         elif self.color == "lilas":
             pass
-        elif self.color == "Altar":
+        elif self.color == "purple":
             temp1 = self.level
             while temp1 > 0:
                 temp1 -= 2
@@ -1717,7 +1697,7 @@ class Room():
                 if self.type == "plate":
                     self.findFreePosition(Altar(0), "altar")
                     temp1 -= 1
-        elif self.color == "Magenta":
+        elif self.color == "magenta":
             temp1 = self.level
             while temp1 > 0:
                 temp1 -= 2
@@ -1801,7 +1781,7 @@ class Broot():
         if self.hp <= 0 and self.alive:
             self.dmg = 0
             self.alive = False
-    def chooseRandomBroot(BrootPool):
+    def chooseRandomBroot(BrootPool, affectPool = True):
         total = 0
         for broot in BrootPool:
             total += broot[0]
@@ -1814,7 +1794,8 @@ class Broot():
                 break
             id += 1
 
-        BrootPool[id][0] += round(len(BrootPool)*0.5)
+        if affectPool:
+            BrootPool[id][0] += round(len(BrootPool)*0.5)
         return id
 class Raac():
     def __init__(self, id):
@@ -2631,6 +2612,7 @@ class Game():
         self.rooms["plate_lilas"] = 0
 
         self.ExtraRooms = []
+        self.ExtraObjects = []
         self.oldFloors = []
 
         self.log = []
@@ -2645,9 +2627,9 @@ class Game():
         self.currentFloor = Floor(-1, self.rooms, copy.deepcopy(self.broots), self)
 
         self.plate_yellowCost = 5
-        self.level = -1 +5
-        self.player.acquire(["Verdans", 25])
-        self.player.acquire(["Heeds", 25])
+        self.level = -1
+        # self.player.acquire(["Verdans", 25])
+        # self.player.acquire(["Heeds", 25])
         self.newFloor()
 
         self.infoObject = None
@@ -2666,7 +2648,7 @@ class Game():
                 self.newFloor()
     def newFloor(self):
         self.level += 1
-        self.rooms["normal_gray"] += floor(2.6*self.level**0.3)
+        self.rooms["normal_gray"] += floor(3 +(self.level**1.1)/3)
 
 
 
@@ -2856,6 +2838,11 @@ class Game():
         self.player.room = self.currentFloor.Rooms[0]
         self.currentFloor.Rooms[0].discovered = True
         self.currentFloor.Rooms[0].colored = True
+
+
+        for object in self.ExtraObjects:
+            self.player.room.findFreePosition(object[0], object[1])
+
     def update(self):
         display.flip()
         mouseXY = mouse.get_pos()
@@ -3035,7 +3022,7 @@ class Game():
                 draw.rect(game.screen, (255, 255, 255), (40+self.size*x+1, 160+self.size*y+1, self.size-2, self.size-2))
                 self.escrever("Gate", 25, (40+self.size*x+self.size//2, 160+self.size*y+self.size//2))
                 rect = Rect(40+self.size*x, 160+self.size*y, self.size, self.size)
-                options.append([rect, 0, "next"])
+                options.append([rect, 0, "gate"])
 
         x = 2
         y = -2
@@ -3418,7 +3405,7 @@ class Game():
                 room.randomGreeble(2, raac.level*3)
         elif action == "clean":
             room.freeePosition(parameter[0], parameter[1])
-        elif action == "next":
+        elif action == "gate":
             return 1
         elif action == "active":
             if self.player.Traacs[parameter].charge >= self.player.Traacs[parameter].cost:
@@ -3507,48 +3494,7 @@ class Game():
 
                 self.player.unacquire([item[4], item[3]])
         elif action == "sign" and len(self.player.Zoodiacs) > 0:
-            zoodiac = self.player.Zoodiacs.pop(self.player.selectedZoodiac)
-            sucess = False
-            self.player.selectedZoodiac -= 1
-            if self.player.selectedZoodiac < 0:
-                self.player.selectedZoodiac = 0
-
-
-            if zoodiac.sway == "Prospit":
-                if zoodiac.aspect == "Light": # [1-1 | 12-1]
-                    newColor = zoodiacColor[zoodiac.family]
-
-                    color = room.color
-                    typee = room.type
-                    self.rooms[typee + "_" + color] -= 1
-                    self.rooms[typee + "_" + newColor] += 1
-                    room.color = newColor
-                    room.depopulate()
-                    room.populate(self.params)
-                    sucess = True
-                if zoodiac.aspect == "Void": # [1-2 | 12-2]
-                    color = room.color
-                    typee = room.type
-                    self.rooms[typee + "_" + color] -= 1
-                    self.rooms[typee+"_void"] += 1
-                    room.depopulate()
-                    room.prize()
-                    room.color = "void"
-                    sucess = True
-                if zoodiac.aspect == "Time":
-                    color = zoodiacColor[zoodiac.family]
-                    if color == "red":
-                        FloorEnemies = []
-                        for rm in self.currentFloor.Rooms():
-                            if rm.color == "red":
-                                for enemy in rm.Enemies:
-                                    FloorEnemies.append(enemy[0])
-                                for enemy in rm.Enemies:
-                                    rm.freeePosition(enemy[1], enemy[2])
-
-            if not sucess:
-                self.player.Zoodiacs.append(zoodiac)
-
+            self.zoodiacActivate()
         enemyAlive = False
         for enemy in room.Enemies:
             enemy = enemy[0]
@@ -3589,6 +3535,7 @@ class Game():
 
         self.clock.tick(30)
     def walkRoom(self, room):
+        room.findFreePosition(Zoodiac(Zoodiac.chooseRandomZoodiac()), "zoodiac")
         if not room.discovered:
             if self.player.Greebles["Feeds"] > 0:
                 self.player.unacquire(["Feeds", 1])
@@ -3722,7 +3669,7 @@ class Game():
                                 if rm2.color == "gray":
                                     rm2.findFreePosition(newWasp, "enemy")
                                     rm2.color = "red"
-                    elif enemy.name == "Envinerator" and enemy.genNum > 0:
+                    elif enemy.id == 99 and enemy.genNum > 0:
                         RNG = random.randrange(100)
                         if RNG <= 50:
                             enemy.genNum -= 1
@@ -3810,7 +3757,7 @@ class Game():
         for rm in room.connections:
             for enemy in rm.Enemies:
                 enemy = enemy[0]
-                if enemy.name == "Scorpion" and enemy.id != 0:
+                if enemy.id == 97 and enemy.id != 0:
                     self.player.damage(max(enemy.dmg//2, 1))
                 if enemy.hp > 0 and SplashDamage > 0:
                     enemy.hp -= floor((0.30+SplashDamage*0.05)*self.player.dmg)
@@ -4056,7 +4003,152 @@ class Game():
                 elif ev.type == KEYDOWN:
                     if ev.key == K_TAB:
                         tabPressed = not tabPressed
+    def zoodiacActivate(self):
+            room = self.player.room
+            zoodiac = self.player.Zoodiacs.pop(self.player.selectedZoodiac)
+            sucess = False
+            self.player.selectedZoodiac -= 1
+            if self.player.selectedZoodiac < 0:
+                self.player.selectedZoodiac = 0
 
+
+            if zoodiac.sway == "Prospit":
+                if zoodiac.aspect == "Light": # [1-1 | 12-1]
+                    newColor = zoodiacColor[zoodiac.family]
+
+                    color = room.color
+                    typee = room.type
+                    self.rooms[typee + "_" + color] -= 1
+                    self.rooms[typee + "_" + newColor] += 1
+                    room.color = newColor
+                    # room.depopulate()
+                    room.populate(self.params)
+                    sucess = True
+                elif zoodiac.aspect == "Void" and zoodiacColor[zoodiac.family] == room.color: # [1-2 | 12-2]
+                    color = room.color
+                    typee = room.type
+                    self.rooms[typee + "_" + color] -= 1
+                    self.rooms[typee+"_void"] += 1
+                    room.depopulate()
+                    room.prize()
+                    room.color = "void"
+                    sucess = True
+                elif zoodiac.aspect == "Time":
+                    color = zoodiacColor[zoodiac.family]
+                    sucess = True
+
+                    if color in ["white", "gray", "green"]:
+                        if color == "white":
+                            self.player.dmg += random.randrange(-2, 5)
+                            self.player.df += random.randrange(-2, 5)
+                            self.player.speed += random.randrange(-4, 7)
+                        elif color == "gray":
+                            room.depopulate()
+                            room.color = random.choice(list(colorkey))
+                            room.populate(self.params)
+                        elif color == "green":
+                            shopScore = 0
+                            sellScore = 0
+                            shopRemove = []
+                            for shop in room.Shops:
+                                shopRemove.append(shop)
+                            for shop in shopRemove:
+                                if shop[0][4] == "pots":
+                                    sellScore += 3
+                                else:
+                                    if shop[0][0] == "traac":
+                                        shopScore += 6
+                                    elif shop[0][0] == "raac":
+                                        shopScore += 5
+                                    elif shop[0][0] == "zoodiac":
+                                        shopScore += 8
+                                    elif shop[0][0] == "raac":
+                                        shopScore += 3
+                                    else:
+                                        shopScore += 1
+                                room.freeePosition(shop[1], shop[2])
+                            room.randomShop(sellScore, False)
+                            room.randomShop(shopScore, True)
+                    else:
+                        for w in range(room.width):
+                            for h in range(room.height):
+                                type = room.objects[w][h][2]
+                                object = room.objects[w][h][3]
+                                take = False
+                                room.freeePosition(w, h)
+                                if (type == "enemy" and color == "red"):
+                                    room.findFreePosition(Enemy(Enemy.chooseRandomEnemy()), "enemy", w, h)
+                                elif (type == "raac" and color == "blue"):
+                                    room.findFreePosition(Raac(Raac.chooseRandomRaac()), "raac", w, h)
+                                elif (type == "greeble" and color == "yellow"):
+                                    greeble = object[0]
+                                    if greeble[0] in GQ0+GQ0b:
+                                        Q = 0
+                                    elif greeble[0] in GQ1+GQ1b:
+                                        Q = 1
+                                    elif greeble[0] in GQ2+GQ2b:
+                                        Q = 2
+                                    elif greeble[0] in GQ3+GQ3b:
+                                        Q = 3
+                                    elif greeble[0] in GQ4+GQ4b:
+                                        Q = 4
+
+                                    RNG = random.randrange(100)
+                                    if RNG < 5:
+                                        Q -= 1
+                                        if Q < 0:
+                                            Q = 0
+
+                                    room.randomGreeble(Q, greeble[1])
+                                    # room.findFreePosition(greeble, "greeble", w, h)
+                                elif (type == "broot" and color == "cyan"):
+                                    room.findFreePosition(Broot(Broot.chooseRandomBroot(BrootPool, False)), "broot", w, h)
+                                elif (type == "traac" and color == "orange"):
+                                    room.findFreePosition(Traac(Traac.chooseRandomTraac()), "traac", w, h)
+                                elif (type == "altar" and color == "purple"):
+                                    room.findFreePosition(Altar(Altar.chooseRandomAltar()), "altar", w, h)
+                                elif (type == "zoodiac" and color == "magenta"):
+                                    room.findFreePosition(Zoodiac(Zoodiac.chooseRandomZoodiac()), "zoodiac", w, h)
+                elif zoodiac.aspect == "Space":
+                    color = zoodiacColor[zoodiac.family]
+                    sucess = True
+                    if color in ["white", "gray"]:
+                        if color == "white":
+                            return 1
+                        elif color == "gray":
+                            copyroom = copy.deepcopy(room)
+                            copyroom.connections.clear()
+                            self.ExtraRooms.append(copyroom)
+                            room.depopulate()
+                            room.color = "void"
+                    else:
+                        for rm in self.currentFloor.Rooms:
+                            tempObjects = []
+                            for w in range(rm.width):
+                                for h in range(rm.height):
+                                    type = rm.objects[w][h][2]
+                                    object = rm.objects[w][h][3]
+                                    take = False
+                                    if (type == "enemy" and color == "red") or \
+                                        (type == "raac" and color == "blue") or \
+                                        (type == "greeble" and color == "yellow") or \
+                                        (type == "broot" and color == "cyan") or \
+                                        (type == "traac" and color == "orange") or \
+                                        (type == "altar" and color == "purple") or \
+                                        (type == "shop" and color == "green") or \
+                                        (type == "zoodiac" and color == "magenta"):
+                                        take = True
+                                    if take:
+                                        self.ExtraObjects.append([object[0], type])
+                                        tempObjects.append([w, h])
+                            for place in tempObjects:
+                                rm.freeePosition(place[0], place[1])
+
+
+
+
+            if not sucess:
+                self.player.Zoodiacs.append(zoodiac)
 
 
 

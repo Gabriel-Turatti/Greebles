@@ -75,7 +75,7 @@ Traac charge is equal to 20+5*self.level energy.
     # Prospit is controlled effects
     # (X) Light: Changes the current Room's color forever, and regenerates it.
     # (X) Void: Removes the color of the room, and removes that room from the pool. Gives a bonus accordingly.
-    # (X) Time: Rerolls prizes of color
+    # (X) Time: Rerolls prizes of color in room
     # (X) Space: Throws the prizes of color of the entire floor to the next floor's white room
     # ( ) Heart: 
     # ( ) Mind: 
@@ -119,10 +119,11 @@ Traac charge is equal to 20+5*self.level energy.
 # ( ) New Characters
 # ( ) Menu showing Room colors, and Broots available in rotation
 # ( ) Aligning colors with sign colors.
-# ( ) Flip Greebles quality 3 and 4 functions
+# (X) Flip Greebles quality 3 and 4 functions
+# ( ) remake Quality 3, 4 Crafting Tree
+# ( ) Stop depending on enemy name for enemy skills (learned your lesson with using id always?)
 
 # (?) Boss is severely outclassed
-# (??) Room colors are coming together (is it bad?) (are they???)
 # ( ) Rework Rerox for Level of rerolled
 # (X) Q2, Xendan and Heexs max
 # (X) Enemies with 0 hp (float?)
