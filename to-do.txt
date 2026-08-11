@@ -36,6 +36,8 @@ Traac charge is equal to 20+5*self.level energy.
 # ( ) Game Mode: Deflation - all sources of raac energy slowly starts to dwindle with floors instead of increasing.
 # ( ) Change Raacs from place to prioritize energy
 # ( ) Do something about enemy bodies.
+# ( ) Squire Raac correctly energy usage
+# ( ) centralize Shop
 # ( ) New Room Variant "Wasted"
     # ( ) Wasted Purple: Sacrificial altar that permanently removes Broot from rotation
     # ( ) Wasted Red: Double Enemies, no rewards
@@ -44,9 +46,6 @@ Traac charge is equal to 20+5*self.level energy.
     # ( ) Wasted Black: No Boss, no Raac
     # ( ) Wasted Orange: A copy of a Raac that you have. One Enemy
     # ( ) Wasted Gray: 0 Greebles, will occupy position of other rooms if enough of them are present.
-# New Color Ideas:
-    # ( ) Cyan Room: Celestial, has Zodiacs
-    # ( ) Pink Room: Charge your Traacs, in exchange for??
 
 
 
@@ -59,55 +58,88 @@ Traac charge is equal to 20+5*self.level energy.
 
 # Updates: It's all in the Stars (consumable Signs) 0.6
     # ( ) 12 zodiac Sign Families
-    # ( ) Aries -> Combat
-    # ( ) Taurus -> Traacs
-    # ( ) Gemini -> Raacs 
-    # ( ) Cancer -> 
-    # ( ) Leo -> Greebles
-    # ( ) Virgo -> Broots
-    # ( ) Libra -> Room generation
-    # ( ) Scorpio -> Shop
-    # ( ) Sagitarius ->
-    # ( ) Capricorn -> 
-    # ( ) Aquarius -> Altar
-    # ( ) Pisces -> Meta Signs
+    # ( ) Aries -> Red-black/   Enemy
+    # ( ) Taurus -> Orange  /   Traacs
+    # ( ) Gemini -> Yellow  /   Greebles 
+    # ( ) Cancer -> White   /   Player
+    # ( ) Leo -> DarkGreen  /   Shop
+    # ( ) Virgo -> Aqua     /   Broots
+    # ( ) Libra -> Gray     /   Floor
+    # ( ) Scorpio -> Teal   /   ???
+    # ( ) Sagitarius -> Blue/   Raacs
+    # ( ) Capricorn -> Lilas/   Altar
+    # ( ) Aquarius -> Purple/   ???
+    # ( ) Pisces -> Magenta /   Signs
 
-    # ( ) 12 Aspects
-    # ( ) Creation: Converts a Gray room into the [sign]'s color
-    # ( ) Destruction: Removes the respective room's color, gives rewards accordingly
-    # ( ) 
-# ( ) Adding rooms temporarly
+    # ( ) 12 Aspects / Prospit / Derse
+    # Prospit is controlled effects
+    # (X) Light: Changes the current Room's color forever, and regenerates it.
+    # (X) Void: Removes the color of the room, and removes that room from the pool. Gives a bonus accordingly.
+    # (X) Time: Rerolls prizes of color
+    # (X) Space: Throws the prizes of color of the entire floor to the next floor's white room
+    # ( ) Heart: 
+    # ( ) Mind: 
+    # ( ) Hope: Boosts the color's power
+    # ( ) Rage: 
+    # ( ) Breath: 
+    # ( ) Blood: Gives prizes of color.
+    # ( ) Life: Permanent effect Pro-color
+    # ( ) Doom:
+    # Derse are uncontrollable stronger effects
+    # ( ) Light:
+    # ( ) Void:
+    # ( ) Time:
+    # ( ) Space: 
+    # ( ) Heart: 
+    # ( ) Mind: 
+    # ( ) Hope:
+    # ( ) Rage: 
+    # ( ) Breath: 
+    # ( ) Blood:
+    # ( ) Life:
+    # ( ) Doom:
+
+    # ( ) Sign-Space-Prospit: Mimics effect of last sign used
+    # ( ) Sign-Space-Derse: Mimics effect of a random sign
+    # ( ) Sign-Hope-Prospit: For the rest of the Floor, Signs are extra powerful
+    # ( ) Sign-Hope-Derse: For the rest of the Floor, When you activate a Sign, activate another random effect of the same family
+    # ( ) Floor-Space-Prospit: Sets 10 random rooms to discovered
+    # ( ) Floor-Space-Derse: Teleports to a random unexplored Room
+    # ( ) Floor-Doom-Prospit: Creates a Gate to the next floor
+    # ( ) Shop-Breath-Prospit: Next item you buy in the shop is free. 
+    # ( ) Shop-Breath-Derse: Sets 3 items on the shop free. 
+
+
+# (X) Blue rooms usually contain Raacs, Orange usually contains Traacs
+# (X) Adding rooms temporarly
+# (X) Zoodiac room
+# (X) Zoodiac Plated room
+# (X) Magenta Room spawn criteria
+# (X) Magenta plate room spawn criteria
+# ( ) New Characters
+# ( ) Menu showing Room colors, and Broots available in rotation
+# ( ) Aligning colors with sign colors.
 # ( ) Flip Greebles quality 3 and 4 functions
-# ( ) Change slop of Digests Broot by tier of quality
-# ( ) Broot Frosty:
-# ( ) Broot Armor Breaker:
-# ( ) Broot Killers walk:
+
+# (?) Boss is severely outclassed
+# (??) Room colors are coming together (is it bad?) (are they???)
+# ( ) Rework Rerox for Level of rerolled
+# (X) Q2, Xendan and Heexs max
+# (X) Enemies with 0 hp (float?)
+# (X) Nerf Blue Rooms
+# (X) Skeletons taking damage together on room with multiple enemies
+# (X) Rewire grey room manipulation
+# (X) Buff Rock Crest
+# (X) Refactor of all room object storage
+# ( ) White Room shennanigans
+# ( ) Plate White Floor Connections
+# (X) Change slop of Digests Broot by tier of quality
+# ( ) ( ) Broot Frosty:
+# ( ) ( ) Broot Armor Breaker:
+# ( ) ( ) Broot Killers walk:
+# (X) (X) Void Brick
+
 # ( ) Traac: breaks Leeds into Q0 Greebles into the room
-
-
-# Draw that shit
-    # (X) ( ) Slime: When dead, spawns two slimes with a third of HP and half damage/defense on adjacent rooms, if HP < 10 or dmg <= 0 does not spawn. Drop: Slops
-    # (X) ( ) WaspNest: Very low damage but spawns Wasps on adjacent rooms. Drop: Clots
-    # (X) ( ) Wasp: Weak enemy.
-    # (X) ( ) Skeleton: Patrols, moving from room to room, turning gray room into red, and red into gray.
-    # (X) ( ) Envinerator: Spawns self.level vines around the floor, if you attack it, the boss takes damage, but it also attacks you, so some rooms have 2 enemies (bad)
-    # (X) ( ) Firebreather: Steals Greebles from random rooms into theirs.
-    # (X) ( ) Scorpion: Attacks you for half damage if you access an adjacent room.
-#     ( ) Dead enemy bodies
-# (X) ( ) Add Luck Greeble quality 3
-#     ( ) Heexs Greeble
-# (X) ( ) Attack/Defense/Speed icons for player
-    # (X) ( ) One who detects secret Passages: Place it in a room to detect if there is a secret room connected to it
-    # (X) ( ) One who takes the final hit: Follows you into other rooms, if you were to die from a hit, kills it instead.
-    # (X) ( ) One who Fights onward: Place on a red room, attacks enemy directly.
-# (X) ( ) Raac: Vampire: Everytime you kill an enemy, consume 2X Bloods to recover X Heed
-# (X) ( ) Raac: Frost Aspect: Your attacks slows enemies down by 2+Tannors speed.
-# (X) ( ) Raac: Squire: Increases Broots abilities
-# (X) ( ) Raac: Hammlet: your attacks break 0.5 armor
-# (X) ( ) Raac: Revishot: Every floor, remove 2 Shot and gain a temporary Def point. 
-# (X) ( ) Raac: Magic Eye: Blue rooms are revealed if connected to a purple room.
-
-
 
 
 
@@ -127,16 +159,16 @@ Traac charge is equal to 20+5*self.level energy.
     # (X) (X) Goblin: Armored
     # (X) (X) Goblin: Speed
     # (X) (X) Plating: Enemies in adjacent rooms gain +1 defense. Drop: rocks
-    # (X) ( ) Slime: When dead, spawns two slimes with a third of HP and half damage/defense on adjacent rooms, if HP < 10 or dmg <= 0 does not spawn. Drop: Slops
-    # (X) ( ) WaspNest: Very low damage but spawns Wasps on adjacent rooms. Drop: Clots
-    # (X) ( ) Wasp: Weak enemy.
-    # (X) ( ) Skeleton: Patrols, moving from room to room, turning gray room into red, and red into gray.
+    # (X) (X) Slime: When dead, spawns two slimes with a third of HP and half damage/defense on adjacent rooms, if HP < 10 or dmg <= 0 does not spawn. Drop: Slops
+    # (X) (X) WaspNest: Very low damage but spawns Wasps on adjacent rooms. Drop: Clots
+    # (X) (X) Wasp: Weak enemy.
+    # (X) (X) Skeleton: Patrols, moving from room to room, turning gray room into red, and red into gray.
 # (X) Enemies have different tags: Normal, Fast, Armored, Boss, Elite. Besides the actual type
 # (X) Enemies that spawn enemies have some sort of limit in spawn.
 # (X) Plate-Black with special Bosses
-    # (X) ( ) Envinerator: Spawns self.level vines around the floor, if you attack it, the boss takes damage, but it also attacks you, so some rooms have 2 enemies (bad)
-    # (X) ( ) Firebreather: Steals Greebles from random rooms into theirs.
-    # (X) ( ) Scorpion: Attacks you for half damage if you access an adjacent room.
+    # (X) (X) Envinerator: Spawns self.level vines around the floor, if you attack it, the boss takes damage, but it also attacks you, so some rooms have 2 enemies (bad)
+    # (X) (X) Firebreather: Steals Greebles from random rooms into theirs.
+    # (X) (X) Scorpion: Attacks you for half damage if you access an adjacent room.
 # (X) Secret Rooms
     # (X) Blue Room: Secret, can only be opened by ??
 # (X) Health bar for enemies
@@ -148,7 +180,7 @@ Traac charge is equal to 20+5*self.level energy.
 # (X) Indicate how many times enemy hit you
 # (X) Normalize Broots according to Raac and Traac rules
 # (X) Log: SaveThrow and Final Broot
-#     ( ) Dead enemy bodies
+#     (X) Dead enemy bodies
 # (X) ( ) Add Luck Greeble quality 3
 #     (X) All the Raacs that are not yet drawn
 #     ( ) Heexs Greeble
