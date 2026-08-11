@@ -3535,7 +3535,6 @@ class Game():
 
         self.clock.tick(30)
     def walkRoom(self, room):
-        room.findFreePosition(Zoodiac(Zoodiac.chooseRandomZoodiac()), "zoodiac")
         if not room.discovered:
             if self.player.Greebles["Feeds"] > 0:
                 self.player.unacquire(["Feeds", 1])
