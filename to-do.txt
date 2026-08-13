@@ -22,22 +22,20 @@ Traac charge is equal to 20+5*self.level energy.
 
 # Update: Negative Greebles and rooms
 # Update: Rule Raacs
-# Update: Save Game
 # Update: Alternative Floors
+# Update: Save Game
+# Update: New Characters with special abilities
 
 
 
 
 # Universal Future
 # ( ) Connectivity algorithm to ensure that Black Rooms are reachable from White Rooms
-# ( ) Walk algorithm generating greebles that it cannot store, where should it go?
-# ( ) Oh god, make the floor rooms update more optimized
-# ( ) Warning of colors close by? Minesweeper-coded
 # ( ) Game Mode: Deflation - all sources of raac energy slowly starts to dwindle with floors instead of increasing.
 # ( ) Change Raacs from place to prioritize energy
 # ( ) Do something about enemy bodies.
 # ( ) Squire Raac correctly energy usage
-# ( ) centralize Shop
+# ( ) More choices
 # ( ) New Room Variant "Wasted"
     # ( ) Wasted Purple: Sacrificial altar that permanently removes Broot from rotation
     # ( ) Wasted Red: Double Enemies, no rewards
@@ -109,22 +107,26 @@ Traac charge is equal to 20+5*self.level energy.
     # ( ) Shop-Breath-Prospit: Next item you buy in the shop is free. 
     # ( ) Shop-Breath-Derse: Sets 3 items on the shop free. 
 
+# (?) Boss is severely outclassed
 
+# (X) Walk algorithm generating greebles that it cannot store, where should it go?
+# (X) Oh god, make the floor rooms update more optimized
+# (X) Warning of colors close by? Minesweeper-coded
+# (X) centralize Shop
 # (X) Blue rooms usually contain Raacs, Orange usually contains Traacs
 # (X) Adding rooms temporarly
 # (X) Zoodiac room
 # (X) Zoodiac Plated room
 # (X) Magenta Room spawn criteria
 # (X) Magenta plate room spawn criteria
-# ( ) New Characters
-# ( ) Menu showing Room colors, and Broots available in rotation
+# (X) Menu showing Room colors, and Broots available in rotation
 # ( ) Aligning colors with sign colors.
 # (X) Flip Greebles quality 3 and 4 functions
-# ( ) remake Quality 3, 4 Crafting Tree
-# ( ) Stop depending on enemy name for enemy skills (learned your lesson with using id always?)
+# (X) remake Quality 3, 4 Crafting Tree
+# (X) (X) New Greebles Q3/Q4, altar that crafts them. Calculate Energy
+# (X) Stop depending on enemy name for enemy skills (learned your lesson with using id always?)
 
-# (?) Boss is severely outclassed
-# ( ) Rework Rerox for Level of rerolled
+# (X) Rework Rerox for Level of rerolled
 # (X) Q2, Xendan and Heexs max
 # (X) Enemies with 0 hp (float?)
 # (X) Nerf Blue Rooms
