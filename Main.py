@@ -160,6 +160,10 @@ if True: # Pre-processing
         "detector": image.load('Images/plate_green.png'),
         "final": image.load('Images/plate_green.png'),
         "fights": image.load('Images/plate_green.png'),
+
+        "frosts": image.load('Images/plate_purple.png'),
+        "pierces": image.load('Images/plate_purple.png'),
+        "walks": image.load('Images/plate_purple.png'),
     }
     zoodiacimg = {}
     zoodiacColor = {
@@ -173,7 +177,7 @@ if True: # Pre-processing
         "Scorpio": "teal",
         "Sagitarius": "blue",
         "Capricorn": "purple",
-        "Aquarius": "lilas",
+        "Aquarius": "black",
         "Pisces": "magenta",
     }
     for i in range(12):
@@ -256,6 +260,10 @@ if True: # Pre-processing
         6,
         13,
         5,
+
+        9,
+        7,
+        10,
     ]
     zoodiacValue = [
         0,
@@ -336,16 +344,20 @@ if True: # Pre-processing
     BrootPool = [
         [0, 0], # [PoolWeight, Id]
 
-        [45, "armed"],
-        [30, "defends"],
+        [90, "armed"],
+        [60, "defends"],
 
-        [15, "digests"],
-        [12, "digs"],
-        [18, "deconstructs"],
+        [30, "digests"],
+        [24, "digs"],
+        [36, "deconstructs"],
 
-        [12, "detector"],
-        [10, "final"],
-        [25, "fights"],
+        [24, "detector"],
+        [20, "final"],
+        [50, "fights"],
+
+        [16, "frosts"],
+        [28, "pierces"],
+        [5, "walks"],
     ]
 
     
@@ -889,6 +901,8 @@ class Enemy():
     def chooseRandomEnemy():
         RNG = random.randrange(1, 9)
         return RNG
+    def chooseRandomBoss():
+        return random.randrange(97, 100)
 
 class Altar():
     def __init__(self, id):
@@ -900,6 +914,7 @@ class Altar():
     def generate(self):
         if self.id == 0: # Anvil
             self.maxuses = 1
+            self.rarity = "Unique"
         elif self.id == 1: # Heeds Altar
             self.recipe = [
                 ["Bloods", 2],
@@ -909,6 +924,7 @@ class Altar():
                 ["Heeds", 1]
             ]
             self.maxuses = 6
+            self.rarity = "Common"
         elif self.id == 2: # Feeds Altar
             self.recipe = [
                 ["Shots", 2],
@@ -918,6 +934,7 @@ class Altar():
                 ["Feeds", 1]
             ]
             self.maxuses = 10
+            self.rarity = "Common"
         elif self.id == 3: # Beets Altar
             self.recipe = [
                 ["Pots", 2],
@@ -927,6 +944,7 @@ class Altar():
                 ["Beets", 1]
             ]
             self.maxuses = 3
+            self.rarity = "Uncommon"
         elif self.id == 4: # Sheets Altar
             self.recipe = [
                 ["Shots", 1],
@@ -939,6 +957,7 @@ class Altar():
                 ["Sheets", 1]
             ]
             self.maxuses = 5
+            self.rarity = "Common"
         elif self.id == 5: # Daffans Altar
             self.recipe = [
                 ["Sheets", 2],
@@ -948,6 +967,7 @@ class Altar():
                 ["Daffans", 1]
             ]
             self.maxuses = 2
+            self.rarity = "Rare"
         elif self.id == 6: # Sackans Altar
             self.recipe = [
                 ["Leeds", 1],
@@ -958,6 +978,7 @@ class Altar():
                 ["Sackans", 1]
             ]
             self.maxuses = 4
+            self.rarity = "Uncommon"
         elif self.id == 7: # Verdans Altar
             self.recipe = [
                 ["Beets", 2],
@@ -968,6 +989,7 @@ class Altar():
                 ["Verdans", 1]
             ]
             self.maxuses = 2
+            self.rarity = "Uncommon"
         elif self.id == 8: # Callans Altar
             self.recipe = [
                 ["Sheets", 4],
@@ -977,6 +999,7 @@ class Altar():
                 ["Callans", 1]
             ]
             self.maxuses = 2
+            self.rarity = "Rare"
         elif self.id == 9: # Radeans Altar
             self.recipe = [
                 ["Beets", 2],
@@ -986,6 +1009,7 @@ class Altar():
                 ["Radeans", 1]
             ]
             self.maxuses = 2
+            self.rarity = "Rare"
         elif self.id == 10: # Clot Filter Altar
             self.recipe = [
                 ["Clots", 5],
@@ -995,6 +1019,7 @@ class Altar():
                 ["Shots", 5],
             ]
             self.maxuses = 5
+            self.rarity = "Common"
         elif self.id == 11: # Rock Crusher Altar
             self.recipe = [
                 ["Rocks", 5],
@@ -1004,6 +1029,7 @@ class Altar():
                 ["Pots", 5],
             ]
             self.maxuses = 5
+            self.rarity = "Common"
         elif self.id == 12: # Pallers Altar
             self.recipe = [
                 ["Radeans", 2],
@@ -1013,6 +1039,7 @@ class Altar():
                 ["Pallers", 1],
             ]
             self.maxuses = 1
+            self.rarity = "Mythical"
         elif self.id == 13: # Sallers Altar
             self.recipe = [
                 ["Daffans", 2],
@@ -1023,6 +1050,7 @@ class Altar():
                 ["Sallers", 1],
             ]
             self.maxuses = 1
+            self.rarity = "Mythical"
         elif self.id == 14: # Cleansing Altar
             self.recipe = [
                 ["Xendans", 1],
@@ -1032,6 +1060,7 @@ class Altar():
                 ["Verdans", 1],
             ]
             self.maxuses = 2
+            self.rarity = "Uncommon"
         elif self.id == 15: # Anti Slop Altar
             self.recipe = [
                 ["Slops", 5],
@@ -1040,6 +1069,7 @@ class Altar():
                 [random.choice(GQ0), 1],
             ]
             self.maxuses = 7
+            self.rarity = "Common"
         elif self.id == 16: # Super Callans Altar
             self.recipe = [
                 ["Kollors", 1],
@@ -1051,6 +1081,7 @@ class Altar():
                 ["Callans", 2],
             ]
             self.maxuses = 2
+            self.rarity = "Common"
         elif self.id == 17: # Super Heeds Altar
             self.recipe = [
                 ["Kollors", 1],
@@ -1061,6 +1092,7 @@ class Altar():
                 ["Heeds", 10],
             ]
             self.maxuses = 3
+            self.rarity = "Common"
         elif self.id == 18: # Super Daffans Altar
             self.recipe = [
                 ["Kollors", 1],
@@ -1071,8 +1103,9 @@ class Altar():
                 ["Daffans", 3],
             ]
             self.maxuses = 2
+            self.rarity = "Common"
         elif self.id == 19: # Super Feeds Altar
-            self.recipe = [ # Extracting Altar
+            self.recipe = [
                 ["Kollors", 1],
             ]
             self.products = [
@@ -1080,6 +1113,7 @@ class Altar():
                 ["Feeds", 8],
             ]
             self.maxuses = 4
+            self.rarity = "Common"
         elif self.id == 20: # Anti Leed Altar
             self.recipe = [
                 ["Leeds", 2],
@@ -1089,6 +1123,7 @@ class Altar():
                 ["Pots", 2],
             ]
             self.maxuses = 12
+            self.rarity = "Rare"
         elif self.id == 21: # KOLLORS Altar
             self.recipe = [
                 ["Rallers", 2],
@@ -1098,6 +1133,7 @@ class Altar():
                 ["Kollors", 1],
             ]
             self.maxuses = 1
+            self.rarity = "Unique"
         elif self.id == 22: # Fallers Altar
             self.recipe = [
                 ["Verdans", 2],
@@ -1108,6 +1144,7 @@ class Altar():
                 ["Fallers", 1],
             ]
             self.maxuses = 1
+            self.rarity = "Mythical"
         elif self.id == 23: # Leeds Altar
             self.recipe = [
                 ["Shots", 2],
@@ -1117,6 +1154,7 @@ class Altar():
                 ["Leeds", 1],
             ]
             self.maxuses = 4
+            self.rarity = "Uncommon"
         elif self.id == 24: # Postans Altar
             self.recipe = [
                 ["Leeds", 2],
@@ -1126,6 +1164,7 @@ class Altar():
                 ["Postans", 1],
             ]
             self.maxuses = 3
+            self.rarity = "Uncommon"
         elif self.id == 25: # Radaeans2 Altar
             self.recipe = [
                 ["Leeds", 2],
@@ -1135,6 +1174,7 @@ class Altar():
                 ["Radeans", 1],
             ]
             self.maxuses = 8
+            self.rarity = "Uncommon"
         elif self.id == 26: # Vallers Altar
             self.recipe = [
                 ["Verdans", 3],
@@ -1144,6 +1184,7 @@ class Altar():
                 ["Vallers", 1],
             ]
             self.maxuses = 2
+            self.rarity = "Mythical"
         elif self.id == 27: # Rallers Altar
             self.recipe = [
                 ["Verdans", 1],
@@ -1157,6 +1198,7 @@ class Altar():
                 ["Rallers", 1],
             ]
             self.maxuses = 2
+            self.rarity = "Mythical"
         elif self.id == 28: # BANKORS Altar
             self.recipe = [
                 ["Rallers", 2],
@@ -1166,6 +1208,7 @@ class Altar():
                 ["Bankors", 1],
             ]
             self.maxuses = 1
+            self.rarity = "Unique"
         elif self.id == 29: # RANGORS Altar
             self.recipe = [
                 ["Rallers", 2],
@@ -1175,6 +1218,7 @@ class Altar():
                 ["Rangors", 1],
             ]
             self.maxuses = 2
+            self.rarity = "Unique"
         elif self.id == 30: # TANNORS Altar
             self.recipe = [
                 ["Rallers", 1],
@@ -1185,6 +1229,7 @@ class Altar():
                 ["Tannors", 1],
             ]
             self.maxuses = 1
+            self.rarity = "Unique"
         elif self.id == 31: # ALATORS Altar
             self.recipe = [
                 ["Vallers", 1],
@@ -1194,6 +1239,7 @@ class Altar():
                 ["Alators", 1],
             ]
             self.maxuses = 1
+            self.rarity = "Unique"
         elif self.id == 32: # Xendans Altar
             self.recipe = [
                 ["Heeds", 1],
@@ -1203,6 +1249,7 @@ class Altar():
                 ["Xendans", 1],
             ]
             self.maxuses = 4
+            self.rarity = "Rare"
         elif self.id == 32: # Anti Heexs Altar
             self.recipe = [
                 ["Shots", 2],
@@ -1212,6 +1259,7 @@ class Altar():
                 ["Pots", 2],
             ]
             self.maxuses = 7
+            self.rarity = "Common"
     def chooseRandomAltar():
         AltarPool = [
             [0, 0], # [PoolWeight, Id]
@@ -1365,11 +1413,10 @@ class Room():
         self.objects[w][h][3] = None
         self.objects[w][h][2] = ""
     def populate(self, params):
-        typee = Enemy.chooseRandomEnemy()
         if self.color == "red" and self.type == "normal":
-            self.findFreePosition(Enemy(typee, "Normal", self.level), "enemy")
+            self.findFreePosition(Enemy(Enemy.chooseRandomEnemy(), "Normal", self.level), "enemy")
         elif self.color == "red" and self.type == "plate":
-            self.findFreePosition(Enemy(typee, "Normal", self.level+2), "enemy")
+            self.findFreePosition(Enemy(Enemy.chooseRandomEnemy(), "Normal", self.level+2), "enemy")
             self.randomGreeble(1, self.level)
             self.randomGreeble(2, min(round(log2(self.level))-3, 0))
         elif self.color == "yellow" and self.type == "normal":
@@ -1389,7 +1436,7 @@ class Room():
             if self.level % 5 == 0 and self.level != 0:
                 self.type = "plate"
             else:
-                self.findFreePosition(Enemy(typee, "Boss", self.level), "enemy")
+                self.findFreePosition(Enemy(Enemy.chooseRandomEnemy(), "Boss", self.level), "enemy")
                 RNG = random.randrange(100)
                 if RNG <= 20:
                     self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac")
@@ -1397,14 +1444,16 @@ class Room():
                     self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
                 self.acquire(["Feeds", 5+round(self.level*1.5)])
         elif self.color == "purple" and self.type == "normal":
-            typee = Altar.chooseRandomAltar()
-            self.findFreePosition(Altar(typee), "altar")
+            self.findFreePosition(Altar(Altar.chooseRandomAltar()), "altar")
         elif self.color == "purple" and self.type == "plate":
             self.findFreePosition(Altar(0), "altar")
         elif self.color == "white" and self.type == "normal":
             return
         elif self.color == "gray" and self.type == "normal":
             temp = ceil(log2(self.level+1)) + 1
+            self.randomGreeble(0, temp)
+        elif self.color == "gray" and self.type == "plate":
+            temp = ceil(2*log2(self.level+1)) + 2
             self.randomGreeble(0, temp)
         elif self.color == "green" and self.type == "normal":
             temp = self.level*2 +4*params[0]
@@ -1413,7 +1462,7 @@ class Room():
             temp = self.level*2 +2*params[0]
             self.randomShop(temp, False)
         elif self.color == "orange" and self.type == "normal":
-            self.findFreePosition(Enemy(typee, "Elite", self.level), "enemy")
+            self.findFreePosition(Enemy(Enemy.chooseRandomEnemy(), "Elite", self.level), "enemy")
             RNG = random.randrange(100)
             if RNG <= 80:
                 self.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac")
@@ -1422,9 +1471,9 @@ class Room():
             temp1 = self.level
             self.randomGreeble(1, temp1-2)
         elif self.color == "orange" and self.type == "plate":
-            self.findFreePosition(Enemy(typee, "Elite", self.level+1), "enemy")
+            self.findFreePosition(Enemy(Enemy.chooseRandomEnemy(), "Elite", self.level+1), "enemy")
             typee = Enemy.chooseRandomEnemy()
-            self.findFreePosition(Enemy(typee, "Elite", self.level+1), "enemy")
+            self.findFreePosition(Enemy(Enemy.chooseRandomEnemy(), "Elite", self.level+1), "enemy")
             for i in range(3):
                 RNG = random.randrange(100)
                 if RNG <= 40:
@@ -1478,8 +1527,7 @@ class Room():
                 else:
                     self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
             self.acquire(["Feeds", 10+round(self.level*2)])
-            typee = random.randrange(97, 100)
-            self.findFreePosition(Enemy(typee, "Boss", self.level), "enemy")
+            self.findFreePosition(Enemy(Enemy.chooseRandomBoss(), "Boss", self.level), "enemy")
     def depopulate(self):
         for w in range(self.width):
             for h in range(self.height):
@@ -1760,7 +1808,14 @@ class Room():
             while temp1 > 0:
                 temp1 -= 3
                 self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
-        elif self.color == "lilas":
+        elif self.color == "black":
+            self.acquire(["Feeds", 5*self.level])
+            self.randomGreeble(1, self.level)
+            self.randomGreeble(2, self.level//3)
+            self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
+            self.findFreePosition(Enemy(Enemy.chooseRandomEnemy(), "Boss", self.level), "enemy")
+            self.findFreePosition(Enemy(Enemy.chooseRandomEnemy(), "Boss", self.level), "enemy")
+            self.findFreePosition(Zoodiac((3, 3, 1)), "zoodiac")
             pass
         elif self.color == "purple":
             temp1 = self.level
@@ -1792,16 +1847,19 @@ class Broot():
             self.dmg = 4*squireLevel
             self.speed = 20+5*squireLevel
             self.name = "armed"
+            self.trueName = "One who is Armed at Intersections"
         elif self.id == 2: # Defends
             self.hp = 15*squireLevel
             self.dmg = 1*squireLevel
             self.speed = 30+5*squireLevel
             self.name = "defends"
+            self.trueName = "One who Defends at Intersections"
         elif self.id == 3: # Digests
             self.hp = 25*squireLevel
             self.dmg = 1*squireLevel
             self.speed = 10+5*squireLevel
             self.name = "digests"
+            self.trueName = "It Eats greebles and turn them to Slop"
         elif self.id == 4: # Dig
             self.hp = 10*squireLevel
             self.dmg = 1*squireLevel
@@ -1809,42 +1867,70 @@ class Broot():
             self.action = 0
             self.cost = 3
             self.name = "digs"
+            self.trueName = "It Digs for Greebles and does not Stop"
         elif self.id == 5: # Deconstructs
             self.hp = 20*squireLevel
             self.dmg = 1*squireLevel
             self.speed = 5*squireLevel
             self.name = "deconstructs"
+            self.trueName = "It Deconstructs Altars for Greebles"
         elif self.id == 6: # Detector
             self.hp = 35*squireLevel
             self.dmg = 1*squireLevel
             self.speed = 10*squireLevel
             self.name = "detector"
+            self.trueName = "Its Detection will reveal Secret Rooms"
         elif self.id == 7: # Final
             self.hp = 15*squireLevel
             self.dmg = 1*squireLevel
             self.speed = 5*squireLevel
             self.name = "final"
+            self.trueName = "Its life will be Sacrificed for you"
         elif self.id == 8: # Fights
             self.hp = 30*squireLevel
             self.dmg = 5*squireLevel
             self.speed = 15+10*squireLevel
             self.name = "fights"
+            self.trueName = "Its life will be spent fighting in the Room"
+        elif self.id == 9: # Frosts
+            self.hp = 15*squireLevel
+            self.dmg = 3*squireLevel
+            self.speed = 25+12*squireLevel
+            self.name = "frosts"
+            self.trueName = "Enemies will be slown down by it"
+        elif self.id == 10: # Pierces
+            self.hp = 40*squireLevel
+            self.dmg = 2*squireLevel
+            self.speed = 25+7*squireLevel
+            self.name = "pierces"
+            self.trueName = "Enemies armor will break by it"
+        elif self.id == 11: # Walks
+            self.hp = 40*squireLevel
+            self.dmg = 5*squireLevel
+            self.speed = 25+10*squireLevel
+            self.name = "walks"
+            self.trueName = "Enemies will be hunt down by it"
+
 
         self.level = squireLevel
-
-
 
         self.mhp = self.hp
     def namesID(name):
         if name == "DEAD": return 0
         elif name == "armed": return 1
         elif name == "defends": return 2
+
         elif name == "digests": return 3
         elif name == "digs": return 4
         elif name == "deconstructs": return 5
+
         elif name == "detector": return 6
         elif name == "final": return 7
         elif name == "fights": return 8
+
+        elif name == "frosts": return 9
+        elif name == "pierces": return 10
+        elif name == "walks": return 11
     def deploy(self, x, y, room):
         self.x = x
         self.y = y
@@ -2233,7 +2319,7 @@ class Traac():
             self.maxCharge = 3
             self.cost = 3
             self.progression = 4
-            self.description = "If an unused altar has 6 or more charges, increase it by 1."
+            self.description = "Increase the amount of uses of a Common unused Altar by 1."
             self.quality = 4
         elif self.id == 1:
             self.name = "Crystalize"
@@ -2516,10 +2602,10 @@ class Zoodiac():
                 "Sends all unused Altars in the Floor to next Floor.",
                 "",],
             [
-                "Turns current room Lilas permanently, rerolls room.",
-                "If current room is Lilas, extract color permanently to give rewards.",
-                "Rerolls ??? in the room.",
-                "Sends all ??? in the Floor to next Floor.",
+                "Turns current room Black permanently, rerolls room.",
+                "If current room is Black, extract color permanently to give rewards.",
+                "Rerolls Boss in the room.",
+                "Sends all Bosses in the Floor to next Floor.",
                 "",],
             [
                 "Turns current room Magenta permanently, rerolls room.",
@@ -2650,7 +2736,6 @@ class Game():
         self.rooms = {}
 
         self.rooms["normal_gray"] = 10
-
         self.rooms["normal_white"] = 1
         self.rooms["normal_yellow"] = 2
         self.rooms["normal_purple"] = 1
@@ -2690,7 +2775,9 @@ class Game():
             self.broots[broot] = 0
         self.broots["armed"] = 2
         self.broots["defends"] = 1
-        # self.broots["detector"] = 3
+        # self.broots["frosts"] = 1
+        # self.broots["pierces"] = 1
+        # self.broots["walks"] = 1
 
 
         self.roomsReveal = {}
@@ -2749,6 +2836,7 @@ class Game():
         anvilcount = 0
         orangeScore = 0
         raacScore = 0
+        exploreScore = 0
         cleanscore = True
         zoodiacScore = 0
         for rm in self.currentFloor.Rooms:
@@ -2779,6 +2867,8 @@ class Game():
             if rm.color != "blue":
                 raacScore += 30*(len(rm.Raacs)+len(rm.Traacs))
                 zoodiacScore += 5*len(rm.Zoodiacs)
+                if not rm.discovered:
+                    exploreScore += 1
             if len(rm.Greebles) > 0 and rm.color != "blue":
                 cleanscore = False
 
@@ -2805,6 +2895,9 @@ class Game():
             if self.rooms["normal_magenta"] > 0:
                 self.rooms["normal_magenta"] -= 1
                 self.rooms["plate_magenta"] += 1
+        if exploreScore == 0:
+            self.rooms["normal_gray"] -= 1
+            self.rooms["plate_gray"] += 1
 
         self.rooms["normal_yellow"] += 1
         self.rooms["normal_red"] += 1
@@ -3352,6 +3445,8 @@ class Game():
 
                 self.escreverCanto(f"Uses: {self.infoObject.uses}/{self.infoObject.maxuses}", 20, (x, y))
                 y += 20
+                self.escreverCanto(f"Rarity: {self.infoObject.rarity}", 20, (x, y))
+                y += 20
 
                 # self.escreverCanto(f"Rarity: {self.infoObject.rarity}", 20, (x, y))
                 # y += 20
@@ -3387,7 +3482,7 @@ class Game():
                 self.escrever(f"x{self.infoObject[3]}", 20, (x, y))
                 y += 20
             elif self.infoType == "broot":
-                self.escreverCanto(f"{self.infoObject.name}", 20, (x, y))
+                self.escreverCanto(f"{self.infoObject.trueName}", 20, (x, y))
                 y += 20
 
                 self.escreverCanto(f"HP: {self.infoObject.hp}/{self.infoObject.mhp}", 20, (x, y))
@@ -3399,7 +3494,7 @@ class Game():
                 self.escreverCanto(f"Speed: {self.infoObject.speed}", 20, (x, y))
                 y += 20
             elif self.infoType == "deploy":
-                self.escreverCanto(f"{self.infoObject.name}", 20, (x, y))
+                self.escreverCanto(f"{self.infoObject.trueName}", 20, (x, y))
                 y += 20
 
                 self.escreverCanto(f"HP: {self.infoObject.hp}/{self.infoObject.mhp}", 20, (x, y))
@@ -3531,7 +3626,7 @@ class Game():
                 if name == "AltarBoost":
                     for altar in room.Altars:
                         altar = altar[0]
-                        if altar and altar.uses == altar.maxuses and altar.uses >= 5:
+                        if altar and altar.uses == altar.maxuses and altar.rarity == "Common":
                             altar.uses += 1
                             altar.maxuses += 1
                             sucess = True
@@ -3825,9 +3920,28 @@ class Game():
                 if deploy.name == "fights" and deploy.alive:
                     for enemy in rm.Enemies:
                         enemy = enemy[0]
-                        enemy.hp -= deploy.dmg
-                        deploy.damage(enemy.dmg)
-                        rm.checkEnemyLife(self.player, self)
+                        if enemy.id != 0:
+                            enemy.hp -= deploy.dmg
+                            deploy.damage(enemy.dmg)
+                            rm.checkEnemyLife(self.player, self)
+                elif deploy.name == "walks" and deploy.alive:
+                    for enemy in rm.Enemies:
+                        enemy = enemy[0]
+                        if enemy.id != 0:
+                            enemy.hp -= deploy.dmg
+                            deploy.damage(enemy.dmg)
+                            rm.checkEnemyLife(self.player, self)
+                            break
+
+                    rm2 = random.choice(rm.connections)
+                    for deploy2 in rm.Deploys:
+                        if deploy2[0] == deploy:
+                            break
+                    rm.freeePosition(deploy2[1], deploy2[2])
+                    rm2.findFreePosition(deploy, "deploy")
+                    deploy.room = room
+
+
             if stealer == 0 and len(rm.Greebles) > 0:
                 greeb = rm.Greebles[0][0]
                 rm.freeePosition(greeb[2][0], greeb[2][1])
@@ -3839,14 +3953,13 @@ class Game():
         for deploy in self.player.room.Deploys:
             deploy = deploy[0]
             if deploy.name == "final" and deploy.alive:
-                for w in range(self.player.room.width):
-                    for h in range(self.player.room.height):
-                        if self.player.room.objects[w][h][3] == deploy:
-                            break
-                    if self.player.room.objects[w][h][3] == deploy:
+                for deploy2 in self.player.room.Deploys:
+                    if deploy2[0] == deploy:
                         break
-                self.player.room.freeePosition(w, h)
+                self.player.room.freeePosition(deploy2[1], deploy2[2])
                 room.findFreePosition(deploy, "deploy")
+                deploy.room = room
+
 
         self.player.room = room
         self.activate(room)
@@ -3869,6 +3982,10 @@ class Game():
                 Hammlet += raac.level/2
         broot_attack = 0
         broot_defense = 0
+        effects = {
+            "frost": 0,
+            "pierce": 0,
+        }
 
         enemyDMG = 0
         for enemy in room.Enemies:
@@ -3893,9 +4010,19 @@ class Game():
                 elif deploy.name == "defends":
                     broot_defense += deploy.dmg
                     deploy.damage(enemyDMG)
+                elif deploy.name == "frosts":
+                    broot_attack += deploy.dmg
+                    effects["frost"] += deploy.dmg/3
+                    deploy.damage(enemyDMG)
+                elif deploy.name == "pierces":
+                    broot_attack += deploy.dmg
+                    effects["pierce"] += deploy.dmg/10
+                    deploy.damage(enemyDMG)
+
 
 
         attack = True
+        brootAttack = True
         playerSpeed = self.player.speed
         enemyAlive = True
         while attack and enemyAlive:
@@ -3905,8 +4032,19 @@ class Game():
                 if enemy.id == 0:
                     continue
                 enemyAlive = True
-                enemy.hp -= broot_attack
-                broot_attack = 0
+
+
+                if brootAttack:
+                    enemy.hp -= broot_attack
+                    for effect in effects:
+                        if effects[effect] > 0:
+                            if effect == "frost":
+                                enemy.speed -= round(effects[effect])
+                            elif effect == "pierce":
+                                enemy.df -= effects[effect]
+                    brootAttack = False
+
+
                 for deploy in room.Deploys:
                     deploy = deploy[0]
                     if deploy.name == "fights" and deploy.alive:
@@ -4278,6 +4416,8 @@ class Game():
                                     room.findFreePosition(Altar(Altar.chooseRandomAltar()), "altar", w, h)
                                 elif (type == "zoodiac" and color == "magenta"):
                                     room.findFreePosition(Zoodiac(Zoodiac.chooseRandomZoodiac()), "zoodiac", w, h)
+                                if (type == "enemy" and color == "black"):
+                                    room.findFreePosition(Enemy(Enemy.chooseRandomEnemy(), "Boss", self.level), "enemy", w, h)
                 elif zoodiac.aspect == "Space":
                     color = zoodiacColor[zoodiac.family]
                     sucess = True
@@ -4298,14 +4438,15 @@ class Game():
                                     type = rm.objects[w][h][2]
                                     object = rm.objects[w][h][3]
                                     take = False
-                                    if (type == "enemy" and color == "red") or \
+                                    if (type == "enemy" and color == "red" and rm.color != "black") or \
                                         (type == "raac" and color == "blue") or \
                                         (type == "greeble" and color == "yellow") or \
                                         (type == "broot" and color == "cyan") or \
                                         (type == "traac" and color == "orange") or \
                                         (type == "altar" and color == "purple") or \
                                         (type == "shop" and color == "green") or \
-                                        (type == "zoodiac" and color == "magenta"):
+                                        (type == "zoodiac" and color == "magenta") or \
+                                        (type == "enemy" and color == "black" and rm.color == "black"):
                                         take = True
                                     if take:
                                         self.ExtraObjects.append([object[0], type])

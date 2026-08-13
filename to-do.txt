@@ -36,6 +36,8 @@ Traac charge is equal to 20+5*self.level energy.
 # ( ) Do something about enemy bodies.
 # ( ) Squire Raac correctly energy usage
 # ( ) More choices
+# ( ) Broot attack/speed rework
+# ( ) Broot-Destroying Altar
 # ( ) New Room Variant "Wasted"
     # ( ) Wasted Purple: Sacrificial altar that permanently removes Broot from rotation
     # ( ) Wasted Red: Double Enemies, no rewards
@@ -56,7 +58,7 @@ Traac charge is equal to 20+5*self.level energy.
 
 # Updates: It's all in the Stars (consumable Signs) 0.6
     # ( ) 12 zodiac Sign Families
-    # ( ) Aries -> Red-black/   Enemy
+    # ( ) Aries -> Red      /   Enemy
     # ( ) Taurus -> Orange  /   Traacs
     # ( ) Gemini -> Yellow  /   Greebles 
     # ( ) Cancer -> White   /   Player
@@ -65,8 +67,8 @@ Traac charge is equal to 20+5*self.level energy.
     # ( ) Libra -> Gray     /   Floor
     # ( ) Scorpio -> Teal   /   ???
     # ( ) Sagitarius -> Blue/   Raacs
-    # ( ) Capricorn -> Lilas/   Altar
-    # ( ) Aquarius -> Purple/   ???
+    # ( ) Capricorn ->Purple/   Altar
+    # ( ) Aquarius -> Black /   BOSS
     # ( ) Pisces -> Magenta /   Signs
 
     # ( ) 12 Aspects / Prospit / Derse
@@ -75,8 +77,32 @@ Traac charge is equal to 20+5*self.level energy.
     # (X) Void: Removes the color of the room, and removes that room from the pool. Gives a bonus accordingly.
     # (X) Time: Rerolls prizes of color in room
     # (X) Space: Throws the prizes of color of the entire floor to the next floor's white room
-    # ( ) Heart: 
-    # ( ) Mind: 
+    # ( ) Heart: (Special Unique effect of Recovering)
+        # ( ) Aries -> Red      /   Enemy       /   Reduce Enemy's Defense and Attack
+        # ( ) Taurus -> Orange  /   Traacs      /   Recharges 15 of each Traac
+        # ( ) Gemini -> Yellow  /   Greebles    /   Cleanses Xendans, recharges Kollors, + others
+        # ( ) Cancer -> White   /   Player      /   +5 temp def +2 temp dmg
+        # ( ) Leo -> DarkGreen  /   Shop        /   Discounts every item in the shop by 30%
+        # ( ) Virgo -> Aqua     /   Broots      /   Recover 50 HP of all Broots in Floor
+        # ( ) Libra -> Gray     /   Floor       /   All Gray rooms get repopulated Transforms one void room into gray room
+        # ( ) Scorpio -> Teal   /   ???         /   
+        # ( ) Sagitarius -> Blue/   Raacs       /   Recover the energy of all Raacs
+        # ( ) Capricorn ->Purple/   Altar       /   Recover the uses of altars in the room
+        # ( ) Aquarius -> Black /   BOSS        /   Spawns a boss in the black room, and a pack of Feeds
+        # ( ) Pisces -> Magenta /   Signs       /   Gives you the last Zoodiac used
+    # ( ) Mind: (special unique effect of Upgrading permanently)
+        # ( ) Aries -> Red      /   Enemy       /   Boosts the enemies into Elites
+        # ( ) Taurus -> Orange  /   Traacs      /   Permanently increases max charge by 2
+        # ( ) Gemini -> Yellow  /   Greebles    /   Q0 to Q1, chance to Q1 to Q2, chance<< Q2 to Q3
+        # ( ) Cancer -> White   /   Player      /   +1dmg and +1df
+        # ( ) Leo -> DarkGreen  /   Shop        /   All shops get extra stocks
+        # ( ) Virgo -> Aqua     /   Broots      /   All Broots in hand and room are upgraded
+        # ( ) Libra -> Gray     /   Floor       /   +3rooms, +3plated greys
+        # ( ) Scorpio -> Teal   /   ???         /   
+        # ( ) Sagitarius -> Blue/   Raacs       /   Upgrades all raacs in room by 1 level
+        # ( ) Capricorn ->Purple/   Altar       /   Grants +4/+2/+1 charges to altar based on rarity.
+        # ( ) Aquarius -> Black /   BOSS        /   Boosts boss, boss gives 5 charges when killed.
+        # ( ) Pisces -> Magenta /   Signs       /   Makes Zoodiacs in room stronger./increase chance of finding Zoodiacs for the floor
     # ( ) Hope: Boosts the color's power
     # ( ) Rage: 
     # ( ) Breath: 
@@ -107,8 +133,9 @@ Traac charge is equal to 20+5*self.level energy.
     # ( ) Shop-Breath-Prospit: Next item you buy in the shop is free. 
     # ( ) Shop-Breath-Derse: Sets 3 items on the shop free. 
 
-# (?) Boss is severely outclassed
-
+# (X) Exploring all rooms will make gray room become plated. which has more Q0 greebles
+# (X) Altar Rarity
+# (X) Boss is severely outclassed
 # (X) Walk algorithm generating greebles that it cannot store, where should it go?
 # (X) Oh god, make the floor rooms update more optimized
 # (X) Warning of colors close by? Minesweeper-coded
@@ -137,10 +164,12 @@ Traac charge is equal to 20+5*self.level energy.
 # ( ) White Room shennanigans
 # ( ) Plate White Floor Connections
 # (X) Change slop of Digests Broot by tier of quality
-# ( ) ( ) Broot Frosty:
-# ( ) ( ) Broot Armor Breaker:
-# ( ) ( ) Broot Killers walk:
+# (X) ( ) Broot Frosty:
+# (X) ( ) Broot Armor Breaker:
+# (X) ( ) Broot Killers walk:
 # (X) (X) Void Brick
+# (X) Update on Broots True names
+
 
 # ( ) Traac: breaks Leeds into Q0 Greebles into the room
 
