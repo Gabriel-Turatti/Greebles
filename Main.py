@@ -386,6 +386,7 @@ class Player():
         self.tempSpeed = 0
 
         self.vined = False
+        self.lastZoodiacUsed = (4, 11, 0)
 
         self.initGreebles()
         self.initPlayer(0)
@@ -626,9 +627,9 @@ class Player():
         elif name == "Pallers":
             self.MaxGreebles["Sackans"] += 15*amount
         elif name == "Sallers":
-            self.MaxGreebles["Daffans"] += 5*amount
-            self.MaxGreebles["Callans"] += 5*amount
-            self.MaxGreebles["Radeans"] += 5*amount
+            self.MaxGreebles["Daffans"] += 10*amount
+            self.MaxGreebles["Callans"] += 10*amount
+            self.MaxGreebles["Radeans"] += 10*amount
         elif name == "Vallers":
             self.MaxGreebles["Xendans"] += 3*amount
 
@@ -687,9 +688,9 @@ class Player():
         elif name == "Pallers":
             self.MaxGreebles["Sackans"] -= 15*greeb[1]
         elif name == "Sallers":
-            self.MaxGreebles["Daffans"] -= 5*greeb[1]
-            self.MaxGreebles["Callans"] -= 5*greeb[1]
-            self.MaxGreebles["Radeans"] -= 5*greeb[1]
+            self.MaxGreebles["Daffans"] -= 10*greeb[1]
+            self.MaxGreebles["Callans"] -= 10*greeb[1]
+            self.MaxGreebles["Radeans"] -= 10*greeb[1]
         elif name == "Vallers":
             self.MaxGreebles["Xendans"] -= 3*greeb[1]
 
@@ -865,19 +866,30 @@ class Enemy():
             print("ERROR")
             print(self.id)
 
-        if self.type == "Boss": # Boss
+
+        if self.type == "King": # King
+            hp = hp*2
+            dmg = dmg*1.45
+            df = df*1.2
+            speed = speed*1.1
+            name = "The " + name
+            self.charge = 10
+        elif self.type == "Boss": # Boss
             hp = hp*1.75
             dmg = dmg*1.35
             df = df*1.1
             speed = speed
             name = "Boss " + name
-        if self.type == "Elite": # Elite
+            self.charge = 4
+        elif self.type == "Elite": # Elite
             hp = hp*1.25
             dmg = dmg*1.3
             df = df*0.9
             speed = speed*0.9
             name = "Elite " + name
-
+            self.charge = 2
+        else:
+            self.charge = 1
 
         self.name = name
         self.hp = hp*random.randrange(7, 14)/10
@@ -1212,7 +1224,7 @@ class Altar():
         elif self.id == 29: # RANGORS Altar
             self.recipe = [
                 ["Rallers", 2],
-                ["Paller", 1],
+                ["Pallers", 1],
             ]
             self.products = [
                 ["Rangors", 1],
@@ -1275,7 +1287,7 @@ class Altar():
             [16, 10],
             [16, 11],
             [7, 12],
-            [7, 13],
+            [20, 13],
             [8, 14],
             [12, 15],
 
@@ -1423,14 +1435,14 @@ class Room():
             temp1 = self.level
             self.randomGreeble(1, temp1+2)
             RNG = random.randrange(100)
-            if RNG < 2:
+            if RNG < params[4]:
                 self.findFreePosition(Zoodiac(Zoodiac.chooseRandomZoodiac()), "zoodiac")
         elif self.color == "yellow" and self.type == "plate":
             temp2 = self.level//5
             self.randomGreeble(2, temp2)
             self.randomGreeble(1, temp2*3)
             RNG = random.randrange(100)
-            if RNG < 5:
+            if RNG < params[4]*3:
                 self.findFreePosition(Zoodiac(Zoodiac.chooseRandomZoodiac()), "zoodiac")
         elif self.color == "black" and self.type == "normal":
             if self.level % 5 == 0 and self.level != 0:
@@ -1527,7 +1539,7 @@ class Room():
                 else:
                     self.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac")
             self.acquire(["Feeds", 10+round(self.level*2)])
-            self.findFreePosition(Enemy(Enemy.chooseRandomBoss(), "Boss", self.level), "enemy")
+            self.findFreePosition(Enemy(Enemy.chooseRandomBoss(), "King", self.level), "enemy")
     def depopulate(self):
         for w in range(self.width):
             for h in range(self.height):
@@ -1560,6 +1572,7 @@ class Room():
                 Red = True
             elif enemy.id != 0:
                 enemyEnergy = 20+3*round(sqrt(enemy.mhp*(enemy.df+1)*enemy.speed*enemy.dmg))
+                enemyCharge = enemy.charge
                 print(enemyEnergy)
 
                 if enemy.id == 5:
@@ -1593,7 +1606,6 @@ class Room():
                             enemy2.df -= 1
 
                 EnemyLoot = 0
-                BlackTest = None
                 for raac in player.Raacs:
                     if raac.source == "EnemyKill" and enemyEnergy > 0:
                         raac.charge += raac.rate
@@ -1608,8 +1620,8 @@ class Room():
 
                     if raac.name == "EnemyLoot" and raac.charged():
                         EnemyLoot += 2*raac.level
-                    elif raac.name == "BlackTest":
-                        BlackTest = raac
+                    elif raac.name == "BlackTest" and enemy.type in ["Boss", "King"] and raac.charged():
+                        enemyCharge += raac.level*2
                     elif raac.name == "Vampire":
                         times = raac.level
                         while player.Greebles["Bloods"] > 2 and player.Greebles["Heeds"] < player.MaxGreebles["Heeds"] and times > 0 and raac.charged():
@@ -1625,21 +1637,19 @@ class Room():
 
                 
                 RNG = random.randrange(100)
-                if RNG < 1:
+                if RNG < game.params[4]:
                     self.findFreePosition(Zoodiac(Zoodiac.chooseRandomZoodiac()), "zoodiac")
 
                 for traac in player.Traacs:
-                    if enemyEnergy > traacCost and self.color != "black" or enemyEnergy > 2*traacCost:
+                    temp = enemyCharge
+                    while enemyEnergy >= traacCost and temp > 0:
+                        temp -= 1
                         traac.charge += 1
                         enemyEnergy -= traacCost
-                        if self.color == "black":
-                            traac.charge += 2
-                            if BlackTest and traac.charge < traac.maxCharge and BlackTest.charged():
-                                traac.charge += BlackTest.level
-                            enemyEnergy -= 40
                         if traac.charge > traac.maxCharge:
-                            enemyEnergy += traacCost*(traac.charge-traac.maxCharge)
-                            traac.charge = traac.maxCharge
+                            enemyEnergy += traacCost
+                            traac.charge -= 1
+                            break
 
                 loot = floor(log(enemy.mhp+1, 4)) + EnemyLoot
                 if loot > 0:
@@ -2161,7 +2171,7 @@ class Raac():
         elif self.id == 17:
             self.name = "BlackTest"
             self.trigger = "BossKill"
-            self.description = "Killing a Boss gives +X charges to your Traacs"
+            self.description = "Bosses will give +2X charges to your Traacs"
             self.quality = 5
 
             self.source = "EnemyKill"
@@ -2439,13 +2449,13 @@ class Zoodiac():
             elif aspect == 3:
                 self.aspect = "Space"
             elif aspect == 4:
-                self.aspect = "Hope"
-            elif aspect == 5:
-                self.aspect = "Rage"
-            elif aspect == 6:
                 self.aspect = "Heart"
-            elif aspect == 7:
+            elif aspect == 5:
                 self.aspect = "Mind"
+            elif aspect == 6:
+                self.aspect = "Hope"
+            elif aspect == 7:
+                self.aspect = "Rage"
             elif aspect == 8:
                 self.aspect = "Breath"
             elif aspect == 9:
@@ -2470,72 +2480,96 @@ class Zoodiac():
                 "Arsces",
                 "Arrius",
                 "Ariborn",
+                "Arittarius",
+                "Arpia",
             ],
             [
                 "Taurus",
                 "Taurist",
                 "Taursci",
-                "taurnius",
+                "Taurnius",
+                "Tauricorn",
+                "Taurittanius",
             ],
             [
                 "Gemini",
                 "Germun",
                 "Gemries",
                 "Gemsces",
+                "Gemrius",
+                "Gemiborn",
             ],
             [
                 "Cancer",
                 "Camino",
                 "Canus",
                 "Canrist",
+                "Cansci",
+                "Cannius",
             ],
             [
                 "Leo",
                 "Lecen",
                 "Lemini",
                 "Leun",
+                "Leries",
+                "Lesces",
             ],
             [
                 "Virgo",
                 "Virlo",
                 "Vircer",
                 "Virmino",
+                "Virus",
+                "Virist",
             ],
             [
                 "Libra",
                 "Ligo",
                 "Liblo",
                 "Licer",
+                "Limino",
+                "Libus",
             ],
             [
                 "Scorpio",
                 "Scorra",
                 "Scorgo",
                 "Scorlo",
+                "Scorcer",
+                "Scormino",
             ],
             [
                 "Sagitarius",
                 "Sagipia",
                 "Sagiza",
                 "Sagiga",
+                "Sagio",
+                "Sagicen",
             ],
             [
                 "Capricorn",
                 "Caprittanius",
                 "Capripio",
                 "Caprira",
+                "Caprigo",
+                "Caprilo",
             ],
             [
                 "Aquarius",
                 "Aquiborn",
                 "Aquittarius",
                 "Aquipia",
+                "Aquaza",
+                "Aquaga",
             ],
             [
                 "Pisces",
                 "Pirius",
                 "Piborn",
                 "Pittarius",
+                "Pipia",
+                "Piza",
             ],
         ]
         description = [
@@ -2544,43 +2578,62 @@ class Zoodiac():
                 "If current room is red, extract color permanently to give rewards.",
                 "Rerolls enemies in the room.",
                 "Sends all Enemies in the Floor to next Floor.",
+                "Reduce Enemies' Defenses, Attacks, and Speeds in the room",
+                "Upgrades Enemies' tiers in the room",
+                "",
                 "",],
             [
                 "Turns current room Orange permanently, rerolls room.",
                 "If current room is Orange, extract color permanently to give rewards.",
                 "Rerolls Traacs in the room.",
                 "Sends all Traacs in the Floor to next Floor.",
+                "Recharges your Traacs",
+                "Permanently increases your current Traacs max charge by +2",
+                "",
                 "",],
             [
                 "Turns current room Yellow permanently, rerolls room.",
                 "If current room is Yellow, extract color permanently to give rewards.",
                 "Rerolls Greebles in the room.",
                 "Sends all Greebles in the Floor to next Floor.",
+                "Cleanses the Greebles you hold",
+                "Raises the quality of greebles in room",
+                "",
                 "",],
             [
                 "Turns current room White permanently, rerolls room.",
                 "If current room is White, extract color permanently to give rewards.",
                 "Rerolls Player Stats.",
                 "Send the Player to next Floor.",
+                "Temporarily buffs player",
+                "Gives player a permanent small buff to stats",
+                "",
                 "",],
             [
                 "Turns current room Green permanently, rerolls room.",
                 "If current room is Green, extract color permanently to give rewards.",
                 "Rerolls the Shop.",
                 "Sends all Shop items in the Floor to next Floor.",
+                "Discounts all items in shop by 30%",
+                "Restocks all shops in the floor",
+                "",
                 "",],
             [
                 "Turns current room Cyan permanently, rerolls room.",
                 "If current room is Cyan, extract color permanently to give rewards.",
                 "Rerolls Broots in the room.",
                 "Sends all Broots in the Floor to next Floor.",
+                "Heals Broots in the floor",
+                "Upgrades all Broots in the floor and in hand",
+                "",
                 "",],
             [
                 "Turns current room Gray permanently, rerolls room.",
                 "If current room is Gray, extract color permanently to give rewards.",
                 "Rerolls ??? in the room.",
                 "Sends current room to next Floor.",
-                "",
+                "Repopulates all gray rooms in the Floor",
+                "Adds 3 normal and plated gray rooms to the Floor pool",
                 "",
                 "",],
             [
@@ -2588,30 +2641,45 @@ class Zoodiac():
                 "If current room is Teal, extract color permanently to give rewards.",
                 "Rerolls ??? in the room.",
                 "Sends all ??? in the Floor to next Floor.",
+                "All ??? is restricted inside ???",
+                "Makes all ??? do double of effect",
+                "",
                 "",],
             [
                 "Turns current room Blue permanently, rerolls room.",
                 "If current room is Blue, extract color permanently to give rewards.",
                 "Rerolls Raacs in the room.",
                 "Sends all Raacs in the Floor to next Floor.",
+                "Recharges all your Raacs",
+                "Upgrades the level of all raacs in the room by 1",
+                "",
                 "",],
             [
                 "Turns current room Purple permanently, rerolls room.",
                 "If current room is Purple, extract color permanently to give rewards.",
                 "Rerolls unused Altars in the room.",
                 "Sends all unused Altars in the Floor to next Floor.",
+                "Recharges all Altars in the room.",
+                "Increases the max usage of Altars in the room depending on rarity",
+                "",
                 "",],
             [
                 "Turns current room Black permanently, rerolls room.",
                 "If current room is Black, extract color permanently to give rewards.",
                 "Rerolls Boss in the room.",
                 "Sends all Bosses in the Floor to next Floor.",
+                "Spawns a boss in the black room along with prizes",
+                "Boosts Boss stats, increase the amount of charges acquire by killing them by 5",
+                "",
                 "",],
             [
                 "Turns current room Magenta permanently, rerolls room.",
                 "If current room is Magenta, extract color permanently to give rewards.",
                 "Rerolls Zoodiacs in the room.",
                 "Sends all Zoodiacs in the Floor to next Floor.",
+                "recreates the last Zoodiac you used",
+                "Raises chance of finding Zoodiacs by 1%",
+                "",
                 "",],
         ]
 
@@ -2623,7 +2691,7 @@ class Zoodiac():
         # aspect = random.randrange(12)
         # sway = random.randrange(2)
         family = random.randrange(12)
-        aspect = random.randrange(4)
+        aspect = random.randrange(6)
         sway = random.randrange(1)
         return (family, aspect, sway)
 
@@ -2644,20 +2712,20 @@ class Floor():
         for key in temp:
             rooms[key] = temp[key]
 
-        self.Rooms.append(Room(0, "white", "normal", self.level, [0]))
+        self.Rooms.append(Room(0, "white", "normal", self.level, params))
         self.size -= 1
         rooms["normal_white"] -= 1
 
         N = 1
         while self.size > 1:
             self.size -= 1
-            newroom = Room(N, "gray", "normal", self.level, [0])
+            newroom = Room(N, "gray", "normal", self.level, params)
             N += 1
             self.Rooms.append(newroom)
 
         blackRoom = None
         if self.size > 0:
-            self.Rooms.append(Room(N, "black", "normal", self.level, [0]))
+            self.Rooms.append(Room(N, "black", "normal", self.level, params))
             blackRoom = self.Rooms[-1]
             self.size -= 1
             rooms["normal_black"] -= 1
@@ -2687,7 +2755,7 @@ class Floor():
                 self.Rooms[RNG].color = color
                 self.Rooms[RNG].type = type
                 self.Rooms[RNG].depopulate()
-                self.Rooms[RNG].populate([shopStock])
+                self.Rooms[RNG].populate(params)
                 if color == "yellow" or color == "orange" or color == "cyan":
                     for key2 in broots:
                         if broots[key2] > 0:
@@ -2710,6 +2778,7 @@ class Floor():
         if blackRoom in self.Rooms[0].connections:
             self.Rooms[0].connections.remove(blackRoom)
             blackRoom.connections.remove(self.Rooms[0])
+
 
 
 class Game():
@@ -2794,14 +2863,13 @@ class Game():
                 self.brootsReveal[typee] = False
 
 
-
         self.ExtraRooms = []
         self.ExtraObjects = []
         self.oldFloors = []
 
         self.log = []
 
-        self.params = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.params = [0, 0, 0, 0, 2+15, 0, 0, 0, 0]
         self.currentFloor = Floor(-1, self.rooms, copy.deepcopy(self.broots), self)
 
         self.plate_yellowCost = 5
@@ -2933,8 +3001,8 @@ class Game():
             typee = Broot.chooseRandomBroot(BrootPool)
             self.broots[brootNumber[typee]] += 1
 
-        self.player.Greebles["Kollors"] += self.player.Greebles["Kollors_off"]
-        self.player.Greebles["Kollors_off"] = 0
+        self.player.acquire(["Kollors", self.player.Greebles["Kollors_off"]])
+        self.player.unacquire(["Kollors_off", self.player.Greebles["Kollors_off"]])
 
 
 
@@ -3001,8 +3069,9 @@ class Game():
                     temp -= 1
         self.params[0] = connectivity
         self.params[1] = extraStock
-        # gray rooms
+        # gray rooms DEPRECATED
         self.params[3] = Squire
+        # Zoodiac chance
         self.oldFloors.append(self.currentFloor)
         self.currentFloor = Floor(self.level, self.rooms, copy.deepcopy(self.broots), self)
 
@@ -3652,17 +3721,17 @@ class Game():
                 elif name == "RaacRerox":
                     for raac in room.Raacs:
                         room.freeePosition(raac[1], raac[2])
-                        level = raac.level-1
+                        level = raac[0].level-1
                         RNG = random.randrange(100)
                         if RNG <= 5:
                             traac = Traac(Traac.chooseRandomTraac(TraacPool))
-                            room.findFreePosition(traac, "traac", w, h)
+                            room.findFreePosition(traac, "traac", raac[1], raac[2])
                             if level > 0:
                                 for i in range(level-1):
                                     traac.upgrade()
                         else:
                             raac = Raac(Raac.chooseRandomRaac(RaacPool))
-                            room.findFreePosition(raac, "raac", w, h)
+                            room.findFreePosition(raac, "raac", raac[1], raac[2])
                             if level > 0:
                                 for i in range(level-1):
                                     raac.upgrade()
@@ -3906,6 +3975,7 @@ class Game():
                                     rm2.color = "red"
                                     if len(rm.Enemies) == 0:
                                         rm.color = "gray"
+                                    break
 
 
         stealer = -1
@@ -4386,7 +4456,7 @@ class Game():
                                 if (type == "enemy" and color == "red"):
                                     room.findFreePosition(Enemy(Enemy.chooseRandomEnemy()), "enemy", w, h)
                                 elif (type == "raac" and color == "blue"):
-                                    room.findFreePosition(Raac(Raac.chooseRandomRaac()), "raac", w, h)
+                                    room.findFreePosition(Raac(Raac.chooseRandomRaac(RaacPool)), "raac", w, h)
                                 elif (type == "greeble" and color == "yellow"):
                                     greeble = object[0]
                                     if greeble[0] in GQ0+GQ0b:
@@ -4411,7 +4481,7 @@ class Game():
                                 elif (type == "broot" and color == "cyan"):
                                     room.findFreePosition(Broot(Broot.chooseRandomBroot(BrootPool, False)), "broot", w, h)
                                 elif (type == "traac" and color == "orange"):
-                                    room.findFreePosition(Traac(Traac.chooseRandomTraac()), "traac", w, h)
+                                    room.findFreePosition(Traac(Traac.chooseRandomTraac(TraacPool)), "traac", w, h)
                                 elif (type == "altar" and color == "purple"):
                                     room.findFreePosition(Altar(Altar.chooseRandomAltar()), "altar", w, h)
                                 elif (type == "zoodiac" and color == "magenta"):
@@ -4453,11 +4523,187 @@ class Game():
                                         tempObjects.append([w, h])
                             for place in tempObjects:
                                 rm.freeePosition(place[0], place[1])
+                elif zoodiac.aspect == "Heart":
+                    color = zoodiacColor[zoodiac.family]
 
 
 
+                    if color == "red":
+                        for enemy in room.Enemies:
+                            enemy[0].df -= 3
+                            enemy[0].dmg -= 3
+                            enemy[0].speed -= 5
+                            if enemy[0].df < 0:
+                                enemy.df = 0
+                            sucess = True
+                    elif color == "orange":
+                        for traac in self.player.Traacs:
+                            traac.charge += 15
+                            traac.charge = min(traac.charge, traac.maxCharge)
+                            sucess = True
+                    elif color == "yellow":
+                        qtdX = self.player.Greebles["Xendans"]
+                        qtdX = min(qtdX, 4)
+                        self.player.unacquire(["Xendans", qtdX])
+                        self.player.acquire(["Verdans", qtdX])
 
-            if not sucess:
+                        qtdX = self.player.Greebles["Kollors_off"]
+                        qtdX = min(qtdX, 3)
+                        self.player.unacquire(["Kollors_off", qtdX])
+                        self.player.acquire(["Kollors", qtdX])
+
+                        qtdX = self.player.Greebles["Shots"]
+                        qtdX = min(qtdX, 20)
+                        self.player.unacquire(["Shots", qtdX])
+                        self.player.acquire(["Clots", qtdX//2])
+
+                        qtdX = self.player.MaxGreebles["Heeds"]
+                        qtdX = min(qtdX, 10)
+                        self.player.acquire(["Heeds", qtdX])
+
+                        sucess = True
+                    elif color == "white":
+                        self.player.df += 5
+                        self.player.dmg += 5
+                        self.player.speed += 10
+                        self.player.tempDf += 5
+                        self.player.tempDmg += 5
+                        self.player.tempSpeed += 10
+                        sucess = True
+                    elif color == "green":
+                        for shop in room.Shops:
+                            shop[0][3] = round(shop[0][3]*0.7)
+                            sucess = True
+                    elif color == "cyan":
+                        for rm in self.currentFloor.Rooms:
+                            for deploy in rm.Deploys:
+                                deploy[0].hp += 50
+                                deploy[0].hp = min(deploy[0].hp, deploy[0].mhp)
+                                sucess = True
+                    elif color == "gray":
+                        for rm in self.currentFloor.Rooms:
+                            if rm.color == "void":
+                                rm.color = "gray"
+                            if rm.color == "gray":
+                                rm.populate(self.params)
+                                sucess = True
+                    elif color == "teal":
+                        pass
+                    elif color == "blue":
+                        for raac in self.player.Raacs:
+                            raac[0].charge = raac[0].maxCharge
+                            sucess = True
+                    elif color == "purple":
+                        for altar in room.Altars:
+                            altar[0].uses = altar[0].maxuses
+                            sucess = True
+                    elif color == "black":
+                        if rm.color == "black":
+                            room.populate(self.params)
+                            sucess = True
+                    elif color == "magenta":
+                        idZ = self.player.lastZoodiacUsed
+                        if not idZ:
+                            idZ = (4, 11, 0)
+                        room.findFreePosition(Zoodiac(idZ))
+                        sucess = True
+                elif zoodiac.aspect == "Mind":
+                    color = zoodiacColor[zoodiac.family]
+
+
+                    
+                    if color == "red":
+                        for enemy in room.Enemies:
+                            if enemy[0].type == "Boss":
+                                enemy[0] = Enemy(Enemy.chooseRandomBoss(), "King", self.level)
+                            if enemy[0].type == "Elite":
+                                enemy[0] = Enemy(Enemy.chooseRandomEnemy(), "Boss", self.level)
+                            else:
+                                enemy[0] = Enemy(Enemy.chooseRandomEnemy(), "Elite", self.level)
+                            sucess = True
+                    elif color == "orange":
+                        for traac in self.player.Traacs:
+                            traac.maxCharge += 2
+                            sucess = True
+                    elif color == "yellow":
+                        for greeble in room.Greebles:
+                            RNG = random.randrange(100)
+                            if greeble[0][0] in GQ0+GQ0b:
+                                if RNG <= 80:
+                                    greeble[0][0] = random.choice(GQ1)
+                            elif greeble[0][0] in GQ1+GQ1b:
+                                if RNG <= 20:
+                                    greeble[0][0] = random.choice(GQ2)
+                            elif greeble[0][0] in GQ2+GQ2b:
+                                if RNG <= 1:
+                                    greeble[0][0] = random.choice(GQ3)
+                            sucess = True
+                    elif color == "white":
+                        self.player.df += 1
+                        self.player.dmg += 1
+                        self.player.speed += 1
+                        sucess = True
+                    elif color == "green":
+                        for rm in self.currentFloor.Rooms:
+                            if rm.color == "green":
+                                rm.randomShop(self.level)
+                                sucess = True
+                    elif color == "cyan":
+                        squireLevel = 1
+                        for raac in self.player.Raacs:
+                            if raac.name == "Squire":
+                                squireLevel += raac.level
+                        for rm in self.currentFloor.Rooms:
+                            for broot in rm.Broots:
+                                broot[0] = Broot(broot[0].id, squireLevel)
+                                sucess = True
+                            for broot in self.player.Broots:
+                                broot = Broot(broot.id, squireLevel)
+                                sucess = True
+                    elif color == "gray":
+                        self.rooms["normal_gray"] += 3
+                        self.rooms["plate_gray"] += 3
+                    elif color == "teal":
+                        pass
+                    elif color == "blue":
+                        for raac in room.Raacs:
+                            raac[0].level += 1
+                            sucess = True
+                    elif color == "purple":
+                        for altar in room.Altars:
+                            qtd = 6
+                            if altar.rarity == "Unique":
+                                qtd = 0
+                            elif altar.rarity == "Mythical":
+                                qtd = 1
+                            elif altar.rarity == "Rare":
+                                qtd = 2
+                            elif altar.rarity == "Uncommon":
+                                qtd = 4
+                            altar[0].uses += qtd
+                            altar[0].maxuses += qtd
+                            sucess = True
+                    elif color == "black":
+                        for enemy in room.Enemies:
+                            if enemy[0].type == "Boss":
+                                enemy[0].mhp = round(enemy[0].mhp*1.5)
+                                enemy[0].hp = min(round(enemy[0].hp*1.5), enemy[0].mhp)
+                                enemy[0].dmg = round(enemy[0].dmg*1.35)
+                                enemy[0].df = round(enemy[0].df*1.6)
+                                enemy[0].speed = round(enemy[0].speed*1.4)
+                                enemy[0].charge += 5
+                        if rm.color == "black":
+                            room.populate(self.params)
+                            sucess = True
+                    elif color == "magenta":
+                        self.effects["zoodiacChance"] += 1
+                        sucess = True
+
+
+
+            if sucess:
+                self.player.lastZoodiacUsed = zoodiac.id
+            else:
                 self.player.Zoodiacs.append(zoodiac)
 
 

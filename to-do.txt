@@ -16,7 +16,8 @@ Traac charge is equal to 20+5*self.level energy.
 
 # Long Future
 # ( ) One-way connectivity in the graph
-# ( ) Inventory separated from Greebles
+# (X) Inventory separated from Greebles
+# ( ) Zoodiac Levels
 # (X) Analyze heat death of Greebles
 
 
@@ -36,6 +37,7 @@ Traac charge is equal to 20+5*self.level energy.
 # ( ) Do something about enemy bodies.
 # ( ) Squire Raac correctly energy usage
 # ( ) More choices
+# ( ) Zoodiacs Thermodynamics
 # ( ) Broot attack/speed rework
 # ( ) Broot-Destroying Altar
 # ( ) New Room Variant "Wasted"
@@ -58,18 +60,18 @@ Traac charge is equal to 20+5*self.level energy.
 
 # Updates: It's all in the Stars (consumable Signs) 0.6
     # ( ) 12 zodiac Sign Families
-    # ( ) Aries -> Red      /   Enemy
-    # ( ) Taurus -> Orange  /   Traacs
-    # ( ) Gemini -> Yellow  /   Greebles 
-    # ( ) Cancer -> White   /   Player
-    # ( ) Leo -> DarkGreen  /   Shop
-    # ( ) Virgo -> Aqua     /   Broots
-    # ( ) Libra -> Gray     /   Floor
+    # (X) Aries -> Red      /   Enemy
+    # (X) Taurus -> Orange  /   Traacs
+    # (X) Gemini -> Yellow  /   Greebles 
+    # (X) Cancer -> White   /   Player
+    # (X) Leo -> DarkGreen  /   Shop
+    # (X) Virgo -> Cyan     /   Broots
+    # (X) Libra -> Gray     /   Floor
     # ( ) Scorpio -> Teal   /   ???
-    # ( ) Sagitarius -> Blue/   Raacs
-    # ( ) Capricorn ->Purple/   Altar
-    # ( ) Aquarius -> Black /   BOSS
-    # ( ) Pisces -> Magenta /   Signs
+    # (X) Sagitarius -> Blue/   Raacs
+    # (X) Capricorn ->Purple/   Altar
+    # (X) Aquarius -> Black /   BOSS
+    # (X) Pisces -> Magenta /   Signs
 
     # ( ) 12 Aspects / Prospit / Derse
     # Prospit is controlled effects
@@ -77,32 +79,32 @@ Traac charge is equal to 20+5*self.level energy.
     # (X) Void: Removes the color of the room, and removes that room from the pool. Gives a bonus accordingly.
     # (X) Time: Rerolls prizes of color in room
     # (X) Space: Throws the prizes of color of the entire floor to the next floor's white room
-    # ( ) Heart: (Special Unique effect of Recovering)
-        # ( ) Aries -> Red      /   Enemy       /   Reduce Enemy's Defense and Attack
-        # ( ) Taurus -> Orange  /   Traacs      /   Recharges 15 of each Traac
-        # ( ) Gemini -> Yellow  /   Greebles    /   Cleanses Xendans, recharges Kollors, + others
-        # ( ) Cancer -> White   /   Player      /   +5 temp def +2 temp dmg
-        # ( ) Leo -> DarkGreen  /   Shop        /   Discounts every item in the shop by 30%
-        # ( ) Virgo -> Aqua     /   Broots      /   Recover 50 HP of all Broots in Floor
-        # ( ) Libra -> Gray     /   Floor       /   All Gray rooms get repopulated Transforms one void room into gray room
-        # ( ) Scorpio -> Teal   /   ???         /   
-        # ( ) Sagitarius -> Blue/   Raacs       /   Recover the energy of all Raacs
-        # ( ) Capricorn ->Purple/   Altar       /   Recover the uses of altars in the room
-        # ( ) Aquarius -> Black /   BOSS        /   Spawns a boss in the black room, and a pack of Feeds
-        # ( ) Pisces -> Magenta /   Signs       /   Gives you the last Zoodiac used
-    # ( ) Mind: (special unique effect of Upgrading permanently)
-        # ( ) Aries -> Red      /   Enemy       /   Boosts the enemies into Elites
-        # ( ) Taurus -> Orange  /   Traacs      /   Permanently increases max charge by 2
-        # ( ) Gemini -> Yellow  /   Greebles    /   Q0 to Q1, chance to Q1 to Q2, chance<< Q2 to Q3
-        # ( ) Cancer -> White   /   Player      /   +1dmg and +1df
-        # ( ) Leo -> DarkGreen  /   Shop        /   All shops get extra stocks
-        # ( ) Virgo -> Aqua     /   Broots      /   All Broots in hand and room are upgraded
-        # ( ) Libra -> Gray     /   Floor       /   +3rooms, +3plated greys
-        # ( ) Scorpio -> Teal   /   ???         /   
-        # ( ) Sagitarius -> Blue/   Raacs       /   Upgrades all raacs in room by 1 level
-        # ( ) Capricorn ->Purple/   Altar       /   Grants +4/+2/+1 charges to altar based on rarity.
-        # ( ) Aquarius -> Black /   BOSS        /   Boosts boss, boss gives 5 charges when killed.
-        # ( ) Pisces -> Magenta /   Signs       /   Makes Zoodiacs in room stronger./increase chance of finding Zoodiacs for the floor
+    # (X) Heart: (Special Unique effect of Recovering)
+        # (X) Aries -> Red      /   Enemy       /   Reduce Enemy's Defense and Attack
+        # (X) Taurus -> Orange  /   Traacs      /   Recharges 15 of each Traac
+        # (X) Gemini -> Yellow  /   Greebles    /   Cleanses Xendans, recharges Kollors, + others
+        # (X) Cancer -> White   /   Player      /   +5 temp def +2 temp dmg
+        # (X) Leo -> DarkGreen  /   Shop        /   Discounts every item in the shop by 30%
+        # (X) Virgo -> Cyan     /   Broots      /   Recover 50 HP of all Broots in Floor
+        # (X) Libra -> Gray     /   Floor       /   All Gray rooms get repopulated Transforms one void room into gray room
+        # (X) Scorpio -> Teal   /   ???         /   
+        # (X) Sagitarius -> Blue/   Raacs       /   Recover the energy of all Raacs
+        # (X) Capricorn ->Purple/   Altar       /   Recover the uses of altars in the room
+        # (X) Aquarius -> Black /   BOSS        /   Spawns a boss in the black room, and a pack of Feeds
+        # (X) Pisces -> Magenta /   Signs       /   Gives you the last Zoodiac used
+    # (X) Mind: (special unique effect of Upgrading)
+        # (X) Aries -> Red      /   Enemy       /   Upgrades de enemies normal -> Elite -> Boss -> Super Boss
+        # (X) Taurus -> Orange  /   Traacs      /   Permanently increases max charge by 2
+        # (X) Gemini -> Yellow  /   Greebles    /   Q0 to Q1, chance to Q1 to Q2, chance<< Q2 to Q3
+        # (X) Cancer -> White   /   Player      /   +1dmg and +1df
+        # (X) Leo -> DarkGreen  /   Shop        /   All shops get extra stocks
+        # (X) Virgo -> Cyan     /   Broots      /   All Broots in hand and room are upgraded
+        # (X) Libra -> Gray     /   Floor       /   +3rooms, +3plated greys
+        # (X) Scorpio -> Teal   /   ???         /   
+        # (X) Sagitarius -> Blue/   Raacs       /   Upgrades all raacs in room by 1 level
+        # (X) Capricorn ->Purple/   Altar       /   Grants +4/+2/+1 charges to altar based on rarity.
+        # (X) Aquarius -> Black /   BOSS        /   Boosts boss, boss gives 5 charges when killed.
+        # (X) Pisces -> Magenta /   Signs       /   Increases chance of finding Zoodiacs forever
     # ( ) Hope: Boosts the color's power
     # ( ) Rage: 
     # ( ) Breath: 
