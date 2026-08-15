@@ -25,7 +25,6 @@ Traac charge is equal to 20+5*self.level energy.
 # Update: Rule Raacs
 # Update: Alternative Floors
 # Update: Save Game
-# Update: New Characters with special abilities
 
 
 
@@ -34,20 +33,96 @@ Traac charge is equal to 20+5*self.level energy.
 # ( ) Connectivity algorithm to ensure that Black Rooms are reachable from White Rooms
 # ( ) Game Mode: Deflation - all sources of raac energy slowly starts to dwindle with floors instead of increasing.
 # ( ) Change Raacs from place to prioritize energy
-# ( ) Do something about enemy bodies.
 # ( ) Squire Raac correctly energy usage
 # ( ) More choices
 # ( ) Zoodiacs Thermodynamics
 # ( ) Broot attack/speed rework
-# ( ) Broot-Destroying Altar
-# ( ) New Room Variant "Wasted"
+# ( ) Traacs level up better
+# ( ) Rooms are locked and can only be entered by paying a key (Greeble)
+
+
+
+
+
+
+
+
+
+# Update: New Characters with special abilities
+    # ( ) Aries -> Red      /   Enemy
+    # ( ) Taurus -> Orange  /   Traacs
+    # ( ) Gemini -> Yellow  /   Greebles 
+    # ( ) Cancer -> White   /   Player
+    # ( ) Leo -> DarkGreen  /   Shop
+    # ( ) Virgo -> Cyan     /   Broots
+    # ( ) Libra -> Gray     /   Floor
+    # ( ) Scorpio -> Teal   /   ???
+    # ( ) Sagitarius -> Blue/   Raacs
+    # ( ) Capricorn ->Purple/   Altar
+    # ( ) Aquarius -> Black /   BOSS
+    # ( ) Pisces -> Magenta /   Signs
+    # ( ) ??? -> Rainbow    /   Random Stats
+
+
+# ( ) The Teal Mechanic: Competitors
+    # ( ) Mana Bar -> Too close to Traacs
+    # ( ) Room Obstacles -> Too close to Shops
+    # ( ) Constructs -> Too close to broots
+# ( ) White Room shennanigans
+# ( ) Plate White Floor Connections
+
+# ( ) ( ) New Room Variant "Wasted"
     # ( ) Wasted Purple: Sacrificial altar that permanently removes Broot from rotation
     # ( ) Wasted Red: Double Enemies, no rewards
-    # ( ) Wasted Yellow: Rare Greebles
-    # ( ) Wasted Green: Gambling Machines
+    # ( ) Wasted Yellow: Few B-Greebles
+    # ( ) Wasted Green: Gambling Altars
     # ( ) Wasted Black: No Boss, no Raac
-    # ( ) Wasted Orange: A copy of a Raac that you have. One Enemy
-    # ( ) Wasted Gray: 0 Greebles, will occupy position of other rooms if enough of them are present.
+    # ( ) Wasted Orange: A copy of a Traac that you have, One Elite, no greebles
+    # ( ) Wasted Gray: 0 Greebles.
+    # ( ) Wasted cyan: Broots not in pool
+    # ( ) Wasted teal: ???
+    # ( ) Wasted magenta: A zoodiac you've used this run
+    # ( ) Wasted blue: lower chance of Raacs, higher chance of Greebles
+    # ( ) Wasted white: No floor effects.
+
+# ( ) Do something about enemy bodies.
+# ( ) Broot-Destroying Altar
+
+
+
+# ( ) Traac: Crafting: Consumes 6 leeds to create a random Q2 greeble
+# ( ) Traac: Ordering: Creates a random Shop
+# ( ) Traac: Drafting: Rerolls Q0 Greebles in the room, reduces it by 1.
+
+# ( ) Raac: Brings a used Altar to the next floor
+# ( ) Raac: When starting a floor, gain +1tempdf for each void room in the floor
+# ( ) Raac: Every 2 floors, if you have 15+ Pots, add a Shop to the Pool
+# ( ) Raac: Adds random greebles at the white Room
+# ( ) Raac: Turns a Yellow Room into Green room
+# ( ) Raac: First 2 Hits on a Floor does double damage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -149,7 +224,7 @@ Traac charge is equal to 20+5*self.level energy.
 # (X) Magenta Room spawn criteria
 # (X) Magenta plate room spawn criteria
 # (X) Menu showing Room colors, and Broots available in rotation
-# ( ) Aligning colors with sign colors.
+# (-) Aligning colors with sign colors.
 # (X) Flip Greebles quality 3 and 4 functions
 # (X) remake Quality 3, 4 Crafting Tree
 # (X) (X) New Greebles Q3/Q4, altar that crafts them. Calculate Energy
@@ -163,8 +238,6 @@ Traac charge is equal to 20+5*self.level energy.
 # (X) Rewire grey room manipulation
 # (X) Buff Rock Crest
 # (X) Refactor of all room object storage
-# ( ) White Room shennanigans
-# ( ) Plate White Floor Connections
 # (X) Change slop of Digests Broot by tier of quality
 # (X) ( ) Broot Frosty:
 # (X) ( ) Broot Armor Breaker:
@@ -173,7 +246,6 @@ Traac charge is equal to 20+5*self.level energy.
 # (X) Update on Broots True names
 
 
-# ( ) Traac: breaks Leeds into Q0 Greebles into the room
 
 
 

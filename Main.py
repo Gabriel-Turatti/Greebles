@@ -147,6 +147,10 @@ if True: # Pre-processing
         "TumbleBox": image.load('Images/Traacs/traac_TumbleBox.png'), # Creates random Q0 Greebles in room
         "Reinforce": image.load('Images/Traacs/traac_Reinforce.png'), # Gives 4 temporary DF points, loses 1 per explored room
         "RaacRerox": image.load('Images/Traacs/traac_RaacRerox.png'), # Rerolls T/Raacs in the room
+
+        "Crafting": image.load('Images/Raacs/raac_generic.png'), # Consumes 6 leeds to create a random Q2 greeble
+        "Ordering": image.load('Images/Raacs/raac_generic.png'), # Creates a random Shop
+        "Drafting": image.load('Images/Raacs/raac_generic.png'), # Rerolls Q0 Greebles in the room, reduces it by 1.
     }
     brootimg = {
         "DEAD": image.load('Images/brick_darkred.png'),
@@ -246,6 +250,10 @@ if True: # Pre-processing
         13,
         10,
         20,
+
+        9,
+        6,
+        11,
     ]
     brootValue = [
         0,
@@ -340,6 +348,10 @@ if True: # Pre-processing
         [40, 3],
         [40, 4],
         [20, 5],
+
+        [40, 6],
+        [40, 7],
+        [30, 8],
     ]
     BrootPool = [
         [0, 0], # [PoolWeight, Id]
@@ -465,63 +477,40 @@ class Player():
         for greeb in GQ4+GQ4b:
             self.MaxGreebles[greeb] = 1000
     def initPlayer(self, char):
-        if char == 0:
-            # char = random.randrange(5)
-            char = 1
         if char == -1:
-            for RN in range(len(raacNumber)):
-                raac = Raac(RN)
-                raac.level = 5
-                self.Raacs.append(raac)
+            char = random.randrange(6)
+        if char == 0:
+            self.acquire(["Bankors", 1+random.randrange(4)]) # Max Traacs
+            self.acquire(["Rangors", 2+random.randrange(4)]) # Max Broots
+            self.acquire(["Alators", 1+random.randrange(1)]) # Max Broots
 
-            
-            self.Greebles["Heeds"] = 12 + random.randrange(-3, 4) # Health
-            self.Greebles["Feeds"] = 25 + random.randrange(-5, 6) # Food
-            self.Greebles["Beets"] = 2  + random.randrange(-2, 3) # Health2
-            self.Greebles["Leeds"] = 4  + random.randrange(-2, 3) # Health3
-            self.Greebles["Sheets"] = 20  + random.randrange(-5, 6) # Energy
+            self.acquire(["Fallers", 1+random.randrange(3)]) #
+            self.acquire(["Rallers", 0+random.randrange(2)]) #
+            self.acquire(["Pallers", 1+random.randrange(2)]) #
+            self.acquire(["Sallers", 2+random.randrange(3)]) #
+            self.acquire(["Vallers", 0+random.randrange(2)]) #
 
-            self.Greebles["Verdans"] = 12 + random.randrange(4) # Max Health
-            self.Greebles["Postans"] = 25 + random.randrange(6) # Max Food
-            self.Greebles["Sackans"] = 25 + random.randrange(-5, 6) # Max Q0 inventory*4
-            self.Greebles["Callans"] = 3  + random.randrange(-1, 2) # Damage
-            self.Greebles["Daffans"] = 0  + random.randrange(4) # Defense
-            self.Greebles["Radeans"] = 5  + random.randrange(-2, 3) # Max Health2, Max Health3, Max Energy/2
-            self.Greebles["Xendans"] = 0  + random.randrange(6) # Corrupted Health
+            self.acquire(["Verdans", 6+random.randrange(10)]) # Max Health
+            self.acquire(["Postans", 6+random.randrange(10)]) # Max Food
+            self.acquire(["Sackans", 6+random.randrange(10)]) # Max Q0 inventory*4
+            self.acquire(["Callans", 1+random.randrange(5)]) # Damage
+            self.acquire(["Daffans", 0+random.randrange(4)]) # Defense
+            self.acquire(["Radeans", 3+random.randrange(5)]) # Max Health2, Max Health3, Max Energy/2
+            self.acquire(["Xendans", 0+random.randrange(2)]) # Corrupted Health
 
-            self.Greebles["Bankors"] = 2  + random.randrange(-1, 2) # Max Traacs
-            self.Greebles["Rangors"] = 3  + random.randrange(-2, 3) # Max Broots
-            self.Greebles["Fallers"] = 0 + random.randrange(5)
-            self.Greebles["Kollors"] = 0 + random.randrange(5)
-            self.Greebles["Tannors"] = 0 + random.randrange(5)
-        elif char == 0: # Random
-            RNG = random.randrange(100)
-            if RNG <= 25:
-                traac = random.randrange(len(traacimg))
-                self.acquireTraac(Traac(traac))
-            else:
-                raac = random.randrange(len(raacimg))
-                self.acquireRaac(Raac(raac))
-            self.Greebles["Heeds"] = 12 + random.randrange(-3, 4)# Health
-            self.Greebles["Feeds"] = 25 + random.randrange(-5, 6) # Food
-            self.Greebles["Beets"] = 2  + random.randrange(-2, 3) # Health2
-            self.Greebles["Leeds"] = 4  + random.randrange(-2, 3)# Health3
-            self.Greebles["Sheets"] = 20  + random.randrange(-5, 6) # Energy
+            self.acquire(["Heeds", 6+random.randrange(10)]) # Health
+            self.acquire(["Feeds", 15+random.randrange(20)]) # Food
+            self.acquire(["Beets", 0+random.randrange(7)]) # Health2
+            self.acquire(["Leeds", 0+random.randrange(7)]) # Health3
+            self.acquire(["Sheets", 12+random.randrange(20)]) # Energy
 
-            self.Greebles["Verdans"] = 12 + random.randrange(4) # Max Health
-            self.Greebles["Postans"] = 25 + random.randrange(6)# Max Food
-            self.Greebles["Sackans"] = 25 + random.randrange(-5, 6)# Max Q0 inventory*4
-            self.Greebles["Callans"] = 3  + random.randrange(-1, 2)# Damage
-            self.Greebles["Daffans"] = 0  + random.randrange(4)# Defense
-            self.Greebles["Radeans"] = 5  + random.randrange(-2, 3)# Max Health2, Max Health3, Max Energy/2
-            self.Greebles["Xendans"] = 0 # Corrupted Health
 
-            self.Greebles["Bankors"] = 2  + random.randrange(-1, 2) # Max Traacs
-            self.Greebles["Rangors"] = 3  + random.randrange(-2, 3)# Max Broots
-            self.Greebles["Fallers"] = 0
-        elif char == 1: # Classic
-            self.acquire(["Bankors", 2]) # Max Traacs
-            self.acquire(["Rangors", 4]) # Max Broots
+
+            self.acquireRaac(Raac(Raac.chooseRandomRaac(RaacPool)))
+            self.acquireTraac(Traac(Traac.chooseRandomTraac(TraacPool)))
+        elif char == -2: # Classic
+            self.acquire(["Bankors", 5]) # Max Traacs
+            self.acquire(["Rangors", 7]) # Max Broots
             self.acquire(["Alators", 1]) # Max Broots
 
             self.acquire(["Fallers", 2]) #
@@ -546,8 +535,153 @@ class Player():
 
             # self.acquire(["Pots", 50]) # Money
 
-            self.acquireRaac(Raac(1))
+            self.acquireTraac(Traac(6))
+            self.acquireTraac(Traac(7))
+            self.acquireTraac(Traac(8))
+        elif char == 1: # Aries
+            self.acquire(["Bankors", 1]) # Max Traacs
+            self.acquire(["Rangors", 6]) # Max Broots
+            self.acquire(["Alators", 1]) # Max Q3
+
+            self.acquire(["Fallers", 3]) #
+            self.acquire(["Rallers", 1]) #
+            self.acquire(["Pallers", 1]) #
+            self.acquire(["Sallers", 2]) #
+            self.acquire(["Vallers", 1]) #
+
+            self.acquire(["Verdans", 16]) # Max Health
+            self.acquire(["Postans", 12]) # Max Food
+            self.acquire(["Sackans", 7]) # Max Q0 inventory*4
+            self.acquire(["Callans", 4]) # Damage
+            self.acquire(["Daffans", 0]) # Defense
+            self.acquire(["Radeans", 5]) # Leeds/Beets
+            self.acquire(["Xendans", 0]) # Corrupted Health
+
+            self.acquire(["Heeds", 14]) # Health
+            self.acquire(["Feeds", 30]) # Food
+            self.acquire(["Beets", 2]) # Health2
+            self.acquire(["Leeds", 0]) # Health3
+            self.acquire(["Sheets", 20]) # Energy
+
+
+            self.acquireRaac(Raac(11))
+            self.acquireTraac(Traac(2))
+        elif char == 2: # Taurus
+            self.acquire(["Bankors", 4]) # Max Traacs
+            self.acquire(["Rangors", 1]) # Max Broots
+            self.acquire(["Alators", 1]) # Max Q3
+
+            self.acquire(["Fallers", 2]) #
+            self.acquire(["Rallers", 0]) #
+            self.acquire(["Pallers", 2]) #
+            self.acquire(["Sallers", 3]) #
+            self.acquire(["Vallers", 0]) #
+
+            self.acquire(["Verdans", 12]) # Max Health
+            self.acquire(["Postans", 8]) # Max Food
+            self.acquire(["Sackans", 12]) # Max Q0 inventory*4
+            self.acquire(["Callans", 3]) # Damage
+            self.acquire(["Daffans", 1]) # Defense
+            self.acquire(["Radeans", 7]) # Leeds/Beets
+            self.acquire(["Xendans", 0]) # Corrupted Health
+
+            self.acquire(["Heeds", 12]) # Health
+            self.acquire(["Feeds", 25]) # Food
+            self.acquire(["Beets", 0]) # Health2
+            self.acquire(["Leeds", 4]) # Health3
+            self.acquire(["Sheets", 18]) # Energy
+
+
+            self.acquireRaac(Raac(15))
+            self.acquireRaac(Raac(15))
+            # self.acquireTraac(Traac(3))
+        elif char == 3: # Gemini
+            self.acquire(["Bankors", 2]) # Max Traacs
+            self.acquire(["Rangors", 2]) # Max Broots
+            self.acquire(["Alators", 2]) # Max Q3
+
+            self.acquire(["Fallers", 3]) #
+            self.acquire(["Rallers", 1]) #
+            self.acquire(["Pallers", 3]) #
+            self.acquire(["Sallers", 3]) #
+            self.acquire(["Vallers", 1]) #
+
+            self.acquire(["Verdans", 14]) # Max Health
+            self.acquire(["Postans", 10]) # Max Food
+            self.acquire(["Sackans", 12]) # Max Q0 inventory*4
+            self.acquire(["Callans", 2]) # Damage
+            self.acquire(["Daffans", 0]) # Defense
+            self.acquire(["Radeans", 8]) # Leeds/Beets
+            self.acquire(["Xendans", 2]) # Corrupted Health
+
+            self.acquire(["Heeds", 14]) # Health
+            self.acquire(["Feeds", 30]) # Food
+            self.acquire(["Beets", 0]) # Health2
+            self.acquire(["Leeds", 2]) # Health3
+            self.acquire(["Sheets", 22]) # Speed
+
+
+            self.acquireRaac(Raac(8))
+            # self.acquireRaac(Raac(15))
+            self.acquireTraac(Traac(3))
+        elif char == 4: # Cancer
+            self.acquire(["Bankors", 2]) # Max Traacs
+            self.acquire(["Rangors", 4]) # Max Broots
+            self.acquire(["Alators", 1]) # Max Q3
+
+            self.acquire(["Fallers", 2]) #
+            self.acquire(["Rallers", 0]) #
+            self.acquire(["Pallers", 2]) #
+            self.acquire(["Sallers", 2]) #
+            self.acquire(["Vallers", 2]) #
+
+            self.acquire(["Verdans", 12]) # Max Health
+            self.acquire(["Postans", 15]) # Max Food
+            self.acquire(["Sackans", 14]) # Max Q0 inventory*4
+            self.acquire(["Callans", 3]) # Damage
+            self.acquire(["Daffans", 0]) # Defense
+            self.acquire(["Radeans", 6]) # Leeds/Beets
+            self.acquire(["Xendans", 1]) # Corrupted Health
+
+            self.acquire(["Heeds", 12]) # Health
+            self.acquire(["Feeds", 40]) # Food
+            self.acquire(["Beets", 2]) # Health2
+            self.acquire(["Leeds", 4]) # Health3
+            self.acquire(["Sheets", 20]) # Speed
+
+
+            self.acquireRaac(Raac(3))
+            # self.acquireRaac(Raac(15))
             self.acquireTraac(Traac(5))
+        elif char == 5: # Leo
+            self.acquire(["Bankors", 3]) # Max Traacs
+            self.acquire(["Rangors", 3]) # Max Broots
+            self.acquire(["Alators", 1]) # Max Q3
+
+            self.acquire(["Fallers", 2]) #
+            self.acquire(["Rallers", 0]) #
+            self.acquire(["Pallers", 3]) #
+            self.acquire(["Sallers", 2]) #
+            self.acquire(["Vallers", 0]) #
+
+            self.acquire(["Verdans", 13]) # Max Health
+            self.acquire(["Postans", 9]) # Max Food
+            self.acquire(["Sackans", 9]) # Max Q0 inventory*4
+            self.acquire(["Callans", 3]) # Damage
+            self.acquire(["Daffans", 2]) # Defense
+            self.acquire(["Radeans", 4]) # Leeds/Beets
+            self.acquire(["Xendans", 0]) # Corrupted Health
+
+            self.acquire(["Heeds", 13]) # Health
+            self.acquire(["Feeds", 25]) # Food
+            self.acquire(["Beets", 0]) # Health2
+            self.acquire(["Leeds", 4]) # Health3
+            self.acquire(["Sheets", 18]) # Speed
+
+
+            self.acquireRaac(Raac(10))
+            self.acquireRaac(Raac(10))
+            # self.acquireTraac(Traac(5))
     def damage(self, qtd, game):
         qtd -= self.df//3
         for raac in self.Raacs:
@@ -1524,12 +1658,12 @@ class Room():
             temp1 = self.level
             while temp1 > 0:
                 temp1 -= 7
-                self.findFreePosition(Zoodiac.chooseRandomZoodiac())
+                self.findFreePosition(Zoodiac(Zoodiac.chooseRandomZoodiac()), "zoodiac")
         elif self.color == "magenta" and self.type == "plate":
             temp1 = self.level
             while temp1 > 0:
                 temp1 -= 5
-                self.findFreePosition(Zoodiac.chooseRandomZoodiac())
+                self.findFreePosition(Zoodiac(Zoodiac.chooseRandomZoodiac()), "zoodiac")
 
         if self.color == "black" and self.type == "plate":
             for i in range(2):
@@ -1845,7 +1979,7 @@ class Room():
                     temp1 -= 1
 
 class Broot():
-    def __init__(self, id, squireLevel):
+    def __init__(self, id, squireLevel = 1):
         self.id = id
         self.x = 0
         self.y = 0
@@ -1980,7 +2114,7 @@ class Raac():
 
         self.generate()
     def generate(self):
-        if self.id == 0:
+        if self.id == 0: # Altar
             self.name = "Treasure"
             self.trigger = "Floor"
             self.description = "Every time you enter a floor divisible by 2, X Yellow Rooms will permanently be added to the pool."
@@ -1991,7 +2125,7 @@ class Raac():
             self.cost = 80
             self.rate = 50
             self.upgrades = [500, 80, 50]
-        elif self.id == 1:
+        elif self.id == 1: # BeetHeal
             self.name = "BeetHeal"
             self.trigger = "Discover"
             self.description = "Every time you discover a room, X*20% chance for a Beet to be converted to a Heed+Pot if not at max."
@@ -2002,7 +2136,7 @@ class Raac():
             self.cost = 8
             self.rate = 12
             self.upgrades = [250, 0, 2]
-        elif self.id == 2:
+        elif self.id == 2: # FencorRegen
             self.name = "FencorRegen"
             self.trigger = "Floor"
             self.description = "Every time you enter a floor. You get 3*X*Fencor Heeds."
@@ -2013,7 +2147,7 @@ class Raac():
             self.cost = 45
             self.rate = 50
             self.upgrades = [500, 45, 40]
-        elif self.id == 3:
+        elif self.id == 3: # SaveThrow
             self.name = "SaveThrow"
             self.trigger = "Damage"
             self.description = "If you take death damage, convert a Verdan into a Xerdan and add 3 Heeds to the blow. Only activates X times per floor."
@@ -2036,7 +2170,7 @@ class Raac():
             self.cost = 15
             self.rate = 60
             self.upgrades = [750, 15, 10]
-        elif self.id == 5:
+        elif self.id == 5: # Altar
             self.name = "Altar"
             self.trigger = "Floor"
             self.description = "Every time you enter a floor divisible by 5, X Purple Rooms will permanently be added to the pool."
@@ -2058,7 +2192,7 @@ class Raac():
             self.cost = 125
             self.rate = 100
             self.upgrades = [1500, 50, 100]
-        elif self.id == 7:
+        elif self.id == 7: # ColoredRoom
             self.name = "ColoredRoom"
             self.trigger = "Floor"
             self.description = "Random rooms can have their colors revealed"
@@ -2069,7 +2203,7 @@ class Raac():
             self.cost = 5
             self.rate = 20
             self.upgrades = [150, 0, 10]
-        elif self.id == 8:
+        elif self.id == 8: # LuckyCharm
             self.name = "LuckyCharm"
             self.trigger = "Discover"
             self.description = "Quality 0 Greebles have chance to become Quality 1"
@@ -2080,7 +2214,7 @@ class Raac():
             self.cost = 20
             self.rate = 50
             self.upgrades = [200, 0, 20]
-        elif self.id == 9:
+        elif self.id == 9: # Pottery
             self.name = "Pottery"
             self.trigger = "Discover"
             self.description = "When discovering rooms, chance to transform Shots into Pots."
@@ -2091,7 +2225,7 @@ class Raac():
             self.cost = 5
             self.rate = 50
             self.upgrades = [150, 0, 20]
-        elif self.id == 10:
+        elif self.id == 10: # ExtraStock
             self.name = "ExtraStock"
             self.trigger = "Floor"
             self.description = "Shops have more quality."
@@ -2102,7 +2236,7 @@ class Raac():
             self.cost = 20
             self.rate = 50
             self.upgrades = [400, 20, 25]
-        elif self.id == 11:
+        elif self.id == 11: # SplashDamage
             self.name = "SplashDamage"
             self.trigger = "Attack"
             self.description = "When attacking enemies, if there are enemies in adjacent rooms, deal 35% damage to X of them."
@@ -2113,7 +2247,7 @@ class Raac():
             self.cost = 5
             self.rate = 20
             self.upgrades = [700, 0, 20]
-        elif self.id == 12:
+        elif self.id == 12: # RockCrest
             self.name = "RockCrest"
             self.trigger = "Defend"
             self.description = "If you have 2+X rocks, you receive X defense. On damage, Rocks break into Shots."
@@ -2124,7 +2258,7 @@ class Raac():
             self.cost = 5
             self.rate = 10
             self.upgrades = [120, 0, 2]
-        elif self.id == 13:
+        elif self.id == 13: # SlimeFest
             self.name = "SlimeFest"
             self.trigger = "Floor"
             self.description = "Each Floor you turn X of each quality 0 Greebles into slime, and add X new gray rooms to the floor permanently."
@@ -2135,7 +2269,7 @@ class Raac():
             self.cost = 5
             self.rate = 10
             self.upgrades = [50, 0, 10]
-        elif self.id == 14:
+        elif self.id == 14: # LeedQuest
             self.name = "LeedQuest"
             self.trigger = "Floor"
             self.description = "Each Floor if you can, lose 3X Leeds, add X red rooms permanently."
@@ -2146,7 +2280,7 @@ class Raac():
             self.cost = 40
             self.rate = 60
             self.upgrades = [200, 30, 60]
-        elif self.id == 15:
+        elif self.id == 15: # TraacBest
             self.name = "TraacBest"
             self.trigger = "Always"
             self.description = "Traac items have X more max charge."
@@ -2157,7 +2291,7 @@ class Raac():
             self.cost = 60
             self.rate = 40
             self.upgrades = [400, 0, 30]
-        elif self.id == 16:
+        elif self.id == 16: # AltarRest
             self.name = "AltarRest"
             self.trigger = "Floor"
             self.description = "If there is an unused altar at the end of the floor, consume it to gain 3X Heexs."
@@ -2168,7 +2302,7 @@ class Raac():
             self.cost = 40
             self.rate = 60
             self.upgrades = [250, 40, 60]
-        elif self.id == 17:
+        elif self.id == 17: # BlackTest
             self.name = "BlackTest"
             self.trigger = "BossKill"
             self.description = "Bosses will give +2X charges to your Traacs"
@@ -2190,7 +2324,7 @@ class Raac():
             self.cost = 10
             self.rate = 30
             self.upgrades = [250, 10, 10]
-        elif self.id == 19:
+        elif self.id == 19: # FrostAspect
             self.name = "FrostAspect"
             self.trigger = "Attack"
             self.description = "Your attacks slows enemies down by X(2+Tannor) speed."
@@ -2212,7 +2346,7 @@ class Raac():
             self.cost = 30
             self.rate = 100
             self.upgrades = [1000, 30, 50]
-        elif self.id == 21:
+        elif self.id == 21: # Hammlet
             self.name = "Hammlet"
             self.trigger = "Attack"
             self.description = "Your attacks break 0.5X armor"
@@ -2223,10 +2357,10 @@ class Raac():
             self.cost = 5
             self.rate = 50
             self.upgrades = [300, 5, 0]
-        elif self.id == 22:
+        elif self.id == 22: # Revishot
             self.name = "Revishot"
             self.trigger = "Floor"
-            self.description = "Every Floor, remove 2X Shots and gain X Def points."
+            self.description = "Every Floor, remove 2X Shots and gain X temporary Def points."
             self.quality = 2
 
             self.source = "EnemyKill"
@@ -2234,7 +2368,7 @@ class Raac():
             self.cost = 10
             self.rate = 15
             self.upgrades = [500, 10, 5]
-        elif self.id == 23:
+        elif self.id == 23: # MagicEye
             self.name = "MagicEye"
             self.trigger = "Discover"
             self.description = "Blue Rooms are revealed when connected to purple rooms. Up to X times"
@@ -2324,21 +2458,21 @@ class Traac():
     def generate(self):
 
         self.charge = 0
-        if self.id == 0:
+        if self.id == 0: # AltarBoost
             self.name = "AltarBoost"
             self.maxCharge = 3
             self.cost = 3
             self.progression = 4
             self.description = "Increase the amount of uses of a Common unused Altar by 1."
             self.quality = 4
-        elif self.id == 1:
+        elif self.id == 1: # Crystalize
             self.name = "Crystalize"
             self.maxCharge = 7
             self.cost = 4
             self.progression = 5
             self.description = "Convert a Heed into a Beet."
             self.quality = 5
-        elif self.id == 2:
+        elif self.id == 2: # Bomb
             self.name = "Bomb"
             self.maxCharge = 6
             self.cost = 5
@@ -2346,27 +2480,49 @@ class Traac():
             self.description = "Deal 10X damage on the room."
             self.quality = 2
 
-        elif self.id == 3:
+        elif self.id == 3: # TumbleBox
             self.name = "TumbleBox"
             self.maxCharge = 5
             self.cost = 3
             self.progression = 2
             self.description = "Creates 2+X random Q0 Greebles in the room."
             self.quality = 5
-        elif self.id == 4:
+        elif self.id == 4: # Reinforce
             self.name = "Reinforce"
             self.maxCharge = 9
             self.cost = 5
             self.progression = 3
             self.description = "Gives 3+X temporary DF points. Loses a point everytime you discover a room."
             self.quality = 5
-        elif self.id == 5:
+        elif self.id == 5: # RaacRerox
             self.name = "RaacRerox"
             self.maxCharge = 20
             self.cost = 15
             self.progression = 5
-            self.description = "Rerolls all T/Raacs in the Room."
+            self.description = "Rerolls all Raacs in the Room."
             self.quality = 10
+
+        elif self.id == 6: # Crafting
+            self.name = "Crafting"
+            self.maxCharge = 15
+            self.cost = 10
+            self.progression = 7
+            self.description = "Consumes 6 leeds to create a random Q2 greeble."
+            self.quality = 6
+        elif self.id == 7: # Ordering
+            self.name = "Ordering"
+            self.maxCharge = 12
+            self.cost = 4
+            self.progression = 4
+            self.description = "Creates a random Shop."
+            self.quality = 4
+        elif self.id == 8: # Drafting
+            self.name = "Drafting"
+            self.maxCharge = 15
+            self.cost = 7
+            self.progression = 5
+            self.description = "Rerolls Q0 Greebles in the room, reduces it by 1."
+            self.quality = 6
 
 
 
@@ -2397,9 +2553,14 @@ class Traac():
         if name == "AltarBoost": return 0
         elif name == "Crystalize": return 1
         elif name == "Bomb": return 2
+
         elif name == "TumbleBox": return 3
         elif name == "Reinforce": return 4
         elif name == "RaacRerox": return 5
+
+        elif name == "Crafting": return 6
+        elif name == "Ordering": return 7
+        elif name == "Drafting": return 8
 class Zoodiac():
     def __init__(self, id, level = 1):
         self.id = id
@@ -2767,6 +2928,7 @@ class Floor():
             room.id = N
             self.Rooms.append(room)
             N += 1
+        self.game.ExtraRooms.clear()
 
         for room in self.Rooms:
             for i in range(connectivity):
@@ -2788,7 +2950,7 @@ class Game():
         self.height = 1000
         self.screen = display.set_mode((self.width, self.height))
         self.clock = time.Clock()
-        display.set_caption('GreeblesMania 0.6 - All in the Stars Update')
+        display.set_caption('GreeblesMania 0.7 - Actual Playable Characters')
         self.size = 64
         self.player = Player()
     def escreverCanto(self, texto, tam, pos):
@@ -2869,7 +3031,7 @@ class Game():
 
         self.log = []
 
-        self.params = [0, 0, 0, 0, 2+15, 0, 0, 0, 0]
+        self.params = [0, 0, 0, 0, 8, 0, 0, 0, 0]
         self.currentFloor = Floor(-1, self.rooms, copy.deepcopy(self.broots), self)
 
         self.plate_yellowCost = 5
@@ -3172,8 +3334,7 @@ class Game():
                 elif type == "greeble":
                     temp = 1
                     self.screen.blit(greebleimg[object[0]], (x, y))
-                    if len(room.Enemies) == 0:
-                        options.append([rect, (w, h), "greeble"])
+                    options.append([rect, (w, h), "greeble"])
                     self.escreverCanto(f"x{object[1]}", 15, (x+self.size-20, y))
                 elif type == "broot":
                     temp = 3
@@ -3730,12 +3891,29 @@ class Game():
                                 for i in range(level-1):
                                     traac.upgrade()
                         else:
-                            raac = Raac(Raac.chooseRandomRaac(RaacPool))
-                            room.findFreePosition(raac, "raac", raac[1], raac[2])
+                            newRaac = Raac(Raac.chooseRandomRaac(RaacPool))
+                            room.findFreePosition(newRaac, "raac", raac[1], raac[2])
                             if level > 0:
                                 for i in range(level-1):
-                                    raac.upgrade()
+                                    newRaac.upgrade()
                         sucess = True
+                elif name == "Crafting":
+                    if self.player.Greebles["Leeds"] >= 6:
+                        self.player.unacquire(["Leeds", 6])
+                        room.randomGreeble(2, 1)
+                        sucess = True
+                elif name == "Ordering":
+                    room.randomShop(5*lvl, True)
+                    sucess = True
+                elif name == "Drafting":
+                    for greeble in room.Greebles:
+                        greeb = greeble[0]
+                        if greeb[0] in GQ0+GQ0b:
+                            room.freeePosition(greeble[1], greeble[2])
+                            greeb[1] -= 1
+                            if greeb[1] > 0:
+                                room.findFreePosition([random.choice(GQ0), greeb[1]], "greeble", greeble[1], greeble[2])
+                                sucess = True
                 if sucess:
                     self.player.Traacs[parameter].charge -= self.player.Traacs[parameter].cost
         elif action == "deploy" and len(self.player.Broots) > 0:
@@ -3759,7 +3937,7 @@ class Game():
                     qtd = self.player.acquire([item[2], item[1]])
                     room.acquire([item[2], qtd])
                 elif item[0] == "Broot":
-                    newBroot = Broot(item[2])
+                    newBroot = Broot(item[2], 1)
                     if len(self.player.Broots) < self.player.Greebles["Rangors"]:
                         self.player.Broots.append(newBroot)
                     else:
@@ -3784,8 +3962,7 @@ class Game():
             self.zoodiacActivate()
         enemyAlive = False
         for enemy in room.Enemies:
-            enemy = enemy[0]
-            if enemy.hp > 0:
+            if enemy[0].hp > 0:
                 enemyAlive = True
                 break
         if not enemyAlive:
@@ -3936,13 +4113,19 @@ class Game():
                             altar = altar[0]
                             if altar.uses > 0:
                                 altar.uses -= 1
-                                RNG = random.randrange(100+50*deploy.level)/altar.maxuses
-                                if RNG <= 20:
-                                    rm.acquire([random.choice(GQ0), 1])
-                                elif RNG <= 40:
+                                RNG = random.randrange(100)
+                                if altar.rarity == "Uncommon":
+                                    RNG = RNG/2
+                                elif altar.rarity == "Rare":
+                                    RNG = RNG/4
+                                elif altar.rarity == "Mythical":
+                                    RNG = RNG/8
+                                if RNG <= 10:
+                                    rm.acquire([random.choice(GQ2), 1])
+                                elif RNG <= 35:
                                     rm.acquire([random.choice(GQ1), 1])
                                 else:
-                                    rm.acquire([random.choice(GQ2), 1])
+                                    rm.acquire([random.choice(GQ0), 1])
                                 break
                 for enemyObj in rm.Enemies:
                     enemy = enemyObj[0]
@@ -4067,7 +4250,7 @@ class Game():
             for enemy in rm.Enemies:
                 enemy = enemy[0]
                 if enemy.id == 97 and enemy.id != 0:
-                    self.player.damage(max(enemy.dmg//2, 1))
+                    self.player.damage(max(enemy.dmg//2, 1), self)
                 if enemy.hp > 0 and SplashDamage > 0:
                     enemy.hp -= floor((0.30+SplashDamage*0.05)*self.player.dmg)
                     SplashDamage -= 1
@@ -4320,6 +4503,7 @@ class Game():
             for roomType in self.rooms:
                 if roomType != "normal_gray":
                     gray -= self.rooms[roomType]
+            gray = max(gray, 0)
             x = 800
             y = 50
             i = 0
@@ -4672,13 +4856,13 @@ class Game():
                     elif color == "purple":
                         for altar in room.Altars:
                             qtd = 6
-                            if altar.rarity == "Unique":
+                            if altar[0].rarity == "Unique":
                                 qtd = 0
-                            elif altar.rarity == "Mythical":
+                            elif altar[0].rarity == "Mythical":
                                 qtd = 1
-                            elif altar.rarity == "Rare":
+                            elif altar[0].rarity == "Rare":
                                 qtd = 2
-                            elif altar.rarity == "Uncommon":
+                            elif altar[0].rarity == "Uncommon":
                                 qtd = 4
                             altar[0].uses += qtd
                             altar[0].maxuses += qtd
@@ -4696,7 +4880,7 @@ class Game():
                             room.populate(self.params)
                             sucess = True
                     elif color == "magenta":
-                        self.effects["zoodiacChance"] += 1
+                        self.params[4] += 2
                         sucess = True
 
 
