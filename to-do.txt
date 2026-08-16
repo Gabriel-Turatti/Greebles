@@ -21,7 +21,7 @@ Traac charge is equal to 20+5*self.level energy.
 # (X) Analyze heat death of Greebles
 
 
-# Update: Negative Greebles and rooms
+# Update: Negative Greebles and rooms and Broots
 # Update: Rule Raacs
 # Update: Alternative Floors
 # Update: Save Game
@@ -38,14 +38,8 @@ Traac charge is equal to 20+5*self.level energy.
 # ( ) Zoodiacs Thermodynamics
 # ( ) Broot attack/speed rework
 # ( ) Traacs level up better
+# ( ) Lots of B-cat greebles
 # ( ) Rooms are locked and can only be entered by paying a key (Greeble)
-
-
-
-
-
-
-
 
 
 # Update: New Characters with special abilities
@@ -64,35 +58,54 @@ Traac charge is equal to 20+5*self.level energy.
     # ( ) ??? -> Rainbow    /   Random Stats
 
 
-# ( ) The Teal Mechanic: Competitors
-    # ( ) Mana Bar -> Too close to Traacs
-    # ( ) Room Obstacles -> Too close to Shops
-    # ( ) Constructs -> Too close to broots
-# ( ) White Room shennanigans
-# ( ) Plate White Floor Connections
 
-# ( ) ( ) New Room Variant "Wasted"
-    # ( ) Wasted Purple: Sacrificial altar that permanently removes Broot from rotation
-    # ( ) Wasted Red: Double Enemies, no rewards
-    # ( ) Wasted Yellow: Few B-Greebles
-    # ( ) Wasted Green: Gambling Altars
-    # ( ) Wasted Black: No Boss, no Raac
-    # ( ) Wasted Orange: A copy of a Traac that you have, One Elite, no greebles
-    # ( ) Wasted Gray: 0 Greebles.
-    # ( ) Wasted cyan: Broots not in pool
-    # ( ) Wasted teal: ???
-    # ( ) Wasted magenta: A zoodiac you've used this run
-    # ( ) Wasted blue: lower chance of Raacs, higher chance of Greebles
-    # ( ) Wasted white: No floor effects.
+
+
+
+# Update: The Teal Mechanic
+
+# ( ) The Teal Mechanic: Competitors
+    # (X) Idea Room Obstacles -> Various Obstacles and constructs combines
+    # ( ) Spike: Deals damage to you if you touch something close by
+    # ( ) Blocker: Does not let you take anything it is adjacent of, unless you pay it's price
+    # ( ) Gate: Leads you to the next floor
+    # ( ) Chest: upon opening can give any rewards.
+# (X) White Room shennanigans
+# (X) Plate White Floor Connections
+# (X) Reroll boss deleting treasures
+# ( ) Attack specific enemy
+# (X) Detector Broot level up
+# (X) Plate black appears after beating 5 bosses
+
+# (X) Plate blue Requirement
+# (X) Plate cyan Requirement -> Not touching broots
+# (X) Plate magenta Requirement
+# (X) Plate orange Requirement
+
+# ( ) (X) New Room Variant "Wasted"
+# (X) Requirement for Wasted
+# ( ) Prize for wasted
+# (X) (X) Wasted Purple: Sacrificial altar that permanently removes Broot from rotation
+# (X) (X) Wasted Red: Double Enemies, no rewards
+# (X) (X) Wasted Yellow: Few B-Greebles
+# (X) (X) Wasted Green: Gambling Altars
+# (X) (X) Wasted Black: No Boss, no Raac
+# (X) (X) Wasted Orange: A copy of a Traac that you have, One Elite, no greebles
+# (X) (X) Wasted Gray: 0 Greebles.
+# (X) (X) Wasted cyan: Broots not in pool
+# (X) (X) Wasted teal: ???
+# (X) (X) Wasted magenta: A zoodiac you've used this run
+# (X) (X) Wasted blue: lower chance of Raacs, higher chance of Greebles
+# (X) (X) Wasted white: No floor effects.
 
 # ( ) Do something about enemy bodies.
-# ( ) Broot-Destroying Altar
+# ( ) (X) Broot-Destroying Altar
 
 
 
-# ( ) Traac: Crafting: Consumes 6 leeds to create a random Q2 greeble
-# ( ) Traac: Ordering: Creates a random Shop
-# ( ) Traac: Drafting: Rerolls Q0 Greebles in the room, reduces it by 1.
+# (X) ( ) Traac: Crafting: Consumes 6 leeds to create a random Q2 greeble
+# (X) ( ) Traac: Ordering: Creates a random Shop
+# (X) ( ) Traac: Drafting: Rerolls Q0 Greebles in the room, reduces it by 1.
 
 # ( ) Raac: Brings a used Altar to the next floor
 # ( ) Raac: When starting a floor, gain +1tempdf for each void room in the floor
@@ -101,10 +114,41 @@ Traac charge is equal to 20+5*self.level energy.
 # ( ) Raac: Turns a Yellow Room into Green room
 # ( ) Raac: First 2 Hits on a Floor does double damage
 
+# ( ) Raac: You gain +2X df in Wasted rooms, raises chance of rooms wasting by 3X%
+# ( ) Raac: Steals at most 3X Greebles from the previous floor upon activating a gate
+# ( ) Raac: Turns a Blood into a Rock every time you use an uncommon+ altar.
+# ( ) Raac: Raises chance of item shops costing alternative money
+# ( ) Raac: If you were to die, gain Heeds equal to your Verdans, break this Raac by 1 lvl.
+# ( ) Raac: Killing enemies has a chance to give Heexs.
 
 
-
-
+    # ( ) Hope: Utility
+        # ( ) Aries -> Red      /   Enemy       / Every Blood puddle in the room turns back into enemies
+        # ( ) Taurus -> Orange  /   Traacs      / Applies the effect of every Traac you hold
+        # ( ) Gemini -> Yellow  /   Greebles    / Gains +1 of every Q0, Q1 and Q2 greeble you have
+        # ( ) Cancer -> White   /   Player      / Throws your various of your greebles in the ground
+        # ( ) Leo -> DarkGreen  /   Shop        / Creates shops for selling in the room
+        # ( ) Virgo -> Cyan     /   Broots      / Undeploys all Broots in the room
+        # ( ) Libra -> Gray     /   Floor       / Colors 5 rooms in the floor
+        # ( ) Scorpio -> Teal   /   ???         /  
+        # ( ) Sagitarius -> Blue/   Raacs       / Upgrades two random raacs in your possession by 1
+        # ( ) Capricorn ->Purple/   Altar       / creates a Breaking altar
+        # ( ) Aquarius -> Black /   BOSS        / 
+        # ( ) Pisces -> Magenta /   Signs       / Applies the effects of 
+    # ( ) Rage: Violently shakes status quo
+        # ( ) Aries -> Red      /   Enemy       / Deals 50 dmg to all enemies in room
+        # ( ) Taurus -> Orange  /   Traacs      / 
+        # ( ) Gemini -> Yellow  /   Greebles    / Turns all Greebles into equivalent Slops
+        # ( ) Cancer -> White   /   Player      / 
+        # ( ) Leo -> DarkGreen  /   Shop        / Makes 3 random things in the shop free
+        # ( ) Virgo -> Cyan     /   Broots      / Removes the broots in the room from the pool
+        # ( ) Libra -> Gray     /   Floor       / Removes the current room from the pool
+        # ( ) Scorpio -> Teal   /   ???         / 
+        # ( ) Sagitarius -> Blue/   Raacs       / Breaks the first raac you have to spawn another.
+        # ( ) Capricorn ->Purple/   Altar       / Crafts the item from the first altar in the room for free
+        # ( ) Aquarius -> Black /   BOSS        / 
+        # ( ) Pisces -> Magenta /   Signs       / Bans all zoodiacs in the room from spawning again
+    
 
 
 
@@ -239,9 +283,9 @@ Traac charge is equal to 20+5*self.level energy.
 # (X) Buff Rock Crest
 # (X) Refactor of all room object storage
 # (X) Change slop of Digests Broot by tier of quality
-# (X) ( ) Broot Frosty:
-# (X) ( ) Broot Armor Breaker:
-# (X) ( ) Broot Killers walk:
+# (X) (X) Broot Frosty:
+# (X) (X) Broot Armor Breaker:
+# (X) (X) Broot Killers walk:
 # (X) (X) Void Brick
 # (X) Update on Broots True names
 
@@ -287,20 +331,20 @@ Traac charge is equal to 20+5*self.level energy.
 # (X) Normalize Broots according to Raac and Traac rules
 # (X) Log: SaveThrow and Final Broot
 #     (X) Dead enemy bodies
-# (X) ( ) Add Luck Greeble quality 3
+# (X) (X) Add Luck Greeble quality 3
 #     (X) All the Raacs that are not yet drawn
-#     ( ) Heexs Greeble
+#     (X) Heexs Greeble
 # (-) Broot Defense refactor
-# (X) ( ) Attack/Defense/Speed icons for player
+# (X) (X) Attack/Defense/Speed icons for player
 # (X) Unacquire greebles player
 # (X) Collecting T/Raac affects pool.
 # (X) Traacs gather different amounts of energy depending on level, charge stays the same.
 # (X) Blue Room: Added to pool if you clean a floor. Is Secret
 # (X) New Broots
 # (X) BeetHeal and Splash are having no energy
-    # (X) ( ) One who detects secret Passages: Place it in a room to detect if there is a secret room connected to it
-    # (X) ( ) One who takes the final hit: Follows you into other rooms, if you were to die from a hit, kills it instead.
-    # (X) ( ) One who Fights onward: Place on a red room, attacks enemy directly.
+    # (X) (X) One who detects secret Passages: Place it in a room to detect if there is a secret room connected to it
+    # (X) (X) One who takes the final hit: Follows you into other rooms, if you were to die from a hit, kills it instead.
+    # (X) (X) One who Fights onward: Place on a red room, attacks enemy directly.
 
 # (X) New Traacs
 # (X) (X) Traac: TumbleBox: Generates 3 random Q0 Greebs
